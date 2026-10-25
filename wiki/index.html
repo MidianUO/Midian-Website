@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<title>Wiki · Midian</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: indice fisso a sinistra (sotto, su telefono), colonna di lettura a destra; tabelle scorrevoli. */
+:root {
+  --bg: #f4f5f1; --panel: #ffffff; --ink: #1c2630; --muted: #5a6670; --line: #d9ddd5;
+  --brass: #8a5c14; --teal: #24605f; --tint: #eef1ea; --warn: #9b2c2c; --ok: #2f6b3a;
+  --f-display: "Marcellus SC", "Palatino Linotype", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.wrap { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  border-right: 1px solid var(--line); padding-right: 18px; font-size: 15px; }
+nav.toc h2 { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--brass); margin: 0 0 10px; font-weight: 400 }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 8px; border-radius: 4px }
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+nav.toc .sub a { padding-left: 22px; color: var(--muted); font-size: 14px }
+.search { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 15px; margin-bottom: 14px }
+.search:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px }
+main { min-width: 0 }
+header.top { border-bottom: 2px solid var(--brass); padding-bottom: 18px; margin-bottom: 8px }
+header.top .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal) }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 50px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance }
+header.top p { max-width: 68ch; color: var(--muted); margin: 0 }
+section.chap { padding-top: 34px; scroll-margin-top: 16px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; margin: 0 0 12px; color: var(--ink); text-wrap: balance;
+  display: flex; gap: 12px; align-items: baseline }
+h2 .num { font-family: var(--f-mono); font-size: 14px; color: var(--brass) }
+h3 { font-size: 20px; margin: 26px 0 8px; color: var(--teal); font-weight: 700 }
+h4 { font-size: 17px; margin: 18px 0 6px }
+p, li { max-width: 72ch }
+a { color: var(--teal) }
+code, .id { font-family: var(--f-mono); font-size: .82em; background: var(--tint); padding: 1px 5px; border-radius: 3px; white-space: nowrap }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { background: var(--tint); font-weight: 700; white-space: nowrap; font-size: 13px; letter-spacing: .03em }
+tr:last-child td { border-bottom: 0 }
+td.n, th.n { text-align: right; white-space: nowrap }
+.zero { color: var(--warn); font-weight: 700 }
+.note { border-left: 3px solid var(--brass); background: var(--tint); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; max-width: 76ch }
+.note b { color: var(--brass) }
+.warn { border-left-color: var(--warn) } .warn b { color: var(--warn) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0 }
+.card h4 { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: var(--brass) }
+.card p, .card ul { margin: 4px 0; font-size: 15px }
+.card ul { padding-left: 18px }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.tag { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--tint) }
+ol.steps { padding-left: 22px } ol.steps li { margin: 4px 0 }
+.empty { display: none; color: var(--muted); padding: 30px 0 }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 10px }
+  nav.toc { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 12px }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) }
+  nav.toc .sub { display: none }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+</style>
+
+</head>
+<body>
+<header class="sitebar"><div class="sitebar-in">
+  <a class="sitebrand" href="../index.html">MIDIAN</a>
+  <nav class="sitenav" aria-label="Sezioni del sito">
+    <a href="../index.html">Home</a>
+    <a href="index.html" aria-current="page">Wiki</a>
+    <a href="../download.html">Download</a>
+    <a href="../contatti.html">Contatti</a>
+  </nav>
+</div></header>
+<style>
+.sitebar { border-bottom: 1px solid var(--line); background: var(--panel) }
+.sitebar-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px }
+.sitebrand { font-family: var(--f-display); font-size: 22px; letter-spacing: .12em; color: var(--brass); text-decoration: none }
+.sitenav { display: flex; gap: 4px; flex-wrap: wrap }
+.sitenav a { color: var(--ink); text-decoration: none; padding: 6px 12px; border-radius: 4px }
+.sitenav a:hover, .sitenav a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+.sitenav a[aria-current="page"] { color: var(--brass); box-shadow: inset 0 -2px 0 var(--brass) }
+</style>
+<div class="wrap">
+<nav class="toc" aria-label="Indice">
+  <input class="search" id="q" type="search" placeholder="Cerca nella guida (es. titanio, mustang)" aria-label="Cerca nella guida">
+  <h2>Indice</h2>
+  <ol>
+    <li><a href="#creazione">1 · Creazione del personaggio</a></li>
+    <li><a href="#razze">2 · Razze</a></li>
+    <li><a href="#classi">3 · Classi</a></li>
+    <li class="sub"><a href="#limiti-classi">Limiti delle abilità</a></li>
+    <li class="sub"><a href="#libri">Abilità di classe</a></li>
+    <li class="sub"><a href="#spellbook">Incantesimi per classe</a></li>
+    <li><a href="#stat">4 · Statistiche ed esperienza</a></li>
+    <li><a href="#mestieri">5 · Mestieri</a></li>
+    <li><a href="#ascensioni">6 · Ascensioni</a></li>
+    <li><a href="#cavalcature">7 · Cavalcature</a></li>
+    <li class="sub"><a href="#stalle">Stalle</a></li>
+    <li class="sub"><a href="#addestramento">Addestramento</a></li>
+    <li class="sub"><a href="#asc-cavalli">Ascensione dei cavalli</a></li>
+    <li><a href="#metalli">8 · Minerali e metalli</a></li>
+    <li class="sub"><a href="#miniera">Miniera</a></li>
+    <li class="sub"><a href="#leghe">Raffinazione e leghe</a></li>
+    <li class="sub"><a href="#adamantio">Adamantio</a></li>
+    <li class="sub"><a href="#lavorati">Pezzi lavorati</a></li>
+    <li><a href="#legna">9 · Legna e archi</a></li>
+    <li><a href="#pelli">10 · Pelli e sartoria</a></li>
+    <li><a href="#armi">11 · Armi e armature</a></li>
+    <li><a href="#alchimia">12 · Alchimia e oggetti magici</a></li>
+    <li><a href="#case">13 · Case e barche</a></li>
+    <li><a href="#sicurezza">14 · Porte, serrature e bauli</a></li>
+    <li><a href="#viaggio">15 · Rune e viaggio</a></li>
+    <li><a href="#altro">16 · Altri sistemi</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+<header class="top">
+  <div class="eyebrow">Shard Midian · Sphere 0.51a</div>
+  <h1>Compendio di Midian</h1>
+  <p>Come funziona il gioco su Midian, ricavato direttamente dalle script del server: creazione del personaggio, razze, classi, abilità, mestieri, ascensioni, cavalcature, minerali, legna, crafting, case e sicurezza. I numeri delle abilità sono in punti (100,0 = gran maestro). I codici in grigio sono gli identificativi degli oggetti nelle script, utili ai GM.</p>
+</header>
+<p class="empty" id="noresults">Nessuna sezione contiene questa parola.</p>
+
+<!-- 1 -->
+<section class="chap" id="creazione" data-k="creazione nuovo personaggio pietra razza classe citta partenza transfert">
+<h2><span class="num">01</span>Creazione del personaggio</h2>
+<p>Un personaggio appena creato tocca la <b>pietra della scelta razza e classe</b> <span class="id">6000</span> e passa per tre menu, uno dopo l'altro:</p>
+<ol class="steps">
+  <li><b>Razza</b>: dieci razze. La scelta imposta il colore della pelle e, per alcune, il karma iniziale.</li>
+  <li><b>Classe</b>: l'elenco dipende dalla razza (vedi <a href="#razze">Razze</a>). Il bardo ha un menu a parte.</li>
+  <li><b>Città di partenza</b>: oppure il <b>transfert</b> di un vecchio personaggio, solo con la pergamena di autorizzazione <span class="id">7560</span>.</li>
+</ol>
+<p>Scegliendo la città, il server porta le abilità della classe almeno ai valori iniziali qui sotto. Se una è già più alta, resta com'è.</p>
+<div class="tbl"><table>
+<tr><th>Classe</th><th>Abilità iniziali</th></tr>
+<tr><td>Guerriero</td><td>Swordsmanship 70 · Anatomy 65 · Arms Lore 60 · Mace Fighting 60 · Parrying 50</td></tr>
+<tr><td>Arciere</td><td>Archery 70 · Anatomy 65 · Animal Lore 60 · Tactics 55 · Wrestling 50</td></tr>
+<tr><td>Cavaliere nero</td><td>Swordsmanship 60 · Anatomy 65 · Arms Lore 60 · Archery 50 · Healing 40</td></tr>
+<tr><td>Paladino</td><td>Swordsmanship 60 · Anatomy 65 · Arms Lore 60 · Healing 55 · Parrying 50</td></tr>
+<tr><td>Chierico</td><td>Mace Fighting 60 · Anatomy 60 · Spirit Speak 60 · Healing 60 · Tactics 50</td></tr>
+<tr><td>Assassino</td><td>Fencing 60 · Stealing 55 · Hiding 60 · Snooping 55 · Poisoning 60</td></tr>
+<tr><td>Bardo</td><td>Musicianship 70 · Provocation 60 · Peacemaking 60 · Cooking 60 · Archery 55</td></tr>
+<tr><td>Mago</td><td>Magery 60 · Meditation 60 · Item ID 60 · Evaluating Intelligence 60 · Spirit Speak 50</td></tr>
+<tr><td>Druido</td><td>Magery 60 · Meditation 60 · Item ID 60 · Animal Lore 60 · Tracking 50</td></tr>
+<tr><td>Necromante</td><td>Magery 60 · Meditation 60 · Forensics 60 · Evaluating Intelligence 60 · Spirit Speak 50</td></tr>
+</table></div>
+<h3>Città di partenza</h3>
+<p>Britain (umani) · Cove (nani) · Minoc (città franca) · Cove Orc Camp (mezzorchi) · Ocllo (vampiri) · Moonglow Lycaeum (arcani). Tra parentesi la razza dominante.</p>
+<div class="note"><b>Attenzione.</b> Se il personaggio arriva al menu delle città senza una classe valida, la script lo segnala come "cheater" e lo manda in prigione. Era successo per un difetto del server ricostruito, ora corretto.</div>
+</section>
+
+<!-- 2 -->
+<section class="chap" id="razze" data-k="razze umano mezzelfo elfo oscuro drow nano mezzorco orco demone vampiro arcano silphide statistiche limiti forza destrezza intelligenza">
+<h2><span class="num">02</span>Razze</h2>
+<p>Ogni razza ha limiti propri a Forza, Intelligenza e Destrezza, che crescono con le <a href="#ascensioni">ascensioni</a>. Se una statistica supera il limite, il server la riduce di un punto ogni volta che il personaggio indossa qualcosa o fa doppio clic. Alcune razze hanno anche un tetto razziale a Tracking, Hiding, Magic Resistance e Stealth.</p>
+<div class="tbl"><table>
+<tr><th>Razza</th><th class="n">Base<br>For/Int/Des</th><th class="n">Asc. I</th><th class="n">Asc. II</th><th class="n">Asc. III</th><th>Limiti razziali</th><th>Note</th></tr>
+<tr><td>Umano</td><td class="n">100/100/100</td><td class="n">110/103/107</td><td class="n">120/106/114</td><td class="n">130/110/120</td><td>Tracking 50 · Hiding 70 · Magic Res. 50 · Stealth 70</td><td>Classi: tutte</td></tr>
+<tr><td>Mezzelfo</td><td class="n">90/60/150</td><td class="n">100/67/153</td><td class="n">110/74/156</td><td class="n">120/80/160</td><td>Tracking 30 · Hiding 70 · Magic Res. 60 · Stealth 70</td><td></td></tr>
+<tr><td>Elfo</td><td class="n">80/40/190</td><td class="n">90/47/193</td><td class="n">100/54/196</td><td class="n">110/60/200</td><td>Hiding 80 · Magic Res. 70 · Stealth 80</td><td></td></tr>
+<tr><td>Elfo oscuro</td><td class="n">90/75/140</td><td class="n">100/82/143</td><td class="n">110/89/146</td><td class="n">120/95/150</td><td>Tracking <span class="zero">0</span> · Hiding 100 · Magic Res. 50 · Stealth 100</td><td>Karma iniziale −3000</td></tr>
+<tr><td>Nano</td><td class="n">200/30/70</td><td class="n">200/38/81</td><td class="n">200/46/92</td><td class="n">200/55/105</td><td>Tracking 100 · Hiding <span class="zero">0</span> · Magic Res. 100 · Stealth <span class="zero">0</span></td><td></td></tr>
+<tr><td>Mezzorco</td><td class="n">200/40/80</td><td class="n">200/48/91</td><td class="n">200/56/102</td><td class="n">200/65/115</td><td>Tracking 30 · Hiding 10 · Magic Res. 50 · Stealth <span class="zero">0</span></td><td>Karma iniziale −3000</td></tr>
+<tr><td>Demone</td><td class="n">150/70/80</td><td class="n">153/77/90</td><td class="n">156/84/100</td><td class="n">160/90/110</td><td>Tracking 100 · Hiding <span class="zero">0</span> · Magic Res. 100 · Stealth <span class="zero">0</span></td><td>Karma iniziale −3000</td></tr>
+<tr><td>Vampiro</td><td class="n">120/80/100</td><td class="n">123/87/110</td><td class="n">126/94/120</td><td class="n">130/100/130</td><td>Tracking <span class="zero">0</span> · Hiding 80 · Magic Res. 80 · Stealth 50</td><td>Anche per conversione (vedi <a href="#altro">Altri sistemi</a>)</td></tr>
+<tr><td>Arcano</td><td class="n">75/190/45</td><td class="n">85/193/52</td><td class="n">95/196/59</td><td class="n">105/200/65</td><td>Tracking, Hiding, Stealth <span class="zero">0</span> · Magic Res. 100</td><td></td></tr>
+<tr><td>Silphide</td><td class="n">70/190/60</td><td class="n">80/193/72</td><td class="n">90/196/79</td><td class="n">100/200/80</td><td>Tracking, Magic Res. <span class="zero">0</span> · Hiding 100 · Stealth 100</td><td>Solo corpo femminile</td></tr>
+</table></div>
+<h3>Classi disponibili per razza</h3>
+<div class="tbl"><table>
+<tr><th>Razza</th><th>Classi</th></tr>
+<tr><td>Umano</td><td>Mago, Cavaliere nero, Paladino, Guerriero, Assassino, Arciere, Necromante, Druido, Chierico, Bardo</td></tr>
+<tr><td>Mezzelfo</td><td>Mago, Paladino, Guerriero, Assassino, Arciere, Druido, Bardo</td></tr>
+<tr><td>Elfo</td><td>Mago, Guerriero, Assassino, Arciere, Druido, Bardo</td></tr>
+<tr><td>Elfo oscuro</td><td>Mago, Cavaliere nero, Guerriero, Assassino, Arciere, Necromante, Bardo</td></tr>
+<tr><td>Nano</td><td>Guerriero, Chierico, Bardo</td></tr>
+<tr><td>Mezzorco</td><td>Guerriero, Bardo</td></tr>
+<tr><td>Demone · Vampiro</td><td>Mago, Cavaliere nero, Guerriero, Assassino, Necromante, Bardo</td></tr>
+<tr><td>Arcano</td><td>Mago, Necromante, Druido, Chierico</td></tr>
+<tr><td>Silphide</td><td>Mago, Druido, Chierico</td></tr>
+</table></div>
+<p>Barbaro, Anacoreta ed Evocatore esistono nelle script ma sono disattivati nei menu di creazione.</p>
+</section>
+
+<!-- 3 -->
+<section class="chap" id="classi" data-k="classi guerriero mago arciere druido cavaliere nero paladino assassino chierico necromante bardo armature restrizioni">
+<h2><span class="num">03</span>Classi</h2>
+<p>Ogni classe ha limiti massimi alle abilità e restrizioni sull'equipaggiamento. I limiti vengono applicati ogni volta che il personaggio indossa un oggetto: per questo, dopo un cambio di classe, conviene mettersi e togliersi un abito.</p>
+<h3>Restrizioni comuni</h3>
+<ul>
+  <li>Solo arciere, assassino e bardo arciere sanno usare l'<b>arco elfico</b> <span class="id">5006</span>.</li>
+  <li>Le <b>armature d'osso</b> sono rifiutate da quasi tutte le classi ("puzza di morto"). Il necromante le può indossare.</li>
+  <li>Mago, druido, chierico, necromante, arciere e assassino hanno limiti alle armature ("questa armatura mi sta scomoda"). Il mago non indossa nessuna armatura.</li>
+  <li>Con la <b>bandana kamikaze</b> <span class="id">64b3</span> addosso non si può mirare: "la bandana mi disturba".</li>
+  <li>In città nessuno può squartare un cadavere di giocatore, a meno che fosse un assassino con più di 5 uccisioni.</li>
+</ul>
+
+<h3 id="limiti-classi">Limiti delle abilità per classe</h3>
+<p>Valori massimi raggiungibili. <span class="zero">0</span> significa abilità vietata. Le abilità non elencate hanno il limite generale.</p>
+<div class="tbl"><table>
+<tr><th>Classe</th><th>Limiti</th></tr>
+<tr><td>Guerriero</td><td>Lockpicking <span class="zero">0</span> · Magery <span class="zero">0</span> · Snooping/Stealing <span class="zero">0</span> · Musica (Peacemaking, Enticement, Provocation) <span class="zero">0</span> · Archery 40 · Healing 60 · Eval. Int 50 · Spirit Speak 50 · Poisoning 20 · Meditation 40 · Swordsmanship, Fencing, Mace Fighting 130</td></tr>
+<tr><td>Mago</td><td>Lockpicking, armi bianche, Parrying, Snooping, Stealing, musica <span class="zero">0</span> · Anatomy 50 · Archery 10 · Healing 30 · Spirit Speak 80 · Tactics 30 · Poisoning 30</td></tr>
+<tr><td>Arciere</td><td>Lockpicking, Magery, musica <span class="zero">0</span> · Meditation 40 · Swordsmanship 10 · Mace 10 · Fencing 90 · Parrying 30 · Healing 80 · Eval. Int 40 · Spirit Speak 50 · Snooping 60 · Stealing 60 · Poisoning 20</td></tr>
+<tr><td>Druido</td><td>Lockpicking, armi bianche, Parrying, Snooping, Stealing, musica <span class="zero">0</span> · Archery 10 · Healing 30 · Spirit Speak 80 · Poisoning 50 · Esperienza 100</td></tr>
+<tr><td>Cavaliere nero</td><td>Lockpicking, Snooping, Stealing, musica <span class="zero">0</span> · Meditation 65 · Anatomy 80 · Magery 60 · Archery 60 · Swords/Mace/Fencing 90 · Parrying 80 · Healing 40 · Eval. Int 60 · Spirit Speak 50 · Wrestling 80 · Poisoning 50</td></tr>
+<tr><td>Paladino</td><td>Lockpicking, Snooping, Stealing, musica, Poisoning <span class="zero">0</span> · Meditation 65 · Magery 50 · Archery 10 · Swordsmanship 100 · Mace 10 · Fencing 100 · Eval. Int 70 · Spirit Speak 80</td></tr>
+<tr><td>Assassino</td><td>Magery, Lockpicking, Eval. Int, Spirit Speak, musica <span class="zero">0</span> · Archery 90 · Swordsmanship 70 · Mace 50 · Fencing 100 · Parrying 50 · Healing 50 · Meditation 30</td></tr>
+<tr><td>Chierico</td><td>Lockpicking, Fencing, Eval. Int, Snooping, Stealing, musica <span class="zero">0</span> · Magery 90 · Archery 10 · Swordsmanship 10 · Mace 90 · Parrying 70 · Wrestling 50 · Spirit Speak 80 · Poisoning 20</td></tr>
+<tr><td>Necromante</td><td>Lockpicking, Swords, Fencing, Parrying, Healing, Snooping, Stealing, musica <span class="zero">0</span> · Anatomy 50 · Archery 10 · Mace 30 · Wrestling 50 · Poisoning 75</td></tr>
+<tr><td>Bardo arciere</td><td>Magery, Lockpicking, Spirit Speak, Snooping, Stealing, Eval. Int <span class="zero">0</span> · Tactics 80 · Archery 80 · Anatomy 75 · Swords/Mace/Fencing 50 · Poisoning 50 · Parrying 90 · Healing 90</td></tr>
+</table></div>
+
+<h3 id="libri">Abilità di classe</h3>
+<p>Ogni classe ha un libro o un manuale che apre il pannello delle abilità speciali. Libro e icone delle abilità vanno tenuti in mano o nello zaino. Un'abilità preparata funziona solo per chi l'ha preparata. Molte abilità sono più forti con l'esperienza (Necromancy, abbreviata "esp.") e, usandole, la fanno salire. Tra un uso e l'altro c'è un'attesa, e i libri si rompono dopo un certo numero di aperture (di solito 300). Dove il bersaglio è un giocatore non criminale, usarle rende criminali.</p>
+<h4>Guerriero</h4>
+<p>Manuale dello stratega <span class="id">72a3</span> (pannello "Ira!") e manuale da guerriero <span class="id">60f6</span> (abilità speciali). Quasi tutte le mosse dell'Ira richiedono la spada Durlindana <span class="id">7295</span> in mano e consumano stamina, mana e cibo.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Attacco improvviso</b></td><td>Colpo a mani nude su un nemico adiacente: 20 danni (40 contro gli NPC), contro i giocatori ridotti dalla loro Wrestling. Se si è troppo lontani si spreca metà del mana.</td><td>30 mana</td></tr>
+<tr><td><b>Anatomia di drago</b></td><td>Colpo mirato al punto debole di un drago adiacente: 50 danni.</td><td>20 mana</td></tr>
+<tr><td><b>Anatomia di demone</b></td><td>Colpo mirato al punto debole di un demone adiacente: 50 danni, ridotti dall'Anatomy se il bersaglio è un giocatore.</td><td>20 mana</td></tr>
+<tr><td><b>Recupero</b></td><td>Recupera punti ferita pari a esp./20.</td><td>20 mana</td></tr>
+<tr><td><b>Prontezza</b></td><td>Per 30 secondi alza la Tactics. Non si cumula con altre abilità speciali attive.</td><td>33 mana</td></tr>
+<tr><td><b>Precisione</b></td><td>Per 30 secondi aumenta la precisione dei colpi. Non si cumula con altre abilità speciali attive.</td><td>Tactics/30 mana</td></tr>
+<tr><td><b>Maschera dell'ira</b></td><td>Crea la maschera dell'ira, che serve alle altre mosse.</td><td>20 stamina, 10 mana</td></tr>
+<tr><td><b>Stordimento</b></td><td>Colpo su un nemico adiacente: 15 + esp./30 danni e lo paralizza per qualche istante.</td><td>25 stamina, 20 mana</td></tr>
+<tr><td><b>Bolas</b></td><td>Lancia le bolas su un bersaglio entro 5 caselle e lo blocca a terra per qualche secondo. Non funziona contro chi riflette le magie.</td><td>30 stamina, 25 mana</td></tr>
+<tr><td><b>Stone Break</b></td><td>Spezza la pietrificazione di un personaggio adiacente: torna normale ma con un terzo di vita in meno.</td><td>20 stamina, 15 mana</td></tr>
+<tr><td><b>Bow Break</b></td><td>Spezza l'arco dell'avversario.</td><td>25 stamina, 10 mana</td></tr>
+<tr><td><b>Disarmare</b></td><td>Fa volare via l'arma dell'avversario.</td><td>40 stamina, 25 mana</td></tr>
+<tr><td><b>Last Blow</b></td><td>Colpo finale devastante.</td><td>50 stamina, 30 mana</td></tr>
+<tr><td><b>Berserk</b></td><td>Per 3 minuti: grandi bonus a Forza, Destrezza e abilità di combattimento.</td><td>50 stamina, 30 mana, 8 sangue di drago</td></tr>
+<tr><td><b>Esplosivo</b></td><td>Crea un esplosivo da lanciare (esplosione ad area). Con poca esperienza può scoppiare in mano (-25 punti ferita).</td><td>70 stamina, 20 mana, polvere da sparo + contenitore</td></tr>
+</table></div>
+<h4>Mago</h4>
+<p>Manuale da mago <span class="id">60f5</span> (abilità speciali) e Libro del mago <span class="id">7268</span> (incantesimi rituali con reagenti).</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Meditazione</b></td><td>Ripristina mana pari a esp./20, consumando altrettanta stamina.</td><td>5 black pearl</td></tr>
+<tr><td><b>Cono di ghiaccio</b></td><td>Bersaglio entro 9 caselle: 20 danni, lo intorpidisce (Clumsy al livello di Magery) e lo chiude in una prigione di blocchi di ghiaccio che dura in base all'esperienza. Attesa di 30 secondi.</td><td>60 mana, 5 executioner's cap</td></tr>
+<tr><td><b>Sfera incantata</b></td><td>Crea una sfera magica che accumula cariche.</td><td>80 mana, 10 garlic, 10 ginseng</td></tr>
+<tr><td><b>Ricarica magica</b></td><td>Ricarica un oggetto magico (la sfera): le cariche dipendono dall'esperienza.</td><td>50 mana, 10 garlic, 10 ginseng</td></tr>
+<tr><td><b>Serpent Rune (Sigillo del serpente)</b></td><td>Applica un sigillo magico su un oggetto. Non si usa dove ci sono le guardie.</td><td>reagenti del libro</td></tr>
+<tr><td><b>Obsidian Sash (Fascia di ossidiana)</b></td><td>Una fascia che, indossata, aumenta la difesa in base all'esperienza. Si brucia se colpita da una magia.</td><td>reagenti del libro</td></tr>
+<tr><td><b>Dimensional Door</b></td><td>Apre una porta dimensionale per spostarsi. Non dove ci sono le guardie.</td><td>reagenti del libro</td></tr>
+<tr><td><b>Vampire Touch</b></td><td>Tocco su un bersaglio entro 4 caselle: 10 + esp./50 danni, recuperati come punti ferita. Attesa di 60 secondi.</td><td>reagenti del libro</td></tr>
+<tr><td><b>Enchant</b></td><td>Incanta armature (piastra, maglia, anelli) e armi: la potenza dipende da esperienza e Magery. Per la piastra servono 150 sangue di drago e 50 ossidiana.</td><td>100 mana + reagenti</td></tr>
+<tr><td><b>Lightning Storm</b></td><td>Fa cadere una tempesta di fulmini su tutta l'area intorno.</td><td>reagenti del libro</td></tr>
+</table></div>
+<h4>Druido</h4>
+<p>Manuale da druido <span class="id">60f7</span> e Libro della natura <span class="id">7281</span> (richiede karma sopra 1500).</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Grande controllo</b></td><td>Potenzia un proprio elementale entro 7 caselle: +50 a Forza, Destrezza e Intelligenza. Una sola volta per elementale.</td><td>30 mana</td></tr>
+<tr><td><b>Rigenera albero</b></td><td>Guarisce completamente un albero vivente (un alleato evocato) entro 7 caselle.</td><td>40 mana</td></tr>
+<tr><td><b>Congelare il metallo</b></td><td>Congela un'arma metallica. Le armi troppo potenti respingono l'incantesimo (-35 punti ferita).</td><td>50 mana</td></tr>
+<tr><td><b>Forza vitale (Forza della natura)</b></td><td>Per 5 minuti il potere della natura scorre nel druido, in base alla Magery.</td><td>reagenti del libro</td></tr>
+<tr><td><b>Call Lightning (Invocare il fulmine)</b></td><td>Benedice un alleato entro 9 caselle: per un periodo che dipende da esperienza e Magery i suoi colpi scatenano fulmini.</td><td>reagenti del libro</td></tr>
+<tr><td><b>Sciame di insetti</b></td><td>Uno sciame avvolge un bersaglio entro 14 caselle: 10 + esp./50 danni subito e poi nel tempo, e gli impedisce di usare le abilità del druido.</td><td>reagenti del libro</td></tr>
+<tr><td><b>Nature Power (Potenziamento elementale)</b></td><td>Potenzia un elementale: da +100 a +500 punti ferita, Forza e Destrezza secondo l'esperienza.</td><td>reagenti del libro</td></tr>
+<tr><td><b>Distruggi elementale</b></td><td>Distrugge un elementale. Con esperienza sufficiente se ne ricava muschio magico.</td><td>reagenti del libro</td></tr>
+</table></div>
+<h4>Arciere</h4>
+<p>Manuale del Ranger <span class="id">7253</span> (pannello "Frecce magiche"). Servono l'arco in mano e le piume magiche <span class="id">7252</span>. Portata fino a 12 caselle.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Freccia di fuoco</b></td><td>Freccia esplosiva a tempo: esplode dopo qualche secondo con 20 + esp./50 danni (40 + esp./20 contro gli NPC).</td><td>25 mana, 3 piume</td></tr>
+<tr><td><b>Freccia di ghiaccio</b></td><td>Imprigiona il bersaglio nel ghiaccio per 3-5 secondi: 10 + esp./50 danni (40 + esp./20 contro gli NPC).</td><td>25 mana, 3 piume</td></tr>
+<tr><td><b>Freccia avvelenata</b></td><td>Avvelena il bersaglio in base all'esperienza. Sui mostri molto forti l'effetto è ridotto.</td><td>25 mana, 3 piume</td></tr>
+<tr><td><b>Colpo preciso</b></td><td>Per qualche secondo l'Arco dei boschi fa un colpo critico (20-40 danni).</td><td>30 mana, 5 piume</td></tr>
+<tr><td><b>Disarmare</b></td><td>Per qualche secondo l'Arco dei boschi può far volare via l'arma del nemico.</td><td>30 mana, 5 piume</td></tr>
+<tr><td><b>Nemico particolare</b></td><td>Giura odio a una specie di mostro: bonus contro tutte le creature di quel tipo. Serve l'Arco dei boschi.</td><td>30 mana, 5 piume</td></tr>
+<tr><td><b>Mimetizzazione</b></td><td>Si nasconde dentro un cespuglio, in agguato.</td><td>50 mana, 5 piume</td></tr>
+<tr><td><b>Empatia animale</b></td><td>Per 5 minuti aumenta l'abilità di addestrare gli animali.</td><td>40 mana, 5 piume</td></tr>
+<tr><td><b>Arco dei boschi</b></td><td>Evoca un arco magico (dura 10 minuti) che rende possibili Colpo preciso e Disarmare.</td><td>25 mana, 2 piume</td></tr>
+<tr><td><b>Faretra di Taumaril</b></td><td>Una faretra che crea frecce e dardi quando finiscono, per 2 minuti.</td><td>30 mana, 3 piume</td></tr>
+</table></div>
+<h4>Chierico</h4>
+<p>Versetti <span class="id">6515</span> (500 aperture) e pannello del chierico, che usa i punti fede.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Barriera di lame</b></td><td>Circonda il chierico con lame rotanti che feriscono chi si avvicina. Durata 5 + esp./50.</td><td>40 mana</td></tr>
+<tr><td><b>Cura di massa</b></td><td>Cura chiunque si trovi in un'area 11x11 attorno al bersaglio.</td><td>30 mana</td></tr>
+<tr><td><b>Esorcismo / Scaccia non morto</b></td><td>Colpisce un non morto con la luce sacra. Benedice anche un paletto di frassino, che diventa un'arma contro i non morti.</td><td>20 mana</td></tr>
+<tr><td><b>Resurrezione</b></td><td>Resuscita un fantasma con 60 punti ferita.</td><td>60 mana</td></tr>
+<tr><td><b>Martello benedetto</b></td><td>Crea un martello benedetto.</td><td>35 mana</td></tr>
+<tr><td><b>Invocare gli dei</b></td><td>Invoca l'aiuto degli dei.</td><td>tutto il mana</td></tr>
+<tr><td><b>Pietra in carne</b></td><td>Riporta in vita di carne una persona pietrificata.</td><td>20 mana</td></tr>
+<tr><td><b>Dito della morte</b></td><td>Bersaglio entro 9 caselle: 30 + esp./50 danni. Se il bersaglio riflette le magie, il danno torna indietro.</td><td>40 mana</td></tr>
+<tr><td><b>Angelo custode</b></td><td>Mette un angelo custode su un alleato: durata esp. x 2 secondi.</td><td>80 mana</td></tr>
+<tr><td><b>Preghiera: Respingere</b></td><td>Respinge le creature.</td><td>punti fede</td></tr>
+<tr><td><b>Preghiera: Incanta Plate</b></td><td>Incanta un'armatura di piastra.</td><td>punti fede</td></tr>
+<tr><td><b>Preghiera: Consacra armatura</b></td><td>Consacra un'armatura magica e ne aumenta la protezione di esp./100 + 2.</td><td>100 mana, 300 punti fede</td></tr>
+</table></div>
+<h4>Paladino</h4>
+<p>Libro dei paladini <span class="id">60a7</span>: con lo Scudo sacro <span class="id">60a5</span> in mano si dona oro alla chiesa per i punti fede (massimo 1500). Le abilità si usano dal pannello del paladino.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Imposizione delle mani</b></td><td>Cura un alleato con il tocco.</td><td>30 mana</td></tr>
+<tr><td><b>Cura di massa</b></td><td>Cura chiunque in un'area 11x11.</td><td>30 mana</td></tr>
+<tr><td><b>Distruggi non morti</b></td><td>Area 11x11 che danneggia i non morti.</td><td>20 mana</td></tr>
+<tr><td><b>Resurrezione</b></td><td>Resuscita un fantasma con 60 punti ferita.</td><td>60 mana</td></tr>
+<tr><td><b>Spada santa</b></td><td>Crea la Holy Sword (danno base 20-30).</td><td>35 mana</td></tr>
+<tr><td><b>Protezione divina</b></td><td>Protezione sacra sul paladino.</td><td>molto mana e punti ferita</td></tr>
+<tr><td><b>Fulmine sacro</b></td><td>Fulmine su un bersaglio entro 12 caselle: 15 + esp./60 danni (30 + esp./30 contro gli NPC).</td><td>20 mana</td></tr>
+<tr><td><b>Verdetto divino</b></td><td>Incanta la spada sacra: diventa la Spada del vendicatore sacro.</td><td>50 mana</td></tr>
+<tr><td><b>Anima purificata</b></td><td>Bersaglio entro 5 caselle: danni sacri pari a esp./20, ma il paladino ne subisce altrettanti.</td><td>20 mana</td></tr>
+</table></div>
+<h4>Cavaliere nero</h4>
+<p>Libro dei cavalieri neri <span class="id">60b4</span>: con lo Scudo maledetto <span class="id">60b2</span> in mano si fanno le offerte per i punti fede. Le abilità si usano dal pannello del cavaliere nero.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Spada vampirica</b></td><td>Evoca una spada vampirica per esp./2 secondi.</td><td>50 mana</td></tr>
+<tr><td><b>Offerta votiva</b></td><td>Offerta al proprio dio per ottenere punti fede.</td><td>40 mana</td></tr>
+<tr><td><b>Peso degli anni</b></td><td>Bersaglio entro 19 caselle: gli azzera la stamina.</td><td>25 mana</td></tr>
+<tr><td><b>Tocco del male</b></td><td>Tocco su un bersaglio entro 3 caselle: 15 + esp./50 danni. Attesa di 30 secondi.</td><td>25 mana</td></tr>
+<tr><td><b>Oltraggio divino</b></td><td>Maledizione potente.</td><td>tutto il mana e molti punti ferita</td></tr>
+<tr><td><b>Paralisi</b></td><td>Tocco su un bersaglio entro 2 caselle: lo paralizza.</td><td>30 mana</td></tr>
+<tr><td><b>Malattia</b></td><td>Il bersaglio non può lanciare incantesimi per esp./40 secondi. Attesa tripla prima di poterla rilanciare.</td><td>70 mana</td></tr>
+</table></div>
+<h4>Assassino</h4>
+<p>Manuale dei veleni <span class="id">60c3</span>. I veleni si applicano al Pugnale dell'assassino: la riuscita dipende da Poisoning, che sale usandoli.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Pugnale delle ombre</b></td><td>Il pugnale dell'assassino (scherma), da avvelenare con i veleni.</td><td>10 mana</td></tr>
+<tr><td><b>Veleno paralizzante</b></td><td>Applicato al pugnale: i colpi paralizzano la vittima.</td><td>5 mana</td></tr>
+<tr><td><b>Veleno mortale</b></td><td>Applicato al pugnale: uccide all'istante una vittima che non stava attaccando l'assassino. Il corpo diventa velenoso al tocco.</td><td>30 mana</td></tr>
+<tr><td><b>Veleno di medusa</b></td><td>Applicato al pugnale: pietrifica la vittima.</td><td>40 mana</td></tr>
+<tr><td><b>Gas velenoso</b></td><td>Pozione da lanciare entro 10 caselle: avvelena gravemente una persona. Non funziona su mostri e animali.</td><td>25 mana</td></tr>
+<tr><td><b>Coltello da lancio</b></td><td>Si lancia fino a 14 caselle: 10-35 danni, a volte doppi su un punto vitale. Più il bersaglio è lontano, più è facile mancarlo. Al massimo 2 alla volta.</td><td>va messo nella custodia</td></tr>
+<tr><td><b>Mantello delle ombre</b></td><td>Indossato, aumenta molto Hiding e Stealth per un tempo che dipende dall'esperienza.</td><td>60 mana</td></tr>
+<tr><td><b>Mantello del ladro</b></td><td>Indossato per 10 minuti: si passa inosservati (karma +6000, uccisioni nascoste).</td><td>70 mana</td></tr>
+<tr><td><b>Crea trappole</b></td><td>Trappole a gas, esplosive o a spuntoni piazzate sotto di sé: scattano sul primo che le calpesta. Servono Poisoning 65 e Stealing 80, non si piazzano davanti alle guardie.</td><td>3 mana</td></tr>
+</table></div>
+<h4>Necromante</h4>
+<p>Necronomicon <span class="id">6069</span> (250 aperture). Reagenti: cenere vulcanica, osso di demone, ossidiana, fiala di sangue, pomice, pig iron.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Dark Fire Bolt</b></td><td>Dardo di fuoco oscuro: danni fino a esp./20. Se il bersaglio riflette, il necromante subisce 25 danni.</td><td>mana e reagenti del libro</td></tr>
+<tr><td><b>Hallucination</b></td><td>Il bersaglio ha le allucinazioni.</td><td>mana e reagenti</td></tr>
+<tr><td><b>Animate Dead</b></td><td>Rianima un cadavere come non morto.</td><td>mana e reagenti</td></tr>
+<tr><td><b>Bone Armour</b></td><td>Armatura d'ossa sul necromante.</td><td>mana e reagenti</td></tr>
+<tr><td><b>Defile Corpse</b></td><td>Prosciuga un cadavere: +30 punti ferita e +30 mana, anche oltre il massimo (fino a +30). Un cadavere si prosciuga una sola volta.</td><td>mana e reagenti</td></tr>
+<tr><td><b>Vampire Ray</b></td><td>Raggio su un bersaglio entro 11 caselle: esp./66 danni e il necromante recupera esp./33 punti ferita.</td><td>mana e reagenti</td></tr>
+<tr><td><b>Summon Undead I e II</b></td><td>Evoca non morti. Con poca esperienza l'evocazione può fallire.</td><td>osso di demone e mana</td></tr>
+<tr><td><b>Patto tenebroso</b></td><td>Patto con le tenebre.</td><td>mana e reagenti</td></tr>
+<tr><td><b>Crea reagenti</b></td><td>Crea reagenti necromantici.</td><td>mana</td></tr>
+<tr><td><b>Disperdi forza vitale</b></td><td>Toglie un terzo della vita al bersaglio (50 punti fissi se ne ha più di 200). Se riflette, tocca al necromante.</td><td>mana e reagenti</td></tr>
+<tr><td><b>Curse Arcana</b></td><td>Maledizione potente al livello di esperienza più Magery. Se riflessa, colpisce il necromante.</td><td>mana e reagenti</td></tr>
+</table></div>
+<h4>Bardo</h4>
+<p>Spartiti del bardo <span class="id">60c7</span>. Le canzoni si trascrivono negli spartiti dai libri delle canzoni. La loro forza dipende da Peacemaking o Provocation e dall'esperienza.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Tamburino da lancio</b></td><td>Si lancia fino a 8 caselle: 10 + esp./50 danni (30 + esp./20 contro gli NPC). Attesa di 15 secondi.</td><td>20 mana</td></tr>
+<tr><td><b>Canzone delle stelle</b></td><td>Danneggia i non morti e cura gli amici intorno.</td><td>35 mana</td></tr>
+<tr><td><b>Canzone della vita</b></td><td>Protegge il corpo di un amico e impedisce agli estranei di avvicinarsi.</td><td>30 mana</td></tr>
+<tr><td><b>Canzone della morte</b></td><td>Incita una creatura all'odio: attacca amici e nemici senza distinzione.</td><td>50 mana</td></tr>
+<tr><td><b>Canzone del sole</b></td><td>Accelera il bioritmo del bersaglio: gli impedisce di lanciare una magia o gli fa perdere il bersaglio.</td><td>20 mana</td></tr>
+<tr><td><b>Cantica delle creature</b></td><td>Rende docile una creatura, che si può poi addomesticare.</td><td>60 mana</td></tr>
+</table></div>
+<p>I manuali di classe e gli oggetti delle abilità speciali si fabbricano con il mestiere di <a href="#mestieri">scriba</a>.</p>
+
+<h3 id="spellbook">Incantesimi per classe</h3>
+<p>Il libro degli incantesimi di classe si chiede dal menu di aiuto ("Richiedi lo SPELLBOOK"). Contiene solo gli incantesimi permessi alla classe:</p>
+<div class="tbl"><table>
+<tr><th>Classe</th><th>Incantesimi</th></tr>
+<tr><td>Mago</td><td>Heal, Magic Arrow, Night Sight, Harm, Magic Trap/Untrap, Fireball, Magic Lock, Unlock, Wall of Stone, Fire Field, Lightning, Mana Drain, Incognito, Magic Reflect, Mind Blast, Paralyze, Energy Bolt, Explosion, Invisibility, Paralyze Field, Chain Lightning, Energy Field, Flame Strike, Gate Travel, Mana Vampire, Meteor Swarm, Earthquake, Energy Vortex, Daemon</td></tr>
+<tr><td>Druido</td><td>Create Food, Heal, Magic Arrow, Cure, Protection, Fireball, Fire Field, Greater Heal, Lightning, Mana Drain, Paralyze, Summon, Dispel, Reveal, Chain Lightning, Gate Travel, Mana Vampire, Mass Dispel, Meteor Swarm, Polymorph, Earthquake e i quattro elementali</td></tr>
+<tr><td>Necromante</td><td>Clumsy, Feeblemind, Magic Arrow, Weaken, Harm, Magic Trap, Poison, Curse, Mana Drain, Blade Spirit, Incognito, Mind Blast, Poison Field, Energy Bolt, Mass Curse, Gate Travel, Mana Vampire, Meteor Swarm, Daemon</td></tr>
+<tr><td>Chierico</td><td>Heal, Night Sight, Reactive Armor, Cure, Magic Untrap, Protection, Wall of Stone, Arch Cure, Arch Protection, Greater Heal, Blade Spirit, Dispel Field, Magic Reflect, Paralyze, Summon, Dispel, Reveal, Energy Field, Gate Travel</td></tr>
+<tr><td>Paladino</td><td>Heal, Reactive Armor, Cure, Protection, Wall of Stone, Arch Cure, Arch Protection, Greater Heal, Dispel Field, Magic Reflect</td></tr>
+<tr><td>Cavaliere nero</td><td>Clumsy, Feeblemind, Magic Arrow, Weaken, Harm, Fireball, Poison, Curse, Lightning, Mana Drain, Magic Reflect, Mind Blast</td></tr>
+<tr><td>Bardo</td><td>Create Food, Night Sight, Agility, Cunning, Cure, Strength, Arch Cure, Arch Protection, Dispel Field, Incognito, Magic Reflect</td></tr>
+</table></div>
+<p>Il libro del mago, al primo doppio clic, dà ai nuovi personaggi la possibilità di lanciare Heal.</p>
+</section>
+
+<!-- 4 -->
+<section class="chap" id="stat" data-k="statistiche esperienza necromancy punti esperienza sfera macro carceriere away">
+<h2><span class="num">04</span>Statistiche ed esperienza</h2>
+<h3>Esperienza</h3>
+<p>Su Midian l'abilità <b>Necromancy</b> non è magia nera: è il <b>livello di esperienza</b> del personaggio. Si vede dai manuali di classe ("Visualizza livello esperienza"), sale usando le abilità speciali, serve per il terzo livello delle ascensioni e alla creazione del personaggio viene azzerata.</p>
+<ul>
+  <li><b>Sfera dell'esperienza</b> <span class="id">60db</span>: +1,0 di esperienza fino a 100. I paladini e i cavalieri neri la ricevono con la donazione più alta alla chiesa.</li>
+  <li><b>Punti esperienza</b> <span class="id">7311</span>: tenuti nello zaino si spendono per alzare un'abilità (quattro fasce di difficoltà), per +1 in Forza, Destrezza o Intelligenza, o per comprare oggetti speciali.</li>
+</ul>
+<div class="tbl"><table>
+<tr><th>Difficoltà</th><th>Abilità che si possono alzare con i punti esperienza</th></tr>
+<tr><td>1</td><td>Anatomy, Animal Lore, Arms Lore, Evaluating Intelligence, Item ID, Musicianship, Spirit Speak</td></tr>
+<tr><td>2</td><td>Camping, Cooking, Detecting Hidden, Hiding, Discordance, Provocation, Resisting Spells</td></tr>
+<tr><td>3</td><td>Archery, Fencing, Healing, Snooping, Mace Fighting, Swordsmanship, Wrestling</td></tr>
+<tr><td>4</td><td>Esperienza (costo 10 volte), Magery, Meditation, Parrying, Stealing, Stealth, Tactics</td></tr>
+</table></div>
+<h3>Controllo anti-macro</h3>
+<p>Chi ripete a lungo un'abilità in modo automatico riceve un avviso: deve correre da un <b>carceriere</b> (le statue in armatura). Se non lo fa, l'abilità che stava allenando scende di 0,1 a intervalli regolari. Esistono anche domande di controllo ("Ci sei o sei away?").</p>
+<h3>Nuovo sistema di armi e armature</h3>
+<p>Il menu di aiuto contiene l'aggiornamento al "nuovo sistema di armi e armature": il personaggio riceve tre oggetti invisibili (armatura, resistenze, rigenerazioni). Le armi calcolano il danno in base a un danno base e alla difesa del bersaglio, le armature sommano la difesa e alcune tolgono destrezza.</p>
+</section>
+
+<!-- 5 -->
+<section class="chap" id="mestieri" data-k="mestieri falegname sarto fabbro minatore spacciatore tinker scriba alchimista albo artigiani specializzazione ufficio collocamento">
+<h2><span class="num">05</span>Mestieri</h2>
+<p>Oltre alla classe, ogni personaggio può specializzarsi in <b>un mestiere</b> all'<b>ufficio di collocamento</b> della sua città, con l'<b>albo artigiani</b> <span class="id">7f9d</span>. Solo lo specialista usa gli attrezzi avanzati del mestiere. Cambiare specializzazione costa <b>−5,0 punti</b> nel mestiere che si lascia, e il mestiere lasciato viene prima riportato a 130 se lo superava.</p>
+<div class="tbl"><table>
+<tr><th>Mestiere</th><th>Abilità</th><th>Attrezzo da specialista</th><th>Cosa permette</th></tr>
+<tr><td>Falegname</td><td>Carpentry</td><td>Borsone attrezzi da carpentiere <span class="id">7f67</span> (servono i chiodi)</td><td>Pavimenti, letti, tavoli e sedie di pietra, <a href="#case">case e barche</a>, scaffali</td></tr>
+<tr><td>Sarto</td><td>Tailoring</td><td>Contenitore ago e filo <span class="id">6074</span></td><td>Concia delle pelli, robe, vesti sacre, cappelli di meditazione</td></tr>
+<tr><td>Fabbro</td><td>Blacksmithing</td><td>Incudine <span class="id">7f6d</span> con braci e molle</td><td>Armature di piastra, lavorazione dei metalli e dell'adamantio</td></tr>
+<tr><td>Minatore</td><td>Mining</td><td>Vanga diamantata <span class="id">7f6c</span></td><td>Raffinazione dei metalli, leghe, acciai, pavimenti</td></tr>
+<tr><td>Tinker</td><td>Tinkering</td><td>Cassetta degli attrezzi <span class="id">7f62</span></td><td>Utensili, componenti, campanelli</td></tr>
+<tr><td>Scriba</td><td>Inscription</td><td>Manuali dello scriba <span class="id">7fa2</span></td><td>Libri, manuali di classe, abilità speciali, permessi e lotti per le case</td></tr>
+<tr><td>Alchimista</td><td>Alchemy</td><td>—</td><td>Pozioni speciali</td></tr>
+<tr><td>Spacciatore</td><td>Taste ID</td><td>Comunicatore <span class="id">7307</span></td><td>Coltivazione e commercio illegali (mariajuana, organi)</td></tr>
+</table></div>
+<p>Quasi tutte le lavorazioni hanno una piccola probabilità di far salire l'abilità del mestiere, fino a <b>130</b>.</p>
+<div class="note"><b>Craft a postazione.</b> Lo <b>scaffale degli attrezzi</b> <span class="id">75cc</span> (100 tronchi e 20 lingotti di ferro, lo costruisce il falegname) permette di produrre i <a href="#lavorati">pezzi lavorati</a> con un minigioco: bisogna scegliere ogni volta l'azione giusta (martellata, penna, ingranaggi, arco, cucito). Se si sbaglia o si raccoglie l'oggetto a metà, le materie prime vanno perse.</div>
+</section>
+
+<!-- 6 -->
+<section class="chap" id="ascensioni" data-k="ascensioni ascensione altare livello offerta votiva colore pelle 5000 10000 15000">
+<h2><span class="num">06</span>Ascensioni</h2>
+<p>L'<b>altare per l'ascensione</b> (nel mondo a 1909,853 e a 5443,1147) apre il pannello delle ascensioni. Con il doppio clic, le armi in mano cadono a terra. Ci sono <b>tre livelli</b>, da fare in ordine, ciascuno con un'offerta votiva in oro e requisiti di abilità per classe.</p>
+<div class="grid2">
+  <div class="card"><h4>Ogni livello dà</h4><ul><li>+10 a Forza, Destrezza e Intelligenza, subito</li><li>limiti di statistica più alti per la propria razza (vedi <a href="#razze">Razze</a>)</li><li>un segno nello zaino ("Primo/Secondo/Terzo livello di …") che non si può toccare</li></ul></div>
+  <div class="card"><h4>Il terzo livello dà anche</h4><ul><li>un nuovo colore della pelle, diverso per ogni razza</li></ul><p>Un personaggio asceso non si può più resettare. Dal secondo livello non si entra nelle zone riservate ai principianti.</p></div>
+</div>
+<div class="tbl"><table>
+<tr><th>Classe</th><th>I livello · 5.000 gp</th><th>II livello · 10.000 gp</th><th>III livello · 15.000 gp</th></tr>
+<tr><td>Mago</td><td>Magery 100 · Meditation 100 · Spirit Speak 80 · Item ID 100</td><td>Magery 110 · Meditation 100 · Wrestling 100 · Spirit Speak 80 · Item ID 100 · Eval. Int 100</td><td>come II con Magery 125 · Esperienza 100</td></tr>
+<tr><td>Cavaliere nero</td><td>Magery 60 · Tactics 100 · Swords 90 · Anatomy 80</td><td>Magery 60 · Meditation 65 · Wrestling 80 · Archery 60 · Fencing 90 · Tactics 100 · Swords 90 · Anatomy 80</td><td>come II più Parrying 80</td></tr>
+<tr><td>Paladino</td><td>Magery 50 · Tactics 100 · Swords 100 · Anatomy 100</td><td>Magery 50 · Wrestling 100 · Healing 100 · Tactics 100 · Swords 100 · Anatomy 100</td><td>come II più Parrying 100</td></tr>
+<tr><td>Guerriero</td><td>Healing 60 · Swords 100 · Tactics 100 · Anatomy 100</td><td>Healing 60 · Wrestling 100 · Swords 110 · Mace 100 · Tactics 100 · Anatomy 100</td><td>Healing 60 · Parrying 100 · Wrestling 100 · Swords 130 · Mace 100 · Tactics 100 · Anatomy 100</td></tr>
+<tr><td>Arciere</td><td>Archery 100 · Hiding 70 · Tactics 100 · Anatomy 100</td><td>Healing 80 · Wrestling 100 · Archery 110 · Hiding 70 · Tactics 105 · Anatomy 100</td><td>Healing 80 · Fencing 90 · Wrestling 100 · Archery 130 · Hiding 70 · Tactics 110 · Anatomy 100</td></tr>
+<tr><td>Necromante</td><td>Magery 100 · Meditation 100 · Item ID 100 · Eval. Int 100</td><td>Magery 110 · Meditation 100 · Wrestling 50 · Spirit Speak 100 · Item ID 100 · Eval. Int 100</td><td>come II con Magery 125 · Esperienza 100</td></tr>
+<tr><td>Druido</td><td>Magery 100 · Meditation 100 · Item ID 100 · Eval. Int 100</td><td>Magery 110 · Meditation 100 · Wrestling 100 · Tactics 100 · Item ID 100 · Eval. Int 100</td><td>come II con Magery 125 · Esperienza 100</td></tr>
+<tr><td>Chierico</td><td>Wrestling 50 · Healing 100 · Mace 90 · Anatomy 100</td><td>Magery 75 · Wrestling 50 · Healing 100 · Tactics 100 · Mace 90 · Anatomy 100</td><td>Magery 90 · Wrestling 50 · Healing 100 · Parrying 70 · Tactics 100 · Mace 90 · Anatomy 100</td></tr>
+<tr><td>Bardo</td><td>Musicianship 100 · Archery 70 · Tactics 70 · Anatomy 75</td><td>Healing 90 · Musicianship 100 · Archery 80 · Tactics 80 · Anatomy 75</td><td>come II più Provocation 100 · Peacemaking 100 · Esperienza 100</td></tr>
+<tr><td>Assassino</td><td>Fencing 100 · Archery 90 · Hiding 80 · Anatomy 100</td><td>come I più Healing 50 · Parrying 50</td><td>come II più Stealing 100 · Snooping 100 · Poisoning 100</td></tr>
+</table></div>
+<p>"Esperienza" è l'abilità Necromancy. I valori sono minimi: basta raggiungerli o superarli.</p>
+<div class="note"><b>Il rituale.</b> Durante l'ascensione compare sotto il personaggio una mattonella che lo pietrifica e gli toglie vita ogni secondo, per 10 secondi: chi resta fermo muore e rinasce. La pietrificazione finisce da sola 15 secondi dopo la fine del rituale, anche dopo la resurrezione.</div>
+</section>
+
+<!-- 7 -->
+<section class="chap" id="cavalcature" data-k="cavalcature cavalli cavallo ostard stalliere stalla fieno addestramento resistenza velocita ascensione mustang salvaskill estratto energetico wand protection">
+<h2><span class="num">07</span>Cavalcature</h2>
+<p>I cavalli e gli ostard hanno due valori che si possono allenare: la <b>Resistenza</b> (nelle script è l'abilità Magery del cavallo) e la <b>Velocità</b> (l'abilità Meditation del cavallo), da 0 a 100. Servono per l'<a href="#asc-cavalli">ascensione dei cavalli</a>.</p>
+<h3 id="stalle">Stalle</h3>
+<p>Le stalle si piazzano con un deed e vanno rifornite di <b>fieno</b> <span class="id">7517</span>: ogni balla aggiunge giorni di cibo. Se il fieno finisce mentre c'è un animale dentro, l'animale <b>muore di fame</b> e si possono ritirare solo i resti. Non si stallano animali evocati, umani o sotto effetti magici.</p>
+<div class="tbl"><table>
+<tr><th>Stalla</th><th>Deed</th><th>Cosa conserva</th></tr>
+<tr><td>Stalliere</td><td><span class="id">7519</span></td><td>L'animale. Non conserva Resistenza e Velocità.</td></tr>
+<tr><td>Stalliere Deluxe</td><td><span class="id">7518</span></td><td>Abilità e statistiche dell'animale. Non conserva Resistenza e Velocità di un cavallo in addestramento.</td></tr>
+<tr><td>Stalliere d'addestramento</td><td><span class="id">753a</span></td><td>Solo cavalli e ostard addestrabili (Forza fino a 300, Destrezza fino a 220). Conserva Resistenza e Velocità.</td></tr>
+</table></div>
+<h3 id="addestramento">Addestramento</h3>
+<ol class="steps">
+  <li>Monta il cavallo o l'ostard e vai alla pietra <b>Addestramento cavalli: Resistenza</b> <span class="id">7533</span> o <b>Velocità</b> <span class="id">7534</span>. Si paga un costo in oro che dipende dal percorso, e durante la prova non si possono indossare collane.</li>
+  <li>Al via ricevi una collana di controllo e devi arrivare alla mattonella d'arrivo entro il tempo massimo. Se arrivi troppo veloce a un passaggio perdi secondi; con teleport, cambi di cavallo o morte la prova fallisce.</li>
+  <li>All'arrivo ricevi una <b>Sfera di aumento skill</b> <span class="id">7536</span>: puntala sul tuo cavallo. Alza la Resistenza o la Velocità in base al tempo fatto e alla tua abilità, Veterinary per la Resistenza e Animal Taming per la Velocità. Il cavallo non può superare la tua abilità; gli ostard guadagnano metà.</li>
+  <li>Usando la sfera puoi migliorare anche tu: Veterinary (1 probabilità su 4) o Animal Taming (1 su 7) di 0,1.</li>
+</ol>
+<p>Se batti il record del percorso ricevi punti doppi, se lo eguagli un bonus del 50%.</p>
+<div class="grid2">
+  <div class="card"><h4>Estratto energetico</h4><p><span class="id">753d</span> +0,2 a Resistenza e Velocità (+0,1 agli ostard), fino alla tua abilità corrispondente meno 95.</p></div>
+  <div class="card"><h4>Salvaskill</h4><p><span class="id">753b</span> memorizza Resistenza e Velocità di un cavallo e le ripristina se un errore le abbassa. Non funziona più dopo aver messo l'animale in uno stalliere normale.</p></div>
+  <div class="card"><h4>Wand of Animal Protection</h4><p><span class="id">7513</span> mette un angelo custode alla cavalcatura. 3 cariche, non funziona su animali evocati.</p></div>
+</div>
+<h3 id="asc-cavalli">Ascensione dei cavalli</h3>
+<p>Con la pietra <b>Ascensione Cavalcature</b> <span class="id">7538</span> si punta il proprio cavallo o pack horse. Resistenza e Velocità devono essere entrambe almeno <b>50</b>. La protezione dell'angelo custode viene tolta e il cavallo "muore": dopo 10-30 secondi rinasce come nuova creatura, oppure non torna più.</p>
+<ul>
+  <li><b>Sopravvivenza</b>: si sommano Resistenza e Velocità (massimo 200) e si estrae un numero da 0 a 200,9. Se il numero supera la somma il cavallo non rinasce. Un cavallo con 100/100 muore solo nello 0,4% dei casi.</li>
+  <li>Se rinasce, il padrone guadagna da 0,1 a 1,0 in Veterinary e in Animal Taming, fino a 120.</li>
+</ul>
+<div class="tbl"><table>
+<tr><th>Numero estratto</th><th>Probabilità</th><th>Risultato</th></tr>
+<tr><td class="n">0 – 128,0</td><td class="n">≈ 63,7%</td><td>Mustang (colore A secondo il cavallo di partenza)</td></tr>
+<tr><td class="n">128,1 – 190,0</td><td class="n">≈ 30,8%</td><td>Mustang (colore B)</td></tr>
+<tr><td class="n">190,1 – 196,0</td><td class="n">≈ 3,0%</td><td><b>Wild Mustang</b></td></tr>
+<tr><td class="n">196,1 – 197,0</td><td class="n">≈ 0,5%</td><td><b>Ruby Mustang</b></td></tr>
+<tr><td class="n">197,1 – 198,0</td><td class="n">≈ 0,5%</td><td><b>Emerald Mustang</b></td></tr>
+<tr><td class="n">198,1 – 199,0</td><td class="n">≈ 0,5%</td><td><b>Sky Mustang</b></td></tr>
+<tr><td class="n">199,1 – 200,0</td><td class="n">≈ 0,5%</td><td><b>Blue Moon Mustang</b></td></tr>
+</table></div>
+<p>Altre cavalcature rare si ottengono con i <a href="#altro">punti Thanatos</a>: Musty nero, Orn, Ocloack, Zostrich.</p>
+</section>
+
+<!-- 8 -->
+<section class="chap" id="metalli" data-k="minerali metalli miniera lingotti iron rusty copper stagno shadow gold blood rock silver verite valorite titanio cobalto adamantio bronzo rose agapite black rock mytheril orialco demonic acciaio lega ultraleggera pietra marmo gemme">
+<h2><span class="num">08</span>Minerali e metalli</h2>
+<h3 id="miniera">Miniera</h3>
+<p>Scavando con Mining si trovano vene di questi materiali. Più il minerale è raro, più alta è l'abilità richiesta.</p>
+<div class="tbl"><table>
+<tr><th>Minerale</th><th class="n">Mining min.</th><th class="n">% delle vene</th><th class="n">Per vena</th><th>Diventa</th></tr>
+<tr><td>Iron</td><td class="n">0</td><td class="n">21,5</td><td class="n">9–30</td><td>lingotto di ferro</td></tr>
+<tr><td>Pietra</td><td class="n">20</td><td class="n">8,0</td><td class="n">1–2</td><td>pietra grezza <span class="id">7543</span></td></tr>
+<tr><td>Marmo</td><td class="n">20</td><td class="n">2,0</td><td class="n">1–5</td><td>marmo grezzo <span class="id">750e</span></td></tr>
+<tr><td>Gemme: Diamond, Ruby, Emerald, Star Sapphire, Sapphire, Amethyst</td><td class="n">1</td><td class="n">0,5 ciascuna</td><td class="n">1–5</td><td>gemme</td></tr>
+<tr><td>Rusty</td><td class="n">40</td><td class="n">6,0</td><td class="n">8–21</td><td>Rusty ingot</td></tr>
+<tr><td>Old Copper</td><td class="n">50</td><td class="n">12,0</td><td class="n">7–18</td><td>Old Copper ingot</td></tr>
+<tr><td>Dull Copper</td><td class="n">55</td><td class="n">12,0</td><td class="n">7–18</td><td>Dull Copper ingot</td></tr>
+<tr><td>Stagno</td><td class="n">63,1</td><td class="n">2,5</td><td class="n">1–15</td><td>stagno <span class="id">634d</span></td></tr>
+<tr><td>Shadow</td><td class="n">75</td><td class="n">9,0</td><td class="n">8–20</td><td>Shadow ingot</td></tr>
+<tr><td>Golden</td><td class="n">85</td><td class="n">5,0</td><td class="n">3–10</td><td>Gold ingot</td></tr>
+<tr><td>Blood Rock</td><td class="n">93</td><td class="n">5,0</td><td class="n">3–6</td><td>Blood Rock ingot</td></tr>
+<tr><td>Silver</td><td class="n">95</td><td class="n">5,0</td><td class="n">3–5</td><td>Silver ingot</td></tr>
+<tr><td>Verite</td><td class="n">95</td><td class="n">4,0</td><td class="n">2–6</td><td>Verite ingot</td></tr>
+<tr><td>Valorite</td><td class="n">99</td><td class="n">3,5</td><td class="n">2–4</td><td>Valorite ingot</td></tr>
+<tr><td>Titanio</td><td class="n">110</td><td class="n">0,5</td><td class="n">2–4</td><td>titanio <span class="id">6664</span></td></tr>
+<tr><td>Cobalto</td><td class="n">120</td><td class="n">0,5</td><td class="n">2–4</td><td>cobalto <span class="id">6674</span></td></tr>
+<tr><td>Adamantio</td><td class="n">129,5</td><td class="n">0,5</td><td class="n">1–2</td><td>adamantio <span class="id">7541</span></td></tr>
+</table></div>
+<p>Copper, Bronze, Rose, Agapite, Mytheril e Black Rock <b>non si scavano</b>: si ottengono per raffinazione o lega.</p>
+
+<h3 id="leghe">Raffinazione e leghe</h3>
+<p>Il minatore specializzato, con la vanga diamantata, apre i menu di <b>raffinazione</b>, <b>leghe maggiori</b> e <b>leghe d'acciaio</b>.</p>
+<div class="tbl"><table>
+<tr><th>Menu</th><th>Prodotto</th><th>Ingredienti</th><th class="n">Mining min.</th></tr>
+<tr><td rowspan="6">Raffinazione</td><td>Ferro</td><td>1 Rusty</td><td class="n">55</td></tr>
+<tr><td>Pietra grezza</td><td>25 minerale grezzo</td><td class="n">65</td></tr>
+<tr><td>Rame (Copper)</td><td>3 Old Copper + 3 Dull Copper</td><td class="n">65</td></tr>
+<tr><td>Rose</td><td>8 Copper</td><td class="n">85</td></tr>
+<tr><td>Agapite</td><td>10 Bronzo</td><td class="n">91</td></tr>
+<tr><td>Black Rock</td><td>20 Shadow</td><td class="n">96</td></tr>
+<tr><td rowspan="5">Leghe maggiori</td><td>Piombini</td><td>2 Ferro + 2 braci</td><td class="n">55</td></tr>
+<tr><td>Bronzo</td><td>3 Copper + 1 Stagno</td><td class="n">63</td></tr>
+<tr><td>Mytheril</td><td>2 Silver + 1 Valorite</td><td class="n">95</td></tr>
+<tr><td>Orialco</td><td>4 Rose + 2 Agapite</td><td class="n">100</td></tr>
+<tr><td>Demonic</td><td>4 Blood Rock + 6 Shadow</td><td class="n">105</td></tr>
+<tr><td rowspan="3">Leghe d'acciaio</td><td>Acciaio al Titanio</td><td>6 Acciaio + 6 Titanio</td><td class="n">115</td></tr>
+<tr><td>Lega Ultraleggera</td><td>3 Acciaio + 2 Titanio + 6 Valorite</td><td class="n">120</td></tr>
+<tr><td>Acciaio al Cobalto</td><td>6 Acciaio + 6 Cobalto</td><td class="n">125</td></tr>
+</table></div>
+<p>Altre lavorazioni del minatore: <b>lingotto d'acciaio</b> <span class="id">7f5f</span> (1 brace + 1 pezzo di ferro lavorato, Mining 75), <b>forgia</b> (Mining 90) e <b>prestazione di scavo</b> (con la vanga diamantata, Mining 90).</p>
+
+<h3 id="adamantio">Adamantio</h3>
+<p>Il metallo più raro, lavorato dal fabbro specializzato:</p>
+<ul>
+  <li><b>Adamantio fuso</b> <span class="id">7542</span>: 10 adamantio e 20 braci, Blacksmithing 133.</li>
+  <li><b>Polvere di adamantio</b> <span class="id">7561</span>: da 1 adamantio fuso. Ricarica i talismani e diventa granelli da incastonare nelle collane.</li>
+  <li><b>Malta di adamantio</b> <span class="id">7550</span>: serve per costruire le <a href="#case">case</a>.</li>
+  <li><b>Conversione</b>: 1 adamantio fuso + 1 lingotto + 10 materiale moltiplica un metallo, da 1000 Iron (Blacksmithing 130) fino a 15 Cobalto (140).</li>
+  <li><b>Rivestimento degli scudi</b> in pelle.</li>
+</ul>
+
+<h3 id="lavorati">Pezzi lavorati e armature di piastra</h3>
+<p>Allo <b>scaffale degli attrezzi</b> i lingotti diventano <b>pezzi lavorati</b> <span class="id">759f–75ad</span>. Il fabbro li usa per le armature complete.</p>
+<div class="tbl"><table>
+<tr><th>Metallo</th><th class="n">Lingotti per pezzo</th><th>Armatura completa</th></tr>
+<tr><td>Iron</td><td class="n">5</td><td>—</td></tr>
+<tr><td>Gold · Rose · Agapite</td><td class="n">3</td><td>I gruppo · 60 pezzi</td></tr>
+<tr><td>Blood Rock · Silver</td><td class="n">3</td><td>II gruppo · 60 pezzi</td></tr>
+<tr><td>Verite</td><td class="n">2</td><td>II gruppo · 60 pezzi</td></tr>
+<tr><td>Valorite · Mytheril · Black Rock</td><td class="n">2</td><td>III gruppo · 60 pezzi</td></tr>
+<tr><td>Orialco</td><td class="n">1</td><td>Armatura superiore con scudo · 80 pezzi</td></tr>
+<tr><td>Acciaio al Titanio</td><td class="n">1</td><td>Armatura superiore con scudo · 80 pezzi · Blacksmithing 120</td></tr>
+<tr><td>Acciaio al Cobalto</td><td class="n">1</td><td>Armatura superiore con scudo · 80 pezzi · Blacksmithing 130</td></tr>
+<tr><td>Demonic · Lega Ultraleggera</td><td class="n">1</td><td>Armi in demonic e ultraleggere</td></tr>
+</table></div>
+<p>Gli altri pezzi lavorati: componenti, listelli e lamiere (tinker), pagine e moduli (scriba), listelli per archi, corde e cavi (bowcraft), pelli tagliate ad arte e granelli di adamantio (sarto).</p>
+<h3>Vendita dei metalli</h3>
+<p>Al mercante dei metalli: 1000 Iron = 4.000 gp · 100 Old Copper = 200 gp · 100 Dull Copper = 500 gp · 100 Copper = 400 gp · 100 Stagno = 400 gp · 100 Bronzo = 2.000 gp.</p>
+</section>
+
+<!-- 9 -->
+<section class="chap" id="legna" data-k="legna tronchi log alberi ruby diamond amber emerald amethist lumberjacking archi balestre bowcraft listello">
+<h2><span class="num">09</span>Legna e archi</h2>
+<p>Oltre agli alberi normali esistono cinque <b>alberi preziosi</b>. Con il doppio clic da vicino, chi ha abbastanza Lumberjacking taglia un tronco prezioso. Ogni albero dà 10 tronchi, poi resta vuoto per un po' e ricresce.</p>
+<div class="tbl"><table>
+<tr><th>Albero</th><th class="n">Lumberjacking</th><th>Tronco</th><th class="n">Tronchi per listello d'arco</th></tr>
+<tr><td>Amethist Tree</td><td class="n">60</td><td>amethist log <span class="id">7043</span></td><td class="n">3</td></tr>
+<tr><td>Amber Tree</td><td class="n">70</td><td>amber log <span class="id">7042</span></td><td class="n">3</td></tr>
+<tr><td>Emerald Tree</td><td class="n">80</td><td>emerald log <span class="id">7041</span></td><td class="n">2</td></tr>
+<tr><td>Ruby Tree</td><td class="n">90</td><td>ruby log <span class="id">7040</span></td><td class="n">2</td></tr>
+<tr><td>Diamond Tree</td><td class="n">100</td><td>diamond log <span class="id">7044</span></td><td class="n">1</td></tr>
+</table></div>
+<p>Con i listelli preziosi si fabbricano archi e balestre nel colore della legna:</p>
+<div class="tbl"><table>
+<tr><th>Arma</th><th class="n">Danno base</th><th class="n">Velocità</th><th class="n">Forza</th></tr>
+<tr><td>Arco (amethist, amber, emerald, ruby)</td><td class="n">20–30</td><td class="n">18</td><td class="n">20</td></tr>
+<tr><td>Diamond bow</td><td class="n">20–30</td><td class="n">22</td><td class="n">20</td></tr>
+<tr><td>Balestra (amethist … ruby)</td><td class="n">25–35</td><td class="n">18</td><td class="n">30</td></tr>
+<tr><td>Diamond crossbow</td><td class="n">25–35</td><td class="n">22</td><td class="n">30</td></tr>
+<tr><td>Balestra pesante (amethist … ruby)</td><td class="n">40–45</td><td class="n">10</td><td class="n">40</td></tr>
+<tr><td>Diamond heavy crossbow</td><td class="n">40–45</td><td class="n">12</td><td class="n">40</td></tr>
+<tr><td>Arco professionale</td><td class="n">30–45</td><td class="n">20</td><td class="n">30</td></tr>
+<tr><td>Crazy Bow</td><td class="n">25–35</td><td class="n">20</td><td class="n">30</td></tr>
+<tr><td>Dark Elven</td><td class="n">15–25</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>Compound</td><td class="n">10–40</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>Arco elfico</td><td class="n">10–25</td><td class="n">—</td><td class="n">—</td></tr>
+</table></div>
+<p>Il falegname usa i tronchi anche per gli <b>assi di legno</b> (lotti per le case), i contenitori e gli scaffali, e il tinker per i listelli e le tavole con tasselli.</p>
+</section>
+
+<!-- 10 -->
+<section class="chap" id="pelli" data-k="pelli concia conciate sartoria sarto ettin troll serpente lizard gargoyle demone ciclope drago wirm balron robe tuniche scudi cappelli meditazione">
+<h2><span class="num">10</span>Pelli e sartoria</h2>
+<p>Le pelli dei mostri si <b>conciano</b> (sarto specializzato, 20 pelli grezze per volta) e si usano per armature di pelle, robe e scudi.</p>
+<div class="tbl"><table>
+<tr><th>Pelle</th><th class="n">Tailoring per conciare</th><th class="n">Tailoring per la roba</th><th class="n">Armatura</th><th>Scudo (armatura / forza)</th></tr>
+<tr><td>Ettin</td><td class="n">55</td><td class="n">60</td><td class="n">50</td><td>15 / 12</td></tr>
+<tr><td>Troll</td><td class="n">55</td><td class="n">65</td><td class="n">50</td><td>15 / 14</td></tr>
+<tr><td>Serpente</td><td class="n">60</td><td class="n">70</td><td class="n">50</td><td>15 / 18</td></tr>
+<tr><td>Lizard</td><td class="n">65</td><td class="n">73</td><td class="n">50</td><td>15 / 16</td></tr>
+<tr><td>Gargoyle</td><td class="n">70</td><td class="n">75</td><td class="n">65</td><td>20 / 20</td></tr>
+<tr><td>Demone</td><td class="n">75</td><td class="n">80</td><td class="n">65</td><td>20 / 22</td></tr>
+<tr><td>Ciclope</td><td class="n">80</td><td class="n">87</td><td class="n">70</td><td>22 / 26</td></tr>
+<tr><td>Drago</td><td class="n">85</td><td class="n">84</td><td class="n">70</td><td>22 / 24</td></tr>
+<tr><td>Wirm</td><td class="n">90</td><td class="n">90</td><td class="n">80</td><td>25 / 28</td></tr>
+<tr><td>Balron</td><td class="n">95</td><td class="n">95</td><td class="n">80</td><td>25 / 30</td></tr>
+</table></div>
+<p>Una <b>roba</b> richiede 60 pelli conciate del tipo e 30 pelli tagliate. Per ogni pelle esistono tunica, maniche, guanti, gorgiera, gambali, stivali, cosciali e gonna. Il sarto prepara anche le <b>vesti sacre</b>, recupera il <b>filo magico</b> e cuce i <b>cappelli di meditazione</b> (da Apprentice a Supreme), che aiutano la meditazione.</p>
+<p>Il <b>calderone per la concia</b> <span class="id">64d6</span> converte le pelli.</p>
+</section>
+
+<!-- 11 -->
+<section class="chap" id="armi" data-k="armi armature power weapons danno base spade mazze scherma demonic ultraleggero orialco titanio cobalto piombo destrezza">
+<h2><span class="num">11</span>Armi e armature</h2>
+<p>Le armi del nuovo sistema hanno un <b>danno base</b>, ridotto dalla difesa del bersaglio. Alcune armature pesanti tolgono <b>destrezza</b> finché sono indossate: senza destrezza sufficiente non si possono indossare.</p>
+<h3>Armi speciali</h3>
+<div class="tbl"><table>
+<tr><th>Famiglia</th><th>Armi e danno base</th></tr>
+<tr><td>Power (spade)</td><td>Halberd 68–92 · Large Battle Axe 63–87 · Executioner's Axe 58–82 · Bardiche 53–67 · Double/Two Handed Axe 48–67 · Scimitar, Viking, Battle Axe 33–47 · Longsword 30–45 · Cutlass, Katana, Broadsword 28–42</td></tr>
+<tr><td>Power (mazze)</td><td>War Hammer 68–92 · Maul, Hammer Pick 38–52 · Mace, War Mace, Axe 33–47</td></tr>
+<tr><td>Power (scherma)</td><td>Spear 38–52 · Kryss 29–41 · Short Spear 23–37</td></tr>
+<tr><td>Metalli colorati</td><td>Bronze, Black Rock, Verite, Golden, Mytheril, Silver: dagger 13–17, katana/pike 28–32, viking/mace 33–37, maul/hammer pick 38–42, double axe 48–52, large battle axe 43–67</td></tr>
+<tr><td>Demonic</td><td>Alabarda 50–55 · Bardica 48–52 · Tridente 43–47 · Lancia 38–42 · Martello 38–42</td></tr>
+<tr><td>Ultraleggere</td><td>Alabarda 55–60 · Lancia 38–42 · Spada, Martello, Maglio 33–37</td></tr>
+<tr><td>Uniche</td><td>Forcone dei Tritoni 43–47 · Holy/Unholy/Vampire Sword 20–30 · Spade di piombo (7–30 kg) da allenamento</td></tr>
+</table></div>
+<h3>Armature metalliche superiori</h3>
+<div class="tbl"><table>
+<tr><th>Armatura</th><th class="n">Armatura</th><th class="n">Forza</th><th>Note</th></tr>
+<tr><td>Orialco (piastra, maglia, anelli, scudo)</td><td class="n">80 · scudo 25</td><td class="n">60</td><td>La piastra toglie 12 di destrezza, la variante leggera 7, gli anelli 2</td></tr>
+<tr><td>Titanio (piastra, maglia, anelli, scudo)</td><td class="n">80 · scudo 25</td><td class="n">60</td><td></td></tr>
+<tr><td>Acciaio al Cobalto</td><td class="n">scudo 30</td><td class="n">60</td><td>Busto, parabraccia, gambali, elmo, gorgiera, guanti, corpetto, scudo</td></tr>
+</table></div>
+<p>Esistono anche armature e oggetti <b>piombati</b> (maglie, pantaloni, scarpe, tuniche, piombini) per allenarsi con un peso addosso.</p>
+</section>
+
+<!-- 12 -->
+<section class="chap" id="alchimia" data-k="alchimia pozioni oggetti magici vodoo bambola talismano non morti pozione meditazione maschera metamorfosi polvere da sparo">
+<h2><span class="num">12</span>Alchimia e oggetti magici</h2>
+<div class="grid2">
+  <div class="card"><h4>Pozioni</h4><p>Vista notturna · Cura · Agilità (media, maggiore, superiore) · Forza (media, maggiore) · Veleno (minore, media, maggiore, mortale) · Ristoro (normale, totale) · Guarigione (minore, media, maggiore) · Esplosiva (minore, media, maggiore).</p><p>Speciali: Web, Acid, Shield, Ninja, Shrink, Pozione filosofale, Pozione del dolore, Pozione di meditazione.</p></div>
+  <div class="card"><h4>Oggetti magici</h4><p>Armature magiche (piastra, maglia, anelli) · Spade magiche (Flame, Blizzard, Thunder Sword) · Anello del troll · Bambole vodoo e spilli · Talismano (si ricarica con 10, 20 o 50 polvere di adamantio).</p></div>
+  <div class="card"><h4>Altro</h4><p>Maschera della metamorfosi · Malta all'adamantio · Piombini fusi · Collane da incastonare (granelli di adamantio e oro) · Muschio magico · Piume magiche · Polvere da sparo ed esplosivi · Evocazione di non morti (Skeleton Knight, Archer, Mage, Mummy, Liche Lord).</p></div>
+</div>
+</section>
+
+<!-- 13 -->
+<section class="chap" id="case" data-k="case casa barche concessione edilizia lotti chiodi marmo pietra mattoni mattonelle assi malta permessi decadenza restauro antifurto torre tenda">
+<h2><span class="num">13</span>Case e barche</h2>
+<h3>Permessi e lotti (scriba)</h3>
+<ul>
+  <li><b>Concessione edilizia da 50k</b> <span class="id">7545</span>: 50.000 gp e 20 moduli per i permessi, Inscription 100.</li>
+  <li><b>Lotti</b> di chiodi, marmo, pietra, mattoni, mattonelle di pietra e assi di legno: 200 gp e 2 moduli ciascuno, Inscription 80. Un lotto si riempie fino a diventare un <b>lotto completo di 100</b>.</li>
+</ul>
+<h3>Costruzione (falegname, Carpentry 100)</h3>
+<p>Il falegname specializzato costruisce la casa con la malta di adamantio, i lotti completi e le concessioni:</p>
+<div class="tbl"><table>
+<tr><th>Edificio</th><th>Materiali principali</th></tr>
+<tr><td>Small Stone / Stone and Plaster / Wood and Plaster / Brick / Wood House</td><td>30 malta · 1 concessione · lotti di assi, chiodi, pietra e mattoni (in proporzioni diverse)</td></tr>
+<tr><td>Tenda blu o verde (porte escluse)</td><td>20 malta · 1 concessione · assi, chiodi, 200 stoffa</td></tr>
+<tr><td>Three Room</td><td>60 malta · 2 concessioni · 30 assi, 12 pietra, 18 mattoni</td></tr>
+<tr><td>2 Story brick and stone</td><td>90 malta · 3 concessioni · 55 assi, 45 mattoni</td></tr>
+<tr><td>Tower</td><td>200 malta · 5 concessioni · 88 pietra, 9 mattonelle</td></tr>
+<tr><td>Casa galleggiante</td><td>20 malta · 2 concessioni · 120 assi, 50 chiodi, 100 stoffa</td></tr>
+<tr><td>Fontana decorativa · Torre di marmo nero a serpente</td><td>Lotti di marmo e mattoni o pietra (Carpentry 80 e 95)</td></tr>
+</table></div>
+<div class="tbl"><table>
+<tr><th>Barca</th><th class="n">Carpentry</th><th>Materiali (oltre a 2.000 gp)</th></tr>
+<tr><td>Small ship</td><td class="n">90</td><td>8 assi · 1 chiodi · 20 stoffa</td></tr>
+<tr><td>Small Dragon ship</td><td class="n">92</td><td>8 assi · 1 chiodi · 20 stoffa</td></tr>
+<tr><td>Medium ship</td><td class="n">94</td><td>10 assi · 1 chiodi · 30 stoffa</td></tr>
+<tr><td>Medium Dragon ship</td><td class="n">96</td><td>12 assi · 1 chiodi · 30 stoffa</td></tr>
+<tr><td>Long ship</td><td class="n">98</td><td>14 assi · 2 chiodi · 40 stoffa</td></tr>
+<tr><td>Long Dragon ship</td><td class="n">100</td><td>16 assi · 2 chiodi · 40 stoffa</td></tr>
+</table></div>
+<h3>Manutenzione</h3>
+<p>Ogni casa ha un <b>controllo decadenza</b>: con il doppio clic la casa viene restaurata e non crolla per altri 30 giorni. Se la si trascura diventa rossa ("la casa è decaduta") e poi crolla. Le case modello Atreiu si piazzano tramite un GM: servono 12x12 caselle piane fuori città. Le case con <b>antifurto</b> respingono i fantasmi che provano a entrare.</p>
+</section>
+
+<!-- 14 -->
+<section class="chap" id="sicurezza" data-k="porte blindate serratura combinazione baule combinazione cassetta sicurezza scrigno gilda bankbox campanello trappola furto">
+<h2><span class="num">14</span>Porte, serrature e bauli</h2>
+<div class="grid2">
+  <div class="card"><h4>Porta blindata</h4><p><span class="id">66a2–66a5</span> Si apre solo al proprietario e a <b>due co-utenti</b> registrati. Bisogna essere vicini, non feriti sotto metà dei punti ferita e non agitati. Le magie non hanno effetto.</p></div>
+  <div class="card"><h4>Serratura a combinazione</h4><p>Deed <span class="id">758d</span>: il proprietario della porta blindata la installa sulla porta. Codice a <b>4 cifre</b>, all'inizio <b>9999</b>.</p></div>
+  <div class="card"><h4>Campanello</h4><p>Deed <span class="id">7502</span> (25.000 gp), lo installa un GM. Pannello per registrare chi può entrare dalle porte blindate collegate.</p></div>
+  <div class="card"><h4>Baule a combinazione</h4><p>Deed <span class="id">7503/7505</span> (25.000 gp). Nasce con la serratura <b>disattivata</b> e codice 9999. Il proprietario ha un pannello per impostarlo.</p></div>
+  <div class="card"><h4>Cassetta di sicurezza</h4><p><span class="id">6688</span> "Baule di …": si apre, si sposta e accetta magie solo dal proprietario.</p></div>
+  <div class="card"><h4>Scrigno di gilda</h4><p><span class="id">66a0</span> Si apre solo ai membri della gilda proprietaria.</p></div>
+  <div class="card"><h4>Bankbox personale</h4><p>Concessione <span class="id">64b0</span> (500 gp): una cassa che apre la propria banca. Non accetta oggetti appoggiati sopra.</p></div>
+</div>
+<div class="note warn"><b>Scassinare un baule a combinazione.</b> Chi sbaglia il codice viene punito. Al <b>3° errore</b> scatta una trappola mortale. Al <b>5° errore</b> perde 30 di Forza, finisce in prigione con una nota nel <b>Libro delle pene</b>, muore, e il baule si blocca finché il proprietario o un GM non lo sbloccano.</div>
+</section>
+
+<!-- 15 -->
+<section class="chap" id="viaggio" data-k="rune tavoletta runica mappa runica gessetto penna fissatore cofanetto libro runico moonstone viaggio recall gate">
+<h2><span class="num">15</span>Rune e viaggio</h2>
+<div class="tbl"><table>
+<tr><th>Oggetto</th><th>Uso</th></tr>
+<tr><td>Tavoletta runica <span class="id">64b4</span> (2.000 gp)</td><td>Si disegna con il <b>gessetto runico</b> <span class="id">64b5</span> nel punto in cui ti trovi: <b>10 cariche</b> di ritorno personale, che si attiva dopo qualche secondo. Si rompe dopo 50 usi.</td></tr>
+<tr><td>Mappa runica <span class="id">64b6</span> (4.000 gp)</td><td>Si disegna con la <b>penna runica</b> <span class="id">64b8</span>: apre un <b>passaggio</b> nei due sensi. 10 cariche.</td></tr>
+<tr><td>Fissatori <span class="id">64bc / 64bd</span></td><td>Ricaricano a 10 una tavoletta o una mappa ancora leggibile.</td></tr>
+<tr><td>Cofanetto e Libro runico <span class="id">7320 / 7321</span></td><td>Il cofanetto contiene fino a 16 tavolette o mappe: altri oggetti messi dentro vengono distrutti. Con il doppio clic diventa <b>Libro runico</b>: un elenco da cui usare, estrarre, inserire e ricaricare le rune. Va tenuto in mano o nello zaino. Si sfascia dopo 1000 aperture e le rune cadono.</td></tr>
+<tr><td>Moonstone <span class="id">6500–650f</span></td><td>Appoggiate a terra aprono un portale verso un dungeon: Spirituality, Humility, Hidden Valley, City of the Dead, Ophidian's Lair, Terathan Keep, Shame, Wrong, Despise, Hythloth, Wind, Honor, Valor, Chaos, Sacrifice, Justice.</td></tr>
+</table></div>
+<p>Rune e mappe non funzionano nelle zone antimagia, se si è troppo feriti o se si è agitati (criminali o aggressori con meno di 6 uccisioni).</p>
+</section>
+
+<!-- 16 -->
+<section class="chap" id="altro" data-k="greeny thanatos punti chiesa fede donazione vampiro conversione sangue corrotto cambio razza classe reset sbloccaggio prigione jail lotteria slot transfert">
+<h2><span class="num">16</span>Altri sistemi</h2>
+<h3>Greeny</h3>
+<p>I <b>greeny</b> <span class="id">72af</span> si cambiano in premi a scaglioni (da 500 a 20.000): sacchi di reagenti, trofei, caminetti, oro (500 greeny = 2.500 gp) e oggetti rari.</p>
+<h3>ThanatoS Game</h3>
+<p>Gioco a pagamento (500 gp da soli, 1000 gp sfida). I punti Thanatos si cambiano in premi:</p>
+<div class="tbl"><table>
+<tr><th class="n">Punti</th><th>Premio</th></tr>
+<tr><td class="n">100</td><td>100 greeny</td></tr><tr><td class="n">500</td><td>2.500 gp</td></tr><tr><td class="n">1.000</td><td>500 tronchi</td></tr>
+<tr><td class="n">2.000</td><td>2.000 lingotti di ferro</td></tr><tr><td class="n">5.000</td><td>100 pietra</td></tr><tr><td class="n">25.000</td><td>25 adamantio</td></tr>
+<tr><td class="n">40.000</td><td>Musty nero oppure Orn</td></tr><tr><td class="n">50.000</td><td>Ocloack</td></tr><tr><td class="n">60.000</td><td>Zostrich</td></tr>
+</table></div>
+<h3>Chiesa e punti fede</h3>
+<p>Paladini e cavalieri neri donano oro alla chiesa dal loro libro: 10 punti per 25 gp, 100 punti per 250 gp, 500 punti per 1.000 gp (più una <b>sfera dell'esperienza</b>). Massimo 1500 punti fede.</p>
+<h3>Diventare vampiro</h3>
+<p>All'<b>Altare del Nosferatu</b> <span class="id">7575</span> un <b>chierico</b> può convertirsi in vampiro con <b>20.000 punti esperienza</b> e <b>200 fiale di sangue</b>. Il <b>sangue corrotto</b> si consegna per la ricompensa di Lord British, oppure si versa su un lingotto di ferro per ottenere a caso oro, bronzo, argento o titanio.</p>
+<h3>Cambio di razza e classe, reset</h3>
+<ul>
+  <li><b>Cambio di razza e classe</b> per 50.000 gp senza perdere le abilità. Il vecchio libro degli incantesimi viene eliminato.</li>
+  <li><b>Reset del personaggio</b>: si rifà da capo, in modo irreversibile una volta toccata la pietra azzurra. Non è permesso ai personaggi ascesi.</li>
+</ul>
+<h3>Menu di aiuto</h3>
+<p>Dal menu di aiuto si vedono razza, classe e mestiere, si chiede lo spellbook, si comprano oggetti speciali e si chiama un GM. "Sono bloccato" porta in città (Britain, Buccaneer's Den, Sala lotteria, Ocllo) per <b>1.000 gp</b>: si arriva con 1 punto ferita e mana e stamina a zero. Dalla prigione non si esce così, solo scontando la pena.</p>
+<h3>Svago</h3>
+<p>Lotteria con biglietti e premi, slot machine, tarocchi, dadi, sala di gioco con squadre, gara a cronometro con checkpoint.</p>
+</section>
+
+<footer>Compendio ricavato dalle script di Midian (repository Midian-Script): SPHEREMenu2, SPHEREgump2, SPHEREtrig, SPHEREtrig2, Sphereitem2, SPHERETables. Alcuni valori dipendono da oggetti piazzati nel mondo dai GM, ad esempio il costo delle prove dei cavalli.</footer>
+</main>
+</div>
+
+<script>
+(function () {
+  var q = document.getElementById('q');
+  var secs = Array.prototype.slice.call(document.querySelectorAll('section.chap'));
+  var none = document.getElementById('noresults');
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  var texts = secs.map(function (s) { return norm((s.getAttribute('data-k') || '') + ' ' + s.textContent); });
+  q.addEventListener('input', function () {
+    var v = norm(q.value.trim()); var shown = 0;
+    secs.forEach(function (s, i) { var ok = !v || texts[i].indexOf(v) >= 0; s.hidden = !ok; if (ok) shown++; });
+    none.style.display = shown ? 'none' : 'block';
+    links.forEach(function (a) { var t = document.querySelector(a.getAttribute('href')); var sec = t && t.closest('section.chap'); a.parentNode.hidden = !!(sec && sec.hidden); });
+  });
+})();
+</script>
+
+</body>
+</html>
