@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+<title>Inventore (Tinkering) · Crafting · Midian</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: indice fisso a sinistra (sotto, su telefono), colonna di lettura a destra; tabelle scorrevoli. */
+:root {
+  --bg: #f4f5f1; --panel: #ffffff; --ink: #1c2630; --muted: #5a6670; --line: #d9ddd5;
+  --brass: #8a5c14; --teal: #24605f; --tint: #eef1ea; --warn: #9b2c2c; --ok: #2f6b3a;
+  --f-display: "Marcellus SC", "Palatino Linotype", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.wrap { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  border-right: 1px solid var(--line); padding-right: 18px; font-size: 15px; }
+nav.toc h2 { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--brass); margin: 0 0 10px; font-weight: 400 }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 8px; border-radius: 4px }
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+nav.toc .sub a { padding-left: 22px; color: var(--muted); font-size: 14px }
+.search { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 15px; margin-bottom: 14px }
+.search:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px }
+main { min-width: 0 }
+header.top { border-bottom: 2px solid var(--brass); padding-bottom: 18px; margin-bottom: 8px }
+header.top .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal) }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 50px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance }
+header.top p { max-width: 68ch; color: var(--muted); margin: 0 }
+section.chap { padding-top: 34px; scroll-margin-top: 16px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; margin: 0 0 12px; color: var(--ink); text-wrap: balance;
+  display: flex; gap: 12px; align-items: baseline }
+h2 .num { font-family: var(--f-mono); font-size: 14px; color: var(--brass) }
+h3 { font-size: 20px; margin: 26px 0 8px; color: var(--teal); font-weight: 700 }
+h4 { font-size: 17px; margin: 18px 0 6px }
+p, li { max-width: 72ch }
+a { color: var(--teal) }
+code, .id { font-family: var(--f-mono); font-size: .82em; background: var(--tint); padding: 1px 5px; border-radius: 3px; white-space: nowrap }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { background: var(--tint); font-weight: 700; white-space: nowrap; font-size: 13px; letter-spacing: .03em }
+tr:last-child td { border-bottom: 0 }
+td.n, th.n { text-align: right; white-space: nowrap }
+.zero { color: var(--warn); font-weight: 700 }
+.note { border-left: 3px solid var(--brass); background: var(--tint); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; max-width: 76ch }
+.note b { color: var(--brass) }
+.warn { border-left-color: var(--warn) } .warn b { color: var(--warn) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0 }
+.card h4 { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: var(--brass) }
+.card p, .card ul { margin: 4px 0; font-size: 15px }
+.card ul { padding-left: 18px }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.tag { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--tint) }
+ol.steps { padding-left: 22px } ol.steps li { margin: 4px 0 }
+.empty { display: none; color: var(--muted); padding: 30px 0 }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 10px }
+  nav.toc { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 12px }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) }
+  nav.toc .sub { display: none }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+</style>
+<style>
+.sitebar { border-bottom: 1px solid var(--line); background: var(--panel) }
+.sitebar-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px }
+.sitebrand { font-family: var(--f-display); font-size: 22px; letter-spacing: .12em; color: var(--brass); text-decoration: none }
+.sitenav { display: flex; gap: 4px; flex-wrap: wrap }
+.sitenav a { color: var(--ink); text-decoration: none; padding: 6px 12px; border-radius: 4px }
+.sitenav a:hover, .sitenav a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+.sitenav a[aria-current="page"] { color: var(--brass); box-shadow: inset 0 -2px 0 var(--brass) }
+</style>
+<style>
+.filtro-vuoto { color: var(--muted); font-style: italic }
+@media (max-width: 860px) { nav.toc .qui { display: none } }
+tr[hidden] { display: none }
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="sitebar-in">
+  <a class="sitebrand" href="../../index.html">MIDIAN</a>
+  <nav class="sitenav" aria-label="Sezioni del sito">
+    <a href="../../index.html">Home</a>
+    <a href="../index.html">Wiki</a>
+    <a href="index.html" aria-current="page">Crafting</a>
+    <a href="../../download.html">Download</a>
+    <a href="../../contatti.html">Contatti</a>
+  </nav>
+</div></header>
+<div class="wrap">
+<nav class="toc" aria-label="Indice">
+  <input class="search" type="search" id="filtro" placeholder="Cerca in questa pagina…" aria-label="Cerca in questa pagina">
+  <h2>Crafting</h2>
+  <ol>
+    <li><a href="index.html">Indice del crafting</a></li>
+    <li><a href="alchimia.html">Alchimia (Alchemy)</a></li>
+    <li><a href="altre-script.html">Altre ricette delle script</a></li>
+    <li><a href="arcaio.html">Arcaio (Bowcraft)</a></li>
+    <li><a href="avvelenatore.html">Avvelenatore (Poisoning)</a></li>
+    <li><a href="cuoco.html">Cuoco (Cooking)</a></li>
+    <li><a href="fabbro.html">Fabbro (Blacksmithing)</a></li>
+    <li><a href="falegname.html">Falegname (Carpentry)</a></li>
+    <li><a href="identificazione.html">Identificazione (ItemID)</a></li>
+    <li><a href="inventore.html" aria-current="page">Inventore (Tinkering)</a></li>
+    <li><a href="magia.html">Magia (Magery)</a></li>
+    <li><a href="minatore.html">Minatore (Mining)</a></li>
+    <li><a href="risorse.html">Risorse del crafting</a></li>
+    <li><a href="sarto.html">Sarto (Tailoring)</a></li>
+    <li><a href="scriba.html">Scriba (Inscription)</a></li>
+    <li><a href="taming.html">Taming</a></li>
+  </ol>
+  <h2 class="qui" style="margin-top:18px">In questa pagina</h2>
+  <ol>
+    <li class="sub"><a href="#dal-menu-del-mestiere">Dal menu del mestiere</a></li>
+    <li class="sub"><a href="#dalle-script-di-midian">Dalle script di Midian</a></li>
+  </ol>
+  <p style="margin-top:18px"><a href="../index.html">← Torna alla wiki</a></p>
+</nav>
+<main id="main">
+<header class="top">
+  <div class="eyebrow">Wiki · Crafting</div>
+  <h1>Inventore (Tinkering)</h1>
+</header>
+<p><a href="index.html">← Indice del crafting</a> · <a href="risorse.html">Risorse</a></p>
+<h2 id="dal-menu-del-mestiere">Dal menu del mestiere</h2>
+<div class="tbl"><table><thead><tr><th>Oggetto</th><th>Menu</th><th>Abilità</th><th>Risorse</th><th>A cosa serve</th></tr></thead><tbody>
+<tr><td><a id="o-0e80"></a><strong>strong box</strong> <code>0e80</code></td><td>Containers</td><td>Tinkering 40,0</td><td>5 <a href="risorse.html#o-075b4">Lamiera sagomata</a>, 5 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>contenitore; Brass Box (W); Brass strong box lockable against NW wall</td></tr>
+<tr><td><a id="o-09a8"></a><strong>metal box</strong> <code>09a8</code></td><td>Containers</td><td>Tinkering 40,0</td><td>5 <a href="risorse.html#o-075b4">Lamiera sagomata</a>, 5 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>contenitore; Brass Box (N)</td></tr>
+<tr><td><a id="o-0e7f"></a><strong>keg</strong> <code>0e7f</code></td><td>Containers</td><td>Tinkering 45,0</td><td>8 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>contenitore; Wooden Keg</td></tr>
+<tr><td><a id="o-0e77"></a><strong>barrel</strong> <code>0e77</code></td><td>Containers</td><td>Tinkering 55,0</td><td>10 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>contenitore; Empty Barrel</td></tr>
+<tr><td><a id="o-0fae"></a><strong>barrel</strong> <code>0fae</code></td><td>Containers</td><td>Tinkering 56,0</td><td>12 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>contenitore; Barrel w/Lid</td></tr>
+<tr><td><strong>wooden chest</strong> <code>0e42</code></td><td>Containers</td><td>Tinkering 63,0</td><td>20 <a href="risorse.html#o-075b3">Tavola con tasselli</a>, 2 <a href="risorse.html#o-075b4">Lamiera sagomata</a></td><td>contenitore; Wood/Brass Chest (W); Wooden Chest with brass hinges against NW wall lockable</td></tr>
+<tr><td><a id="o-0e7c"></a><strong>metal chest</strong> <code>0e7c</code></td><td>Containers</td><td>Tinkering 63,0</td><td>20 <a href="risorse.html#o-075b3">Tavola con tasselli</a>, 2 <a href="risorse.html#o-075b4">Lamiera sagomata</a></td><td>Metal Chest (W); Silver Chest similar to 09ab against NW wall</td></tr>
+<tr><td><a id="o-09ab"></a><strong>metal chest</strong> <code>09ab</code></td><td>Containers</td><td>Tinkering 75,0</td><td>20 <a href="risorse.html#o-075b4">Lamiera sagomata</a>, 2 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>contenitore; Metal Chest (N); metal chest silver against NE wall; si usa con doppio clic; «This chest is locked!»</td></tr>
+<tr><td><strong>metal chest</strong> <code>0e7c</code></td><td>Containers</td><td>Tinkering 75,0</td><td>20 <a href="risorse.html#o-075b4">Lamiera sagomata</a>, 2 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>Metal Chest (W); Silver Chest similar to 09ab against NW wall</td></tr>
+<tr><td><a id="o-0e40"></a><strong>metal chest</strong> <code>0e40</code></td><td>Containers</td><td>Tinkering 80,0</td><td>15 <a href="risorse.html#o-075b4">Lamiera sagomata</a>, 5 <a href="fabbro.html#o-01be9">gold ingot</a>, 2 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>contenitore; Metal/Brass Chest (W); metal chest with brass hinges against NW wall</td></tr>
+<tr><td><a id="o-0e41"></a><strong>metal chest</strong> <code>0e41</code></td><td>Containers</td><td>Tinkering 80,0</td><td>15 <a href="risorse.html#o-075b4">Lamiera sagomata</a>, 5 <a href="fabbro.html#o-01be9">gold ingot</a>, 2 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>Metal/Brass Chest (N); metal chest with brass hinges against NE wall</td></tr>
+<tr><td><a id="o-0e9d"></a><strong>tambourine</strong> <code>0e9d</code></td><td>Instruments</td><td>Tinkering 45,0, Musicianship 65,0</td><td>1 <a href="risorse.html#o-075b1">Componente</a>, 3 <a href="risorse.html#o-075b2">Listello</a></td><td>strumento musicale</td></tr>
+<tr><td><a id="o-0e9e"></a><strong>tambourine</strong> <code>0e9e</code></td><td>Instruments</td><td>Carpentry 50,0, Musicianship 65,0</td><td>3 <a href="risorse.html#o-075b2">Listello</a>, 1 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-0e9c"></a><strong>drum</strong> <code>0e9c</code></td><td>Instruments</td><td>Tinkering 51,0, Musicianship 65,0</td><td>1 <a href="risorse.html#o-01078">pil of hides</a>, 5 <a href="risorse.html#o-075b2">Listello</a></td><td>strumento musicale</td></tr>
+<tr><td><a id="o-0eb3"></a><strong>lute</strong> <code>0eb3</code></td><td>Instruments</td><td>Tinkering 52,0, Musicianship 65,0</td><td>6 <a href="risorse.html#o-075b2">Listello</a>, 1 <a href="#o-01876">iron wire</a></td><td>strumento musicale</td></tr>
+<tr><td><a id="o-0eb2"></a><strong>lap harp</strong> <code>0eb2</code></td><td>Instruments</td><td>Tinkering 54,0, Musicianship 65,0</td><td>7 <a href="risorse.html#o-075b2">Listello</a>, 2 <a href="#o-01876">iron wire</a></td><td>strumento musicale</td></tr>
+<tr><td><a id="o-0eb1"></a><strong>standing harp</strong> <code>0eb1</code></td><td>Instruments</td><td>Tinkering 56,5, Musicianship 65,0</td><td>10 <a href="risorse.html#o-075b2">Listello</a>, 4 <a href="#o-01876">iron wire</a></td><td>strumento musicale</td></tr>
+<tr><td><a id="o-07568"></a><strong>Kit da borseggio</strong> <code>07568</code></td><td>Tools</td><td>Tinkering 60,0</td><td>4 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>si usa con doppio clic; «Qui non posso rubare nulla, mi scoprirebbero!»</td></tr>
+<tr><td><a id="o-0f39"></a><strong>shovel</strong> <code>0f39</code></td><td>Tools</td><td>Tinkering 20,0</td><td>4 <a href="risorse.html#o-075b1">Componente</a>, 1 <a href="risorse.html#o-075b2">Listello</a></td><td>Shovel (unique type of unequipable item); si usa con doppio clic; «Non ho abbastanza soldi x pagare il diritto di minare qui (6 gp x la protezione delle guardie o per il diritto»</td></tr>
+<tr><td><a id="o-07255"></a><strong>Magical Pestle</strong> <code>07255</code></td><td>Tools</td><td>Tinkering 65,0</td><td>30 <a href="risorse.html#o-0f86">Mandrake Root</a>, 10 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>si usa con doppio clic</td></tr>
+<tr><td><a id="o-07277"></a><strong>Fiale da alchimista</strong> <code>07277</code></td><td>Tools</td><td>Tinkering 65,0</td><td>30 <a href="#o-0f0e">empty bottle</a>, 10 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>FIale Dell'alchemista; si usa con doppio clic; «Non sei un alchimista specializzato!»</td></tr>
+<tr><td><a id="o-07275"></a><strong>Spillo</strong> <code>07275</code></td><td>Tools</td><td>Tinkering 65,0</td><td>50 <a href="risorse.html#o-0f84">Garlic</a>, 10 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>Spillone; si usa con doppio clic; «SRC.MESSAGE»</td></tr>
+<tr><td><a id="o-01849"></a><strong>heating stand</strong> <code>01849</code></td><td>Tools</td><td>Tinkering 30,0</td><td>4 <a href="risorse.html#o-075b1">Componente</a>, 3 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-06051"></a><strong>Rocchetto</strong> <code>06051</code></td><td>Tools</td><td>Tinkering 65,0</td><td>4 <a href="risorse.html#o-075b1">Componente</a>, 3 <a href="risorse.html#o-075b2">Listello</a></td><td>si usa con doppio clic; «Non hai abbastanza stoffa !»</td></tr>
+<tr><td><a id="o-01876"></a><strong>iron wire</strong> <code>01876</code></td><td>Tools</td><td>Tinkering 65,0</td><td>2 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01028"></a><strong>dovetail saw</strong> <code>01028</code></td><td>Tools</td><td>Tinkering 33,2</td><td>3 <a href="risorse.html#o-075b1">Componente</a>, 1 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-0f0e"></a><strong>empty bottle</strong> <code>0f0e</code></td><td>Tools</td><td>Tinkering 21,3</td><td>2 <a href="risorse.html#o-075b1">Componente</a></td><td>Empty Potion Bottle; si usa con doppio clic</td></tr>
+<tr><td><a id="o-0f43"></a><strong>hatchet</strong> <code>0f43</code></td><td>Tools</td><td>Tinkering 33,9</td><td>4 <a href="risorse.html#o-075b1">Componente</a></td><td>spada, danno 5-23; abilita' Swordsmanship; forza 15</td></tr>
+<tr><td><a id="o-07fa9"></a><strong>Mortaio e pestello</strong> <code>07fa9</code></td><td>Tools</td><td>Tinkering 23,3</td><td>3 <a href="risorse.html#o-075b2">Listello</a>, 1 <a href="risorse.html#o-075b1">Componente</a></td><td>si usa con doppio clic; «Sfruttare bugs e' illecito. Se continuerai cosi' farai una brutta fine.»</td></tr>
+<tr><td><a id="o-0e85"></a><strong>pickaxe</strong> <code>0e85</code></td><td>Tools</td><td>Tinkering 42,1</td><td>4 <a href="risorse.html#o-075b1">Componente</a></td><td>ascia, danno 4-32; forza 25; PickAxe //OSI insists skill is Fencing with this axe; si usa con doppio clic; «Non ho abbastanza soldi x pagare il diritto di minare qui (6 gp x la protezione delle guardie o per il diritto»</td></tr>
+<tr><td><a id="o-0f9e"></a><strong>scissors</strong> <code>0f9e</code></td><td>Tools</td><td>Tinkering 14,5</td><td>4 <a href="risorse.html#o-075b1">Componente</a></td><td>«Appena provi ad infilarlo nello zaino ti scivola a terra e non lo trovi piu'.»</td></tr>
+<tr><td><a id="o-0f9d"></a><strong>sewing kit</strong> <code>0f9d</code></td><td>Tools</td><td>Tinkering 18,8</td><td>2 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01057"></a><strong>sextant</strong> <code>01057</code></td><td>Tools</td><td>Tinkering 30,7</td><td>1 <a href="#o-01059">sextant parts</a></td><td></td></tr>
+<tr><td><a id="o-01058"></a><strong>sextant</strong> <code>01058</code></td><td>Tools</td><td>Tinkering 30,7</td><td>1 <a href="#o-0105a">sextant parts</a></td><td></td></tr>
+<tr><td><a id="o-0fb4"></a><strong>sledge hammer</strong> <code>0fb4</code></td><td>Tools</td><td>Tinkering 54,1</td><td>4 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-013e3"></a><strong>smith's hammer</strong> <code>013e3</code></td><td>Tools</td><td>Tinkering 41,9</td><td>4 <a href="risorse.html#o-075b1">Componente</a></td><td>arma contundente, danno 4-16; abilita' Mace Fighting; forza 30</td></tr>
+<tr><td><a id="o-01ebc"></a><strong>tinker's tools</strong> <code>01ebc</code></td><td>Tools</td><td>Tinkering 35,0</td><td>6 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-010e4"></a><strong>Seghetto</strong> <code>010e4</code></td><td>Tools</td><td>Tinkering 55,0</td><td>2 <a href="risorse.html#o-075b1">Componente</a></td><td><strong>Seghetto</strong></td></tr>
+<tr><td><a id="o-0108b"></a><strong>beads</strong> <code>0108b</code></td><td>Jewelry</td><td>Tinkering 60,0</td><td>2 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01085"></a><strong>necklace</strong> <code>01085</code></td><td>Jewelry</td><td>Tinkering 61,0</td><td>2 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01088"></a><strong>necklace</strong> <code>01088</code></td><td>Jewelry</td><td>Tinkering 61,0</td><td>2 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01089"></a><strong>necklace</strong> <code>01089</code></td><td>Jewelry</td><td>Tinkering 62,0</td><td>3 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>Necklace (Gold Bead); Gold Bead Necklace</td></tr>
+<tr><td><a id="o-01087"></a><strong>earrings</strong> <code>01087</code></td><td>Jewelry</td><td>Tinkering 62,5</td><td>4 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>Earrings (Gold); Gold Earrings</td></tr>
+<tr><td><a id="o-0108a"></a><strong>ring</strong> <code>0108a</code></td><td>Jewelry</td><td>Tinkering 63,0</td><td>5 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>Ring (Gold); Gold Ring</td></tr>
+<tr><td><a id="o-01086"></a><strong>bracelet</strong> <code>01086</code></td><td>Jewelry</td><td>Tinkering 63,5</td><td>5 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>Bracelet (Gold); Gold Bracelet</td></tr>
+<tr><td><a id="o-01051"></a><strong>axle with gears</strong> <code>01051</code></td><td>Wooden Items</td><td>Tinkering 30,4</td><td>2 <a href="risorse.html#o-075b2">Listello</a></td><td>Axle</td></tr>
+<tr><td><a id="o-01052"></a><strong>axle with gears</strong> <code>01052</code></td><td>Wooden Items</td><td>Tinkering 30,4</td><td>2 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-0104d"></a><strong>clock frame</strong> <code>0104d</code></td><td>Wooden Items</td><td>Tinkering 30,4</td><td>6 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-0104e"></a><strong>clock frame</strong> <code>0104e</code></td><td>Wooden Items</td><td>Tinkering 30,4</td><td>6 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-01030"></a><strong>jointing plane</strong> <code>01030</code></td><td>Wooden Items</td><td>Tinkering 30,8</td><td>4 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-01031"></a><strong>jointing plane</strong> <code>01031</code></td><td>Wooden Items</td><td>Tinkering 30,8</td><td>4 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-0102c"></a><strong>moulding planes</strong> <code>0102c</code></td><td>Wooden Items</td><td>Tinkering 30,7</td><td>4 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-0102d"></a><strong>moulding planes</strong> <code>0102d</code></td><td>Wooden Items</td><td>Tinkering 30,7</td><td>4 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-01032"></a><strong>smoothing plane</strong> <code>01032</code></td><td>Wooden Items</td><td>Tinkering 30,7</td><td>4 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-01033"></a><strong>smoothing plane</strong> <code>01033</code></td><td>Wooden Items</td><td>Tinkering 30,7</td><td>4 <a href="risorse.html#o-075b2">Listello</a></td><td></td></tr>
+<tr><td><a id="o-0104b"></a><strong>clock</strong> <code>0104b</code></td><td>Wooden Items</td><td>Tinkering 30,7</td><td>1 <a href="#o-0104d">clock frame</a>, 1 <a href="#o-0104f">clock parts</a></td><td></td></tr>
+<tr><td><a id="o-0104c"></a><strong>clock</strong> <code>0104c</code></td><td>Wooden Items</td><td>Tinkering 30,7</td><td>1 <a href="#o-0104e">clock frame</a>, 1 <a href="#o-01050">clock parts</a></td><td></td></tr>
+<tr><td><a id="o-075e2"></a><strong>Lastra di Rame</strong> <code>075e2</code></td><td>Parts</td><td>Tinkering 90,0</td><td>10 <a href="fabbro.html#o-01be3">copper ingot</a></td><td></td></tr>
+<tr><td><a id="o-075e3"></a><strong>Lastra di Bronzo</strong> <code>075e3</code></td><td>Parts</td><td>Tinkering 90,0</td><td>10 <a href="fabbro.html#o-0454c">Bronze Ingot</a></td><td></td></tr>
+<tr><td><a id="o-0104f"></a><strong>clock parts</strong> <code>0104f</code></td><td>Parts</td><td>Tinkering 30,5</td><td>1 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01050"></a><strong>clock parts</strong> <code>01050</code></td><td>Parts</td><td>Tinkering 30,5</td><td>1 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01053"></a><strong>gears</strong> <code>01053</code></td><td>Parts</td><td>Tinkering 14,7</td><td>1 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><strong>gears</strong> <code>01053</code></td><td>Parts</td><td>Tinkering 14,7</td><td>1 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01055"></a><strong>hinge</strong> <code>01055</code></td><td>Parts</td><td>Tinkering 14,8</td><td>1 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01056"></a><strong>hinge</strong> <code>01056</code></td><td>Parts</td><td>Tinkering 14,8</td><td>1 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01059"></a><strong>sextant parts</strong> <code>01059</code></td><td>Parts</td><td>Tinkering 31,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-0105a"></a><strong>sextant parts</strong> <code>0105a</code></td><td>Parts</td><td>Tinkering 31,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-0105d"></a><strong>springs</strong> <code>0105d</code></td><td>Parts</td><td>Tinkering 13,7</td><td>1 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><strong>springs</strong> <code>0105d</code></td><td>Parts</td><td>Tinkering 13,7</td><td>1 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-0997"></a><strong>ceramic mug</strong> <code>0997</code></td><td>Tavern Types</td><td>Tinkering 42,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-099a"></a><strong>goblet</strong> <code>099a</code></td><td>Tavern Types</td><td>Tinkering 42,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01000"></a><strong>pewter mug</strong> <code>01000</code></td><td>Tavern Types</td><td>Tinkering 42,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-09b3"></a><strong>goblet</strong> <code>09b3</code></td><td>Tavern Types</td><td>Tinkering 42,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-0ffc"></a><strong>skull mug</strong> <code>0ffc</code></td><td>Tavern Types</td><td>Tinkering 42,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-09d6"></a><strong>pitcher</strong> <code>09d6</code></td><td>Tavern Types</td><td>Tinkering 42,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01003"></a><strong>spittoon</strong> <code>01003</code></td><td>Tavern Types</td><td>Tinkering 42,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td>Spitton</td></tr>
+<tr><td><a id="o-0e1c"></a><strong>backgammon board</strong> <code>0e1c</code></td><td>Tavern Types</td><td>Tinkering 30,0</td><td>3 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>Backgammon Game</td></tr>
+<tr><td><a id="o-0fad"></a><strong>backgammon game</strong> <code>0fad</code></td><td>Tavern Types</td><td>Tinkering 30,0</td><td>3 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td></td></tr>
+<tr><td><a id="o-0fa6"></a><strong>game board</strong> <code>0fa6</code></td><td>Tavern Types</td><td>Tinkering 30,0</td><td>3 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>checkers/chess game board</td></tr>
+<tr><td><a id="o-0fa7"></a><strong>dice and cup</strong> <code>0fa7</code></td><td>Tavern Types</td><td>Tinkering 30,0</td><td>3 <a href="risorse.html#o-075b3">Tavola con tasselli</a></td><td>si usa con doppio clic</td></tr>
+<tr><td><a id="o-01011"></a><strong>key ring</strong> <code>01011</code></td><td>Keys</td><td>Tinkering 30,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td>si usa con doppio clic; «Drop keys on an empty key ring»</td></tr>
+<tr><td><a id="o-0100e"></a><strong>copper key</strong> <code>0100e</code></td><td>Keys</td><td>Tinkering 43,0</td><td>3 <a href="fabbro.html#o-01be3">copper ingot</a></td><td>chiave</td></tr>
+<tr><td><a id="o-0100f"></a><strong>gold key</strong> <code>0100f</code></td><td>Keys</td><td>Tinkering 60,0</td><td>2 <a href="risorse.html#o-075b1">Componente</a>, 1 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>chiave</td></tr>
+<tr><td><a id="o-01010"></a><strong>iron key</strong> <code>01010</code></td><td>Keys</td><td>Tinkering 30,0</td><td>3 <a href="risorse.html#o-075b1">Componente</a></td><td>chiave</td></tr>
+<tr><td><a id="o-01012"></a><strong>magic key</strong> <code>01012</code></td><td>Keys</td><td>Tinkering 80,0, Magery 30,0</td><td>5 <a href="fabbro.html#o-01be9">gold ingot</a>, 5 <a href="fabbro.html#o-01bf5">silver ingot</a>, 5 <a href="fabbro.html#o-01be3">copper ingot</a></td><td>chiave</td></tr>
+<tr><td><a id="o-06358"></a><strong>Tavola piombata</strong> <code>06358</code></td><td>Contenitori speciali</td><td>Tinkering 20,0</td><td>10 <a href="risorse.html#o-01bdd">log</a>, 15 <a href="risorse.html#o-086474">Bottino casuale piombini</a></td><td>Tavola di piombo</td></tr>
+<tr><td><a id="o-01eb1"></a><strong>barrel staves</strong> <code>01eb1</code></td><td>Contenitori speciali</td><td>Tinkering 30,0</td><td>10 <a href="risorse.html#o-01bdd">log</a></td><td>barrell staves</td></tr>
+<tr><td><a id="o-01db7"></a><strong>barrle hoops</strong> <code>01db7</code></td><td>Contenitori speciali</td><td>—</td><td>2 <a href="risorse.html#o-075b1">Componente</a></td><td>Barrel Hoops</td></tr>
+<tr><td><a id="o-01004"></a><strong>barrel tap</strong> <code>01004</code></td><td>Contenitori speciali</td><td>Tinkering 65,0</td><td>5 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-06687"></a><strong>Contenitore Termico</strong> <code>06687</code></td><td>Contenitori speciali</td><td>Tinkering 60,0</td><td>10 <a href="fabbro.html#o-0454c">Bronze Ingot</a>, 10 <a href="#o-01eb1">barrel staves</a></td><td>si usa con doppio clic; «Il contenitore e' strapieno!»</td></tr>
+<tr><td><a id="o-064b0"></a><strong>Concessione per un bankbox \</strong> <code>064b0</code></td><td>Contenitori speciali</td><td>Tinkering 80,0</td><td>15 <a href="#o-06358">Tavola piombata</a></td><td>concessione bankbox</td></tr>
+<tr><td><a id="o-0756b"></a><strong>Concessione per un bankbox</strong> <code>0756b</code></td><td>Contenitori speciali</td><td>Tinkering 80,0</td><td>15 <a href="#o-06358">Tavola piombata</a></td><td>Concessione per un bankbox /; concessione bankbox /</td></tr>
+<tr><td><a id="o-064f1"></a><strong>Anfora</strong> <code>064f1</code></td><td>Contenitori speciali</td><td>Tinkering 85,0</td><td>20 <a href="risorse.html#o-0f81">Fertile Dirt</a>, 5 <a href="altre-script.html#o-0de9">Braci</a>, 1 <a href="risorse.html#o-075b1">Componente</a></td><td>si usa con doppio clic; «Questo barile contiene … …»</td></tr>
+<tr><td><a id="o-0668b"></a><strong>Cassetta di sicurezza sx</strong> <code>0668b</code></td><td>Contenitori speciali</td><td>Tinkering 85,0</td><td>20 <a href="risorse.html#o-075b1">Componente</a>, 5 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>Cassetta di sicurezza; si usa con doppio clic; «Ricordati che la cassetta si incollera' a terra al primo doppioclick»</td></tr>
+<tr><td><a id="o-0668c"></a><strong>Cassetta di sicurezza dx</strong> <code>0668c</code></td><td>Contenitori speciali</td><td>Tinkering 85,0</td><td>20 <a href="risorse.html#o-075b1">Componente</a>, 5 <a href="fabbro.html#o-01be9">gold ingot</a></td><td>Cassetta di sicurezza; si usa con doppio clic; «Ricordati che la cassetta si incollera' a terra al primo doppioclick»</td></tr>
+<tr><td><a id="o-01940"></a><strong>Barile</strong> <code>01940</code></td><td>Contenitori speciali</td><td>Tinkering 90,0</td><td>2 <a href="#o-01db7">barrle hoops</a>, 1 <a href="#o-01004">barrel tap</a>, 15 <a href="#o-01eb1">barrel staves</a></td><td>keg; si usa con doppio clic; «Più vuoto di questo barile non c'e' niente...»</td></tr>
+</tbody></table></div>
+<h2 id="dalle-script-di-midian">Dalle script di Midian</h2>
+<p>Oggetti creati da menu, gump o oggetti delle script: la colonna "Dove" dice cosa usare.</p>
+<div class="tbl"><table><thead><tr><th>Oggetto</th><th>Dove</th><th>Abilità</th><th>Risorse</th><th>A cosa serve</th></tr></thead><tbody>
+<tr><td><a id="o-01026"></a><strong>chisels</strong> <code>01026</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>)</td><td>Tinkering 80,1</td><td>2 <a href="risorse.html#o-075b2">Listello</a>, 2 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><strong>dovetail saw</strong> <code>01028</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Dovetail saw (1 LISTELLO, 2 INGOTS)»</td><td>Tinkering 80,1</td><td>1 <a href="risorse.html#o-075b2">Listello</a>, 2 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-0102a"></a><strong>hammer</strong> <code>0102a</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Martello (2 LISTELLO, 3 INGOTS)»</td><td>Tinkering 90,1</td><td>2 <a href="risorse.html#o-075b2">Listello</a>, 3 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-01034"></a><strong>saw</strong> <code>01034</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Sega (1 LISTELLO, 2 INGOTS)»</td><td>Tinkering 75,1</td><td>1 <a href="risorse.html#o-075b2">Listello</a>, 2 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-010e5"></a><strong>froe</strong> <code>010e5</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Froe (1 LISTELLO, 2 INGOTS)»</td><td>Tinkering 80,1</td><td>1 <a href="risorse.html#o-075b2">Listello</a>, 2 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-010e6"></a><strong>inshave</strong> <code>010e6</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Inshave (2 LISTELLO, 2 INGOT)»</td><td>Tinkering 80,1</td><td>2 <a href="risorse.html#o-075b2">Listello</a>, 2 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-010e7"></a><strong>scorp</strong> <code>010e7</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Scorp (1 LISTELLO, 1 INGOT)»</td><td>Tinkering 80,1</td><td>1 <a href="risorse.html#o-075b2">Listello</a>, 1 <a href="risorse.html#o-075b1">Componente</a></td><td></td></tr>
+<tr><td><a id="o-07352"></a><strong>Liuto del bardo</strong> <code>07352</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Liuto della provocazione»</td><td>Tinkering 95,1</td><td>2 <a href="fabbro.html#o-07561">Adamantio in polvere</a>, 10 <a href="risorse.html#o-01bdd">log</a></td><td>si usa con doppio clic; «Devi tenerne solo uno nello zaino»</td></tr>
+<tr><td><a id="o-0102e"></a><strong>nails</strong> <code>0102e</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Chiodi (1 LOG, 1 INGOTS)»</td><td>Tinkering 80,1</td><td>1 <a href="fabbro.html#o-01bef">iron ingot</a>, 1 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-07f6c"></a><strong>Vanga diamantata</strong> <code>07f6c</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Vanga diamantata»</td><td>Tinkering 80,1</td><td>5 <a href="risorse.html#o-0f26">diamond</a>, 1 <a href="risorse.html#o-075b1">Componente</a>, 1 <a href="#o-0f39">shovel</a></td><td></td></tr>
+<tr><td><a id="o-07f6d"></a><strong>Incudine</strong> <code>07f6d</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>)</td><td>Tinkering 75,1</td><td>8 <a href="risorse.html#o-075b1">Componente</a>, 1 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0fbb"></a><strong>tongs</strong> <code>0fbb</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Molle per braci»</td><td>Tinkering 50,1</td><td>2 <a href="risorse.html#o-075b1">Componente</a></td><td>«Appena provi ad infilarlo nello zaino ti scivola a terra e non lo trovi piu'.»</td></tr>
+<tr><td><a id="o-07fa8"></a><strong>Illegale!</strong> <code>07fa8</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Comunicatore per spacciatori»</td><td>Tinkering 75,1</td><td>2 <a href="fabbro.html#o-01be9">gold ingot</a></td><td></td></tr>
+<tr><td><a id="o-09a7"></a><strong>glass pitcher</strong> <code>09a7</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Manuali dello scriba»</td><td>Tinkering 55,1</td><td>2 <a href="risorse.html#o-01bdd">log</a>, 5 <a href="risorse.html#o-0ff8">pitcher of water</a>, 1 <a href="falegname.html#o-0fa9">dyes</a></td><td>Empty Glass Pitcher</td></tr>
+<tr><td><a id="o-07fa2"></a><strong>Manuali dello scriba</strong> <code>07fa2</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Manuali dello scriba»</td><td>Tinkering 55,1</td><td>2 <a href="risorse.html#o-01bdd">log</a>, 5 <a href="risorse.html#o-0ff8">pitcher of water</a>, 1 <a href="falegname.html#o-0fa9">dyes</a></td><td></td></tr>
+<tr><td><a id="o-06004"></a><strong>Pozzanghera</strong> <code>06004</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Manuali dello scriba»</td><td>Tinkering 55,1</td><td>2 <a href="risorse.html#o-01bdd">log</a>, 5 <a href="risorse.html#o-0ff8">pitcher of water</a>, 1 <a href="falegname.html#o-0fa9">dyes</a></td><td>Acqua</td></tr>
+<tr><td><a id="o-012b3"></a><strong>mallet and chisel</strong> <code>012b3</code></td><td>menu <code>ITEMMENU 2002</code> (da <code>[ITEMMENU 2011]</code>) — voce «Mazzuolo e scalpello»</td><td>Tinkering 91,1, Blacksmithing 100,0</td><td>1 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="risorse.html#o-075ad">Pezzo di Iron Lavorato</a></td><td></td></tr>
+<tr><td><a id="o-0750c"></a><strong>Ampolla di sangue vuota</strong> <code>0750c</code></td><td>menu <code>ITEMMENU 2012</code> (da <code>[ITEMMENU 2011]</code>) — voce «Ampolla di sangue vuota x tarocchi»</td><td>Tinkering 60,1</td><td>1 <a href="altre-script.html#o-0de9">Braci</a>, 2 <a href="risorse.html#o-0f81">Fertile Dirt</a></td><td>si usa con doppio clic; «Seleziona la macchia di sangue che vuoi raccogliere»</td></tr>
+<tr><td><strong>iron wire</strong> <code>01876</code></td><td>menu <code>ITEMMENU 2012</code> (da <code>[ITEMMENU 2011]</code>) — voce «Corde per strumento»</td><td>Tinkering 65,1</td><td>1 <a href="identificazione.html#o-01cef">Budella</a>, 1 <a href="minatore.html#o-07f5f">steel ingot</a></td><td></td></tr>
+<tr><td><a id="o-011c7"></a><strong>flower pot</strong> <code>011c7</code></td><td>menu <code>ITEMMENU 2012</code> (da <code>[ITEMMENU 2011]</code>) — voce «Vaso di terracotta»</td><td>Tinkering 90,1</td><td>2 <a href="altre-script.html#o-0de9">Braci</a>, 3 <a href="risorse.html#o-0f81">Fertile Dirt</a></td><td>Large Empty Pot</td></tr>
+<tr><td><strong>glass pitcher</strong> <code>09a7</code></td><td>menu <code>ITEMMENU 2012</code> (da <code>[ITEMMENU 2011]</code>)</td><td>Tinkering 50,1</td><td>2 <a href="altre-script.html#o-0de9">Braci</a>, 2 <a href="risorse.html#o-0f81">Fertile Dirt</a></td><td>Empty Glass Pitcher</td></tr>
+<tr><td><a id="o-0421a"></a><strong>Appalto x un Telescopio</strong> <code>0421a</code></td><td>menu <code>ITEMMENU 2012</code> (da <code>[ITEMMENU 2011]</code>)</td><td>Tinkering 95,1</td><td>20 <a href="#o-0104b">clock</a>, 50 <a href="fabbro.html#o-01be9">gold ingot</a>, 200 <a href="#o-01053">gears</a>, 200 <a href="#o-01055">hinge</a>, 200 <a href="#o-0105d">springs</a>, 50 <a href="#o-075e2">Lastra di Rame</a>, 50 <a href="#o-075e3">Lastra di Bronzo</a>, 5 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 1 <a href="altre-script.html#o-07510">Lotto completo di 100 marmo da costruzione</a>, 100 <a href="#o-01876">iron wire</a>, 20 <a href="#o-01057">sextant</a></td><td>Deed to a Telescope; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-07f61"></a><strong>Appalto edificio modello atreiu</strong> <code>07f61</code></td><td>menu <code>ITEMMENU 2012</code> (da <code>[ITEMMENU 2011]</code>)</td><td>Tinkering 90,1</td><td>135 <a href="minatore.html#o-0519">stone pavers</a>, 5 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a>, 2 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a>, 3 <a href="fabbro.html#o-01877">silver wire</a>, 2 <a href="risorse.html#o-0a25">lantern</a>, 1 <a href="falegname.html#o-06013">Illegale!</a>, 1 <a href="#o-011c7">flower pot</a>, 1 <a href="#o-01053">gears</a>, 2 <a href="fabbro.html#o-01bef">iron ingot</a>, 1 <a href="#o-0102e">nails</a>, 1 <a href="minatore.html#o-07f50">Prestazione di scavo</a>, 1 <a href="fabbro.html#o-014e7">hitching post</a>, 1 <a href="falegname.html#o-07f6f">Deed parti di legno (mod. atreiu)</a>, 1 <a href="falegname.html#o-07f6e">Abbeveratoio</a>, 1 <a href="falegname.html#o-07f69">Letto singolo /</a>, 1 <a href="sarto.html#o-0600f">Cuscino ammortizza-caduta</a>, 1 <a href="#o-0102a">hammer</a></td><td>si usa con doppio clic; «Cestina questo deed e usa il deed 4201 per piazzare il bunker.»</td></tr>
+<tr><td><a id="o-0758d"></a><strong>Deed per una serratura a combinazione</strong> <code>0758d</code></td><td>menu <code>ITEMMENU 2012</code> (da <code>[ITEMMENU 2011]</code>) — voce «Serratura a combinazione»</td><td>Tinkering 99,1</td><td>10 <a href="risorse.html#o-075b3">Tavola con tasselli</a>, 10 <a href="risorse.html#o-075b4">Lamiera sagomata</a>, 4 <a href="fabbro.html#o-06683">Acciaio al Cobalto</a>, 100 <a href="#o-01053">gears</a>, 2 <a href="#o-06358">Tavola piombata</a></td><td>Deed x serratura a combinazione; Deed per mettere una serratura a combinazione ad una porta blindata; si usa con doppio clic; «Seleziona la porta blindata dove vuoi installare la serratura a combinazione:»</td></tr>
+<tr><td><a id="o-07503"></a><strong>Deed per un Baule a Combinazione /</strong> <code>07503</code></td><td>menu <code>ITEMMENU 2012</code> (da <code>[ITEMMENU 2011]</code>) — voce «Baule a combinazione /»</td><td>Tinkering 99,1</td><td>10 <a href="risorse.html#o-075b3">Tavola con tasselli</a>, 10 <a href="risorse.html#o-075b4">Lamiera sagomata</a>, 8 <a href="fabbro.html#o-06683">Acciaio al Cobalto</a>, 50 <a href="#o-01053">gears</a>, 4 <a href="#o-06358">Tavola piombata</a></td><td>Deed x il Baule a combinazione; Deed per una cassetta di sicurezza a combinazione; si usa con doppio clic; «Hai appena piazzato il baule a terra. Ricordati che il baule nasce con la serratura a combinazione disattivata»</td></tr>
+<tr><td><a id="o-07505"></a><strong>Deed per un Baule a Combinazione \</strong> <code>07505</code></td><td>menu <code>ITEMMENU 2012</code> (da <code>[ITEMMENU 2011]</code>) — voce «Baule a combinazione \»</td><td>Tinkering 99,1</td><td>10 <a href="risorse.html#o-075b3">Tavola con tasselli</a>, 10 <a href="risorse.html#o-075b4">Lamiera sagomata</a>, 8 <a href="fabbro.html#o-06683">Acciaio al Cobalto</a>, 50 <a href="#o-01053">gears</a>, 4 <a href="#o-06358">Tavola piombata</a></td><td>Deed x il Baule a combinazione; Deed per una cassetta di sicurezza a combinazione; si usa con doppio clic; «Hai appena piazzato il baule a terra. Ricordati che il baule nasce con la serratura a combinazione disattivata»</td></tr>
+<tr><td><a id="o-07284"></a><strong>Trappola Spuntone</strong> <code>07284</code></td><td><code>[GUMP 76 BUTTON]</code></td><td>Tinkering 75,1</td><td>150 <a href="risorse.html#o-0f7b">Blood Moss</a>, 30 <a href="fabbro.html#o-01bef">iron ingot</a></td><td>si usa con doppio clic; «Non puoi piazzare la trappola!»</td></tr>
+<tr><td><a id="o-07283"></a><strong>Trappola Esplosiva</strong> <code>07283</code></td><td><code>[GUMP 76 BUTTON]</code></td><td>Tinkering 75,1</td><td>150 <a href="risorse.html#o-0f8c">Sulfurous Ash</a>, 30 <a href="fabbro.html#o-01bef">iron ingot</a></td><td>Trappola Esplosione; si usa con doppio clic; «Non puoi piazzare la trappola!»</td></tr>
+<tr><td><a id="o-07282"></a><strong>Trappola a Gas</strong> <code>07282</code></td><td><code>[GUMP 76 BUTTON]</code></td><td>Tinkering 90,1</td><td>200 <a href="risorse.html#o-0f8d">Spider's Silk</a>, 90 <a href="fabbro.html#o-01bef">iron ingot</a></td><td>Trappola Gas; si usa con doppio clic; «Non puoi piazzare la trappola!»</td></tr>
+</tbody></table></div>
+<p class="filtro-vuoto" id="nessuno" hidden>Nessuna riga corrisponde alla ricerca.</p>
+</main>
+</div>
+<script>
+// Filtra le righe delle tabelle con il testo cercato (senza distinguere maiuscole).
+(function () {
+  var campo = document.getElementById('filtro'), righe = document.querySelectorAll('main tbody tr'), vuoto = document.getElementById('nessuno');
+  campo.addEventListener('input', function () {
+    var q = campo.value.trim().toLowerCase(), viste = 0;
+    righe.forEach(function (r) { var ok = !q || r.textContent.toLowerCase().indexOf(q) !== -1; r.hidden = !ok; if (ok) viste++; });
+    vuoto.hidden = !(q && viste === 0);
+  });
+})();
+</script>
+</body>
+</html>

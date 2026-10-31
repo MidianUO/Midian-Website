@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+<title>Falegname (Carpentry) · Crafting · Midian</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: indice fisso a sinistra (sotto, su telefono), colonna di lettura a destra; tabelle scorrevoli. */
+:root {
+  --bg: #f4f5f1; --panel: #ffffff; --ink: #1c2630; --muted: #5a6670; --line: #d9ddd5;
+  --brass: #8a5c14; --teal: #24605f; --tint: #eef1ea; --warn: #9b2c2c; --ok: #2f6b3a;
+  --f-display: "Marcellus SC", "Palatino Linotype", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.wrap { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  border-right: 1px solid var(--line); padding-right: 18px; font-size: 15px; }
+nav.toc h2 { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--brass); margin: 0 0 10px; font-weight: 400 }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 8px; border-radius: 4px }
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+nav.toc .sub a { padding-left: 22px; color: var(--muted); font-size: 14px }
+.search { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 15px; margin-bottom: 14px }
+.search:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px }
+main { min-width: 0 }
+header.top { border-bottom: 2px solid var(--brass); padding-bottom: 18px; margin-bottom: 8px }
+header.top .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal) }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 50px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance }
+header.top p { max-width: 68ch; color: var(--muted); margin: 0 }
+section.chap { padding-top: 34px; scroll-margin-top: 16px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; margin: 0 0 12px; color: var(--ink); text-wrap: balance;
+  display: flex; gap: 12px; align-items: baseline }
+h2 .num { font-family: var(--f-mono); font-size: 14px; color: var(--brass) }
+h3 { font-size: 20px; margin: 26px 0 8px; color: var(--teal); font-weight: 700 }
+h4 { font-size: 17px; margin: 18px 0 6px }
+p, li { max-width: 72ch }
+a { color: var(--teal) }
+code, .id { font-family: var(--f-mono); font-size: .82em; background: var(--tint); padding: 1px 5px; border-radius: 3px; white-space: nowrap }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { background: var(--tint); font-weight: 700; white-space: nowrap; font-size: 13px; letter-spacing: .03em }
+tr:last-child td { border-bottom: 0 }
+td.n, th.n { text-align: right; white-space: nowrap }
+.zero { color: var(--warn); font-weight: 700 }
+.note { border-left: 3px solid var(--brass); background: var(--tint); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; max-width: 76ch }
+.note b { color: var(--brass) }
+.warn { border-left-color: var(--warn) } .warn b { color: var(--warn) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0 }
+.card h4 { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: var(--brass) }
+.card p, .card ul { margin: 4px 0; font-size: 15px }
+.card ul { padding-left: 18px }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.tag { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--tint) }
+ol.steps { padding-left: 22px } ol.steps li { margin: 4px 0 }
+.empty { display: none; color: var(--muted); padding: 30px 0 }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 10px }
+  nav.toc { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 12px }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) }
+  nav.toc .sub { display: none }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+</style>
+<style>
+.sitebar { border-bottom: 1px solid var(--line); background: var(--panel) }
+.sitebar-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px }
+.sitebrand { font-family: var(--f-display); font-size: 22px; letter-spacing: .12em; color: var(--brass); text-decoration: none }
+.sitenav { display: flex; gap: 4px; flex-wrap: wrap }
+.sitenav a { color: var(--ink); text-decoration: none; padding: 6px 12px; border-radius: 4px }
+.sitenav a:hover, .sitenav a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+.sitenav a[aria-current="page"] { color: var(--brass); box-shadow: inset 0 -2px 0 var(--brass) }
+</style>
+<style>
+.filtro-vuoto { color: var(--muted); font-style: italic }
+@media (max-width: 860px) { nav.toc .qui { display: none } }
+tr[hidden] { display: none }
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="sitebar-in">
+  <a class="sitebrand" href="../../index.html">MIDIAN</a>
+  <nav class="sitenav" aria-label="Sezioni del sito">
+    <a href="../../index.html">Home</a>
+    <a href="../index.html">Wiki</a>
+    <a href="index.html" aria-current="page">Crafting</a>
+    <a href="../../download.html">Download</a>
+    <a href="../../contatti.html">Contatti</a>
+  </nav>
+</div></header>
+<div class="wrap">
+<nav class="toc" aria-label="Indice">
+  <input class="search" type="search" id="filtro" placeholder="Cerca in questa pagina…" aria-label="Cerca in questa pagina">
+  <h2>Crafting</h2>
+  <ol>
+    <li><a href="index.html">Indice del crafting</a></li>
+    <li><a href="alchimia.html">Alchimia (Alchemy)</a></li>
+    <li><a href="altre-script.html">Altre ricette delle script</a></li>
+    <li><a href="arcaio.html">Arcaio (Bowcraft)</a></li>
+    <li><a href="avvelenatore.html">Avvelenatore (Poisoning)</a></li>
+    <li><a href="cuoco.html">Cuoco (Cooking)</a></li>
+    <li><a href="fabbro.html">Fabbro (Blacksmithing)</a></li>
+    <li><a href="falegname.html" aria-current="page">Falegname (Carpentry)</a></li>
+    <li><a href="identificazione.html">Identificazione (ItemID)</a></li>
+    <li><a href="inventore.html">Inventore (Tinkering)</a></li>
+    <li><a href="magia.html">Magia (Magery)</a></li>
+    <li><a href="minatore.html">Minatore (Mining)</a></li>
+    <li><a href="risorse.html">Risorse del crafting</a></li>
+    <li><a href="sarto.html">Sarto (Tailoring)</a></li>
+    <li><a href="scriba.html">Scriba (Inscription)</a></li>
+    <li><a href="taming.html">Taming</a></li>
+  </ol>
+  <h2 class="qui" style="margin-top:18px">In questa pagina</h2>
+  <ol>
+    <li class="sub"><a href="#dal-menu-del-mestiere">Dal menu del mestiere</a></li>
+    <li class="sub"><a href="#dalle-script-di-midian">Dalle script di Midian</a></li>
+  </ol>
+  <p style="margin-top:18px"><a href="../index.html">← Torna alla wiki</a></p>
+</nav>
+<main id="main">
+<header class="top">
+  <div class="eyebrow">Wiki · Crafting</div>
+  <h1>Falegname (Carpentry)</h1>
+</header>
+<p><a href="index.html">← Indice del crafting</a> · <a href="risorse.html">Risorse</a></p>
+<h2 id="dal-menu-del-mestiere">Dal menu del mestiere</h2>
+<div class="tbl"><table><thead><tr><th>Oggetto</th><th>Menu</th><th>Abilità</th><th>Risorse</th><th>A cosa serve</th></tr></thead><tbody>
+<tr><td><a id="o-0b32"></a><strong>throne</strong> <code>0b32</code></td><td>Chairs</td><td>Carpentry 52,6</td><td>17 <a href="risorse.html#o-01bdd">log</a></td><td>sedia</td></tr>
+<tr><td><a id="o-0b2e"></a><strong>wooden chair</strong> <code>0b2e</code></td><td>Chairs</td><td>Carpentry 25,0</td><td>17 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Wooden Chair (Dark); wooden chair dark and primitive, against NE wall</td></tr>
+<tr><td><a id="o-0b4e"></a><strong>chair</strong> <code>0b4e</code></td><td>Chairs</td><td>Carpentry 42,1</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Chair (Gray Cushion); chair, with gray cushion, dyeable</td></tr>
+<tr><td><a id="o-0b4f"></a><strong>chair</strong> <code>0b4f</code></td><td>Chairs</td><td>Carpentry 42,1</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0b52"></a><strong>chair</strong> <code>0b52</code></td><td>Chairs</td><td>Carpentry 42,1</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0b53"></a><strong>chair</strong> <code>0b53</code></td><td>Chairs</td><td>Carpentry 42,1</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0b56"></a><strong>chair</strong> <code>0b56</code></td><td>Chairs</td><td>Carpentry 21,0</td><td>13 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Chair (Light Wood); chair light wood against NW wall</td></tr>
+<tr><td><a id="o-0b57"></a><strong>chair</strong> <code>0b57</code></td><td>Chairs</td><td>Carpentry 21,0</td><td>13 <a href="risorse.html#o-01bdd">log</a></td><td>chair light wood against NE wall</td></tr>
+<tr><td><a id="o-0b5a"></a><strong>chair</strong> <code>0b5a</code></td><td>Chairs</td><td>Carpentry 21,0</td><td>13 <a href="risorse.html#o-01bdd">log</a></td><td>chair light wood caned seat against NW wall</td></tr>
+<tr><td><a id="o-0a2a"></a><strong>stool</strong> <code>0a2a</code></td><td>Chairs</td><td>Carpentry 11,0</td><td>9 <a href="risorse.html#o-01bdd">log</a></td><td>Barstool (Cross Bars); barstool with cross bars.</td></tr>
+<tr><td><a id="o-0a2b"></a><strong>stool</strong> <code>0a2b</code></td><td>Chairs</td><td>Carpentry 11,0</td><td>9 <a href="risorse.html#o-01bdd">log</a></td><td>Barstool; barstool with no cross bars.</td></tr>
+<tr><td><a id="o-0b2c"></a><strong>wooden bench</strong> <code>0b2c</code></td><td>Chairs</td><td>Carpentry 52,6</td><td>17 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Wooden Bench (Dark); wooden bench dark against nw wall</td></tr>
+<tr><td><a id="o-0b2d"></a><strong>wooden bench</strong> <code>0b2d</code></td><td>Chairs</td><td>Carpentry 52,6</td><td>17 <a href="risorse.html#o-01bdd">log</a></td><td>wooden bench against NE wall</td></tr>
+<tr><td><a id="o-0664f"></a><strong>Scudo di Ettin</strong> <code>0664f</code></td><td>Scudi e scatole</td><td>Carpentry 60,0</td><td>30 <a href="risorse.html#o-075c6">Pelle di Ettin tagliata ad Arte</a>, 15 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>armatura, difesa 15; forza 12</td></tr>
+<tr><td><a id="o-0664e"></a><strong>Scudo di Troll</strong> <code>0664e</code></td><td>Scudi e scatole</td><td>Carpentry 65,0</td><td>30 <a href="risorse.html#o-075c3">Pelle di Troll tagliata ad Arte</a>, 15 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>armatura, difesa 15; forza 14</td></tr>
+<tr><td><a id="o-0664d"></a><strong>Scudo di Lucertola</strong> <code>0664d</code></td><td>Scudi e scatole</td><td>Carpentry 70,0</td><td>30 <a href="risorse.html#o-075c5">Pelle di Lizard tagliata ad Arte</a>, 15 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>armatura, difesa 15; forza 16</td></tr>
+<tr><td><a id="o-0664c"></a><strong>Scudo di Serpente</strong> <code>0664c</code></td><td>Scudi e scatole</td><td>Carpentry 70,0</td><td>30 <a href="risorse.html#o-075c4">Pelle di Serpente tagliata ad Arte</a>, 15 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>armatura, difesa 15; forza 18</td></tr>
+<tr><td><a id="o-0664b"></a><strong>Scudo di Gargoyle</strong> <code>0664b</code></td><td>Scudi e scatole</td><td>Carpentry 75,0</td><td>30 <a href="risorse.html#o-075c2">Pelle di Gargoyle tagliata ad Arte</a>, 15 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>armatura, difesa 20; forza 20</td></tr>
+<tr><td><a id="o-0664a"></a><strong>Scudo di Demone</strong> <code>0664a</code></td><td>Scudi e scatole</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-075cb">Pelle di Demone tagliata ad Arte</a>, 15 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>armatura, difesa 20; forza 22</td></tr>
+<tr><td><a id="o-06649"></a><strong>Scudo di Drago</strong> <code>06649</code></td><td>Scudi e scatole</td><td>Carpentry 85,0</td><td>30 <a href="risorse.html#o-075c0">Pelle di Drago tagliata ad Arte</a>, 15 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>armatura, difesa 22; forza 24</td></tr>
+<tr><td><a id="o-06648"></a><strong>Scudo di Cyclope</strong> <code>06648</code></td><td>Scudi e scatole</td><td>Carpentry 89,0</td><td>30 <a href="risorse.html#o-075c1">Pelle di Ciclope tagliata ad Arte</a>, 15 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>armatura, difesa 22; forza 26</td></tr>
+<tr><td><a id="o-06647"></a><strong>Scudo di Wyrm</strong> <code>06647</code></td><td>Scudi e scatole</td><td>Carpentry 94,0</td><td>30 <a href="risorse.html#o-075bf">Pelle di Wirm tagliata ad Arte</a>, 15 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>armatura, difesa 25; forza 28</td></tr>
+<tr><td><a id="o-06646"></a><strong>Scudo di Balron</strong> <code>06646</code></td><td>Scudi e scatole</td><td>Carpentry 98,0</td><td>30 <a href="risorse.html#o-075be">Pelle di Balron tagliata ad Arte</a>, 15 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>armatura, difesa 25; forza 30</td></tr>
+<tr><td><a id="o-0e42"></a><strong>wooden chest</strong> <code>0e42</code></td><td>Scudi e scatole</td><td>Carpentry 73,6</td><td>20 <a href="risorse.html#o-01bdd">log</a></td><td>contenitore; Wood/Brass Chest (W); Wooden Chest with brass hinges against NW wall lockable</td></tr>
+<tr><td><a id="o-0e7d"></a><strong>wooden box</strong> <code>0e7d</code></td><td>Scudi e scatole</td><td>Carpentry 21,0</td><td>10 <a href="risorse.html#o-01bdd">log</a></td><td>contenitore; Wooden Box (W); Wooden Box against NW wall</td></tr>
+<tr><td><a id="o-0e7e"></a><strong>crate</strong> <code>0e7e</code></td><td>Scudi e scatole</td><td>Carpentry 10,0</td><td>8 <a href="risorse.html#o-01bdd">log</a></td><td>contenitore; Small Crate (W); small Dark Wooden Crate against NW wall</td></tr>
+<tr><td><a id="o-0e3e"></a><strong>crate</strong> <code>0e3e</code></td><td>Scudi e scatole</td><td>Carpentry 31,5</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td>contenitore; Medium Crate (W); medium crate against NW wall</td></tr>
+<tr><td><a id="o-0e3c"></a><strong>crate</strong> <code>0e3c</code></td><td>Scudi e scatole</td><td>Carpentry 47,3</td><td>18 <a href="risorse.html#o-01bdd">log</a></td><td>contenitore; Large Crate (W)</td></tr>
+<tr><td><a id="o-01b7a"></a><strong>wooden shield</strong> <code>01b7a</code></td><td>Scudi e scatole</td><td>Carpentry 52,6</td><td>9 <a href="risorse.html#o-01bdd">log</a></td><td>armatura, difesa 4; forza 5</td></tr>
+<tr><td><a id="o-0b34"></a><strong>table</strong> <code>0b34</code></td><td>Table</td><td>Carpentry 42,1</td><td>17 <a href="risorse.html#o-01bdd">log</a></td><td>Nightstand; table looks like nightstand dark rough wood against Nw wall</td></tr>
+<tr><td><a id="o-0b8f"></a><strong>table</strong> <code>0b8f</code></td><td>Table</td><td>Carpentry 63,1</td><td>23 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0b7c"></a><strong>table</strong> <code>0b7c</code></td><td>Table</td><td>Carpentry 31,0</td><td>23 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0b7d"></a><strong>table</strong> <code>0b7d</code></td><td>Table</td><td>Carpentry 40,0</td><td>27 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0b90"></a><strong>table</strong> <code>0b90</code></td><td>Table</td><td>Carpentry 40,0</td><td>27 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0118b"></a><strong>table</strong> <code>0118b</code></td><td>Table</td><td>Carpentry 89,0, Tailoring 60,0</td><td>27 <a href="risorse.html#o-01bdd">log</a>, 30 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Table (Colored Runner); table with purple runner against NW wall</td></tr>
+<tr><td><a id="o-0118c"></a><strong>table</strong> <code>0118c</code></td><td>Table</td><td>Carpentry 89,0, Tailoring 60,0</td><td>27 <a href="risorse.html#o-01bdd">log</a>, 30 <a href="risorse.html#o-0175d">folded cloth</a></td><td>table with purple runner against NW wall</td></tr>
+<tr><td><a id="o-0118d"></a><strong>table</strong> <code>0118d</code></td><td>Table</td><td>Carpentry 89,0, Tailoring 60,0</td><td>27 <a href="risorse.html#o-01bdd">log</a>, 30 <a href="risorse.html#o-0175d">folded cloth</a></td><td>table with warm rust runner against NW wall</td></tr>
+<tr><td><a id="o-0118e"></a><strong>table</strong> <code>0118e</code></td><td>Table</td><td>Carpentry 89,0, Tailoring 60,0</td><td>27 <a href="risorse.html#o-01bdd">log</a>, 30 <a href="risorse.html#o-0175d">folded cloth</a></td><td>table with light tan snowflake runner against NE wall</td></tr>
+<tr><td><a id="o-0dbf"></a><strong>fishing pole</strong> <code>0dbf</code></td><td>Weapons &amp; Tools</td><td>Carpentry 68,4, Tailoring 40,0</td><td>5 <a href="risorse.html#o-01bdd">log</a>, 5 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-0fab"></a><strong>dying tub</strong> <code>0fab</code></td><td>Weapons &amp; Tools</td><td>Carpentry 50,0</td><td>5 <a href="risorse.html#o-01bdd">log</a></td><td>«Versi il colore nel barattolo di vernice»</td></tr>
+<tr><td><a id="o-0fa9"></a><strong>dyes</strong> <code>0fa9</code></td><td>Weapons &amp; Tools</td><td>Carpentry 50,0</td><td>5 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="risorse.html#o-0f7b">Blood Moss</a></td><td></td></tr>
+<tr><td><a id="o-013b4"></a><strong>club</strong> <code>013b4</code></td><td>Weapons &amp; Tools</td><td>Carpentry 30,0</td><td>4 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-013f9"></a><strong>gnarled staff</strong> <code>013f9</code></td><td>Weapons &amp; Tools</td><td>Carpentry 78,9</td><td>7 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0e8a"></a><strong>quarter staff</strong> <code>0e8a</code></td><td>Weapons &amp; Tools</td><td>Carpentry 73,6</td><td>6 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0e81"></a><strong>shepherd's crook</strong> <code>0e81</code></td><td>Weapons &amp; Tools</td><td>Carpentry 78,9</td><td>7 <a href="risorse.html#o-01bdd">log</a></td><td>piccone, danno 3-12; forza 10; a due mani; Sheperds Crook; miniature shepherd's crook (picture for backpack only?)</td></tr>
+<tr><td><a id="o-0df0"></a><strong>black staff</strong> <code>0df0</code></td><td>Weapons &amp; Tools</td><td>Carpentry 50,0</td><td>8 <a href="risorse.html#o-01bdd">log</a></td><td>bastone, danno 7-23; abilita' Mace Fighting; forza 35; a due mani</td></tr>
+<tr><td><a id="o-014eb"></a><strong>map</strong> <code>014eb</code></td><td>Furniture</td><td>Carpentry 35,0</td><td>1 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="sarto.html#o-01bd1">feather</a></td><td>Map (Empty); map (basic type) create custom objects for specific types.</td></tr>
+<tr><td><a id="o-0b49"></a><strong>writing table</strong> <code>0b49</code></td><td>Furniture</td><td>Carpentry 63,1</td><td>17 <a href="risorse.html#o-01bdd">log</a></td><td>writing table against NW wall, light wood</td></tr>
+<tr><td><a id="o-0a4d"></a><strong>armoire</strong> <code>0a4d</code></td><td>Furniture</td><td>Carpentry 84,2</td><td>35 <a href="risorse.html#o-01bdd">log</a></td><td>armoire standing open dark wood facing SW</td></tr>
+<tr><td><a id="o-0a4f"></a><strong>armoire</strong> <code>0a4f</code></td><td>Furniture</td><td>Carpentry 84,2</td><td>35 <a href="risorse.html#o-01bdd">log</a></td><td>armoire standing closed light wood facing SW</td></tr>
+<tr><td><a id="o-0a9d"></a><strong>wooden shelf</strong> <code>0a9d</code></td><td>Furniture</td><td>Carpentry 31,5</td><td>25 <a href="risorse.html#o-01bdd">log</a></td><td>contenitore; Bookcase (Dark Wood) (Empty); wooden bookshelf</td></tr>
+<tr><td><strong>wooden shelf</strong> <code>0a9d</code></td><td>Furniture</td><td>Carpentry 31,5</td><td>25 <a href="risorse.html#o-01bdd">log</a></td><td>contenitore; Bookcase (Dark Wood) (Empty); wooden bookshelf</td></tr>
+<tr><td><a id="o-0eb5"></a><strong>music stand</strong> <code>0eb5</code></td><td>Furniture</td><td>Carpentry 78,9</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0eb6"></a><strong>music stand</strong> <code>0eb6</code></td><td>Furniture</td><td>Carpentry 78,9</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0eb8"></a><strong>music stand</strong> <code>0eb8</code></td><td>Furniture</td><td>Carpentry 78,9</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0eb9"></a><strong>music stand</strong> <code>0eb9</code></td><td>Furniture</td><td>Carpentry 81,5</td><td>20 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0eba"></a><strong>music stand</strong> <code>0eba</code></td><td>Furniture</td><td>Carpentry 81,5</td><td>20 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0ebb"></a><strong>music stand</strong> <code>0ebb</code></td><td>Furniture</td><td>Carpentry 81,5</td><td>20 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0ebc"></a><strong>music stand</strong> <code>0ebc</code></td><td>Furniture</td><td>Carpentry 81,5</td><td>20 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0a38"></a><strong>chest of drawers</strong> <code>0a38</code></td><td>Furniture</td><td>Carpentry 85,0</td><td>25 <a href="risorse.html#o-01bdd">log</a></td><td>chest of drawers facing SE, dark wood</td></tr>
+<tr><td><a id="o-0a30"></a><strong>chest of drawers</strong> <code>0a30</code></td><td>Furniture</td><td>Carpentry 85,0</td><td>25 <a href="risorse.html#o-01bdd">log</a></td><td>contenitore; Chest of Drawers (Dark Wood) (SW); chest of drawers dark wood facing SW</td></tr>
+<tr><td><a id="o-0a98"></a><strong>bookcase</strong> <code>0a98</code></td><td>Furniture</td><td>Carpentry 65,0</td><td>25 <a href="risorse.html#o-01bdd">log</a>, 30 <a href="scriba.html#o-0ff2">book</a></td><td></td></tr>
+<tr><td><a id="o-01e2e"></a><strong>dartboard</strong> <code>01e2e</code></td><td>Miscellaneous</td><td>Carpentry 60,5</td><td>8 <a href="risorse.html#o-01bdd">log</a></td><td>dartboard facing SW</td></tr>
+<tr><td><a id="o-01e2f"></a><strong>dartboard</strong> <code>01e2f</code></td><td>Miscellaneous</td><td>Carpentry 15,0</td><td>5 <a href="risorse.html#o-01bdd">log</a></td><td>dartboard facing SE</td></tr>
+<tr><td><a id="o-0ec6"></a><strong>dress form</strong> <code>0ec6</code></td><td>Miscellaneous</td><td>Carpentry 63,1, Tailoring 65,0</td><td>25 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-0ec7"></a><strong>dress form</strong> <code>0ec7</code></td><td>Miscellaneous</td><td>Carpentry 63,1, Tailoring 65,0</td><td>25 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-05010"></a><strong>Deed to a Training Dummy (West)</strong> <code>05010</code></td><td>Miscellaneous</td><td>Carpentry 85,0, Tailoring 70,0</td><td>55 <a href="risorse.html#o-01bdd">log</a>, 60 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Training Dummy (W)</td></tr>
+<tr><td><a id="o-05011"></a><strong>Deed to a Training Dummy (North)</strong> <code>05011</code></td><td>Miscellaneous</td><td>Carpentry 85,0, Tailoring 70,0</td><td>55 <a href="risorse.html#o-01bdd">log</a>, 60 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Training Dummy (N)</td></tr>
+<tr><td><a id="o-05015"></a><strong>Deed to a Pickpocket Dip (West)</strong> <code>05015</code></td><td>Miscellaneous</td><td>Carpentry 90,0, Tailoring 70,0</td><td>65 <a href="risorse.html#o-01bdd">log</a>, 65 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Pickpocket Dip (W); grave triggers</td></tr>
+<tr><td><a id="o-05014"></a><strong>Deed to a Pickpocket Dip (North)</strong> <code>05014</code></td><td>Miscellaneous</td><td>Carpentry 90,0, Tailoring 70,0</td><td>65 <a href="risorse.html#o-01bdd">log</a>, 65 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Pickpocket Dip (N)</td></tr>
+<tr><td><a id="o-05012"></a><strong>Deed to a Archery Butte (West)</strong> <code>05012</code></td><td>Miscellaneous</td><td>Carpentry 90,0, Tailoring 70,0</td><td>55 <a href="risorse.html#o-01bdd">log</a>, 65 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Archery Butte (W)</td></tr>
+<tr><td><a id="o-05013"></a><strong>Deed to a Archery Butte (North)</strong> <code>05013</code></td><td>Miscellaneous</td><td>Carpentry 90,0, Tailoring 70,0</td><td>55 <a href="risorse.html#o-01bdd">log</a>, 65 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Archery Butte (N)</td></tr>
+<tr><td><a id="o-05009"></a><strong>Deed to a Spinning Wheel</strong> <code>05009</code></td><td>Miscellaneous</td><td>Carpentry 73,6, Tailoring 65,0</td><td>75 <a href="risorse.html#o-01bdd">log</a>, 25 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Spinning Wheel; no additional directional deed needed</td></tr>
+<tr><td><a id="o-014f3"></a><strong>ship model</strong> <code>014f3</code></td><td>Miscellaneous</td><td>Carpentry 95,0</td><td>10 <a href="risorse.html#o-01bdd">log</a></td><td>Ship Model (N)</td></tr>
+<tr><td><a id="o-014f4"></a><strong>ship model</strong> <code>014f4</code></td><td>Miscellaneous</td><td>Carpentry 95,0</td><td>10 <a href="risorse.html#o-01bdd">log</a></td><td>Ship Model (W)</td></tr>
+<tr><td><a id="o-0a18"></a><strong>lantern</strong> <code>0a18</code></td><td>Miscellaneous</td><td>Carpentry 40,0</td><td>5 <a href="risorse.html#o-01bdd">log</a></td><td>luce; Lantern (Unlit)</td></tr>
+<tr><td><a id="o-01047"></a><strong>globe</strong> <code>01047</code></td><td>Miscellaneous</td><td>Carpentry 80,0</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-01048"></a><strong>globe</strong> <code>01048</code></td><td>Miscellaneous</td><td>Carpentry 80,0</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0154d"></a><strong>water barrel</strong> <code>0154d</code></td><td>Miscellaneous</td><td>Carpentry 85,0</td><td>25 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0e7b"></a><strong>water tub</strong> <code>0e7b</code></td><td>Miscellaneous</td><td>Carpentry 70,0</td><td>25 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-05007"></a><strong>Deed to a Bulletin Board W</strong> <code>05007</code></td><td>Miscellaneous</td><td>Carpentry 90,0</td><td>60 <a href="risorse.html#o-01bdd">log</a></td><td>@</td></tr>
+<tr><td><a id="o-05008"></a><strong>Deed to a Bulletin Board N</strong> <code>05008</code></td><td>Miscellaneous</td><td>Carpentry 90,0</td><td>60 <a href="risorse.html#o-01bdd">log</a></td><td>@</td></tr>
+<tr><td><a id="o-0e9f"></a><strong>portrait</strong> <code>0e9f</code></td><td>Paintings</td><td>Carpentry 80,0, Tailoring 65,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 25 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-0ea3"></a><strong>painting</strong> <code>0ea3</code></td><td>Paintings</td><td>Carpentry 80,0, Tailoring 65,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 25 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-0ea6"></a><strong>portrait</strong> <code>0ea6</code></td><td>Paintings</td><td>Carpentry 80,0, Tailoring 65,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 25 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-0ee7"></a><strong>portrait</strong> <code>0ee7</code></td><td>Paintings</td><td>Carpentry 80,0, Tailoring 65,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 25 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-0ea0"></a><strong>painting</strong> <code>0ea0</code></td><td>Paintings</td><td>Carpentry 85,0, Tailoring 70,0</td><td>25 <a href="risorse.html#o-01bdd">log</a>, 35 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-0ea8"></a><strong>portrait</strong> <code>0ea8</code></td><td>Paintings</td><td>Carpentry 80,0, Tailoring 65,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 25 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-0ec8"></a><strong>painting</strong> <code>0ec8</code></td><td>Paintings</td><td>Carpentry 80,0, Tailoring 65,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 25 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-0ec9"></a><strong>painting</strong> <code>0ec9</code></td><td>Paintings</td><td>Carpentry 80,0, Tailoring 65,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 25 <a href="risorse.html#o-0175d">folded cloth</a></td><td></td></tr>
+<tr><td><a id="o-01e67"></a><strong>trophy</strong> <code>01e67</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Bear</td></tr>
+<tr><td><a id="o-01e60"></a><strong>trophy</strong> <code>01e60</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Bear</td></tr>
+<tr><td><a id="o-01e68"></a><strong>trophy</strong> <code>01e68</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Deer</td></tr>
+<tr><td><a id="o-01e61"></a><strong>trophy</strong> <code>01e61</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Deer</td></tr>
+<tr><td><a id="o-01e69"></a><strong>trophy</strong> <code>01e69</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Fish</td></tr>
+<tr><td><a id="o-01e62"></a><strong>trophy</strong> <code>01e62</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Fish</td></tr>
+<tr><td><a id="o-01e6a"></a><strong>trophy</strong> <code>01e6a</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Gorilla</td></tr>
+<tr><td><a id="o-01e63"></a><strong>trophy</strong> <code>01e63</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Gorilla</td></tr>
+<tr><td><a id="o-01e6b"></a><strong>trophy</strong> <code>01e6b</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Cougar</td></tr>
+<tr><td><a id="o-01e64"></a><strong>trophy</strong> <code>01e64</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Cougar</td></tr>
+<tr><td><a id="o-01e6c"></a><strong>trophy</strong> <code>01e6c</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Polar Bear</td></tr>
+<tr><td><a id="o-01e65"></a><strong>trophy</strong> <code>01e65</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Polar Bear</td></tr>
+<tr><td><a id="o-01e6d"></a><strong>trophy</strong> <code>01e6d</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Troll</td></tr>
+<tr><td><a id="o-01e66"></a><strong>trophy</strong> <code>01e66</code></td><td>Trophies</td><td>Carpentry 72,0, Tailoring 60,0</td><td>15 <a href="risorse.html#o-01bdd">log</a>, 10 <a href="risorse.html#o-01078">pil of hides</a></td><td>Troll</td></tr>
+<tr><td><a id="o-0190e"></a><strong>bar door</strong> <code>0190e</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0190f"></a><strong>bar door</strong> <code>0190f</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-01910"></a><strong>bar</strong> <code>01910</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-01911"></a><strong>bar</strong> <code>01911</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-01912"></a><strong>bar</strong> <code>01912</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-01913"></a><strong>bar</strong> <code>01913</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-01918"></a><strong>bar</strong> <code>01918</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-01919"></a><strong>bar</strong> <code>01919</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0191a"></a><strong>bar</strong> <code>0191a</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0191b"></a><strong>bar</strong> <code>0191b</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0191c"></a><strong>bar</strong> <code>0191c</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0191d"></a><strong>bar</strong> <code>0191d</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0191e"></a><strong>bar</strong> <code>0191e</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0191f"></a><strong>bar</strong> <code>0191f</code></td><td>Table › Bars</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-019f1"></a><strong>woodworker's bench</strong> <code>019f1</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Woodworkers Bench</td></tr>
+<tr><td><a id="o-019f2"></a><strong>woodworker's bench</strong> <code>019f2</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Woodworkers Bench</td></tr>
+<tr><td><a id="o-019f3"></a><strong>woodworker's bench</strong> <code>019f3</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Woodworkers Bench</td></tr>
+<tr><td><a id="o-019f4"></a><strong>vise</strong> <code>019f4</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-019f5"></a><strong>woodworker's bench</strong> <code>019f5</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Woodworkers Bench</td></tr>
+<tr><td><a id="o-019f6"></a><strong>woodworker's bench</strong> <code>019f6</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Woodworkers Bench</td></tr>
+<tr><td><a id="o-019f7"></a><strong>woodworker's bench</strong> <code>019f7</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Woodworkers Bench</td></tr>
+<tr><td><a id="o-019f8"></a><strong>vise</strong> <code>019f8</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-019f9"></a><strong>cooper's bench</strong> <code>019f9</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Coopers Bench</td></tr>
+<tr><td><a id="o-019fa"></a><strong>cooper's bench</strong> <code>019fa</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Coopers Bench</td></tr>
+<tr><td><a id="o-019fb"></a><strong>cooper's bench</strong> <code>019fb</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Coopers Bench</td></tr>
+<tr><td><a id="o-019fc"></a><strong>cooper's bench</strong> <code>019fc</code></td><td>Table › Woodworkers Bench (27 log)</td><td>Carpentry 80,0</td><td>30 <a href="risorse.html#o-01bdd">log</a></td><td>sedia; Coopers Bench</td></tr>
+<tr><td><a id="o-0b41"></a><strong>water trough</strong> <code>0b41</code></td><td>Rancher Types</td><td>Carpentry 80,0</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0b42"></a><strong>water trough</strong> <code>0b42</code></td><td>Rancher Types</td><td>Carpentry 80,0</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0b43"></a><strong>water trough</strong> <code>0b43</code></td><td>Rancher Types</td><td>Carpentry 80,0</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0b44"></a><strong>water trough</strong> <code>0b44</code></td><td>Rancher Types</td><td>Carpentry 80,0</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0f37"></a><strong>saddle</strong> <code>0f37</code></td><td>Rancher Types</td><td>Carpentry 80,0</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0f38"></a><strong>saddle</strong> <code>0f38</code></td><td>Rancher Types</td><td>Carpentry 80,0</td><td>15 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-0a74"></a><strong>bed</strong> <code>0a74</code></td><td>Beds</td><td>Carpentry 94,7, Tailoring 75,0</td><td>150 <a href="risorse.html#o-01bdd">log</a>, 150 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Fancy Dbl Bed (Head) (NE Wall - E Corner); fancy double bed head corner against NE wall - E CORNER PIECE</td></tr>
+<tr><td><a id="o-0a75"></a><strong>bed</strong> <code>0a75</code></td><td>Beds</td><td>Carpentry 94,7, Tailoring 75,0</td><td>150 <a href="risorse.html#o-01bdd">log</a>, 150 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Fancy Dbl Bed (Foot) (NE - NW Wall); fancy double bed foot corner against NE &amp; NW wall - S CORNER PIECE</td></tr>
+<tr><td><a id="o-0a76"></a><strong>bed</strong> <code>0a76</code></td><td>Beds</td><td>Carpentry 94,7, Tailoring 75,0</td><td>150 <a href="risorse.html#o-01bdd">log</a>, 150 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Fancy Dbl Bed (Foot) (NE Wall - W Corner); fancy double bed foot against NE wall - W CORNER PIECE</td></tr>
+<tr><td><a id="o-0a77"></a><strong>bed</strong> <code>0a77</code></td><td>Beds</td><td>Carpentry 94,7, Tailoring 75,0</td><td>150 <a href="risorse.html#o-01bdd">log</a>, 150 <a href="risorse.html#o-0175d">folded cloth</a></td><td>Fancy Dbl Bed (Head) (NE Wall - N Corner); fancy double bed header against NE wall - N CORNER PIECE</td></tr>
+</tbody></table></div>
+<h2 id="dalle-script-di-midian">Dalle script di Midian</h2>
+<p>Oggetti creati da menu, gump o oggetti delle script: la colonna "Dove" dice cosa usare.</p>
+<div class="tbl"><table><thead><tr><th>Oggetto</th><th>Dove</th><th>Abilità</th><th>Risorse</th><th>A cosa serve</th></tr></thead><tbody>
+<tr><td><a id="o-06074"></a><strong>Contenitore per ago e filo</strong> <code>06074</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>) — voce «Contenitore ago e filo (10Logs)»</td><td>Carpentry 60,1</td><td>10 <a href="risorse.html#o-01bdd">log</a></td><td>Sewing Kit Vuoto; si usa con doppio clic; «Appena provi ad infilarlo nello zaino ti scivola a terra e non lo trovi piu'.»</td></tr>
+<tr><td><a id="o-07589"></a><strong>Deed per uno scaffale di vendita \</strong> <code>07589</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>) — voce «Scaffale di vendita \ (1 Adamantio Fuso e 10k)»</td><td>Carpentry 90,1</td><td>1 <a href="fabbro.html#o-07542">Adamantio fuso</a></td><td>Deed x Scaffale di Vendita \; si usa con doppio clic; «Stai per piazzare uno scaffale di vendita \. Lo scaffale apparira' esattamente sotto i tuoi piedi e non si pot»</td></tr>
+<tr><td><a id="o-07588"></a><strong>Deed per uno scaffale di vendita /</strong> <code>07588</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>) — voce «Scaffale di vendita / (1 Adamantio Fuso e 10k)»</td><td>Carpentry 90,1</td><td>1 <a href="fabbro.html#o-07542">Adamantio fuso</a></td><td>Deed x Scaffale di Vendita /; si usa con doppio clic; «Stai per piazzare uno scaffale di vendita /. Lo scaffale apparira' esattamente sotto i tuoi piedi e non si pot»</td></tr>
+<tr><td><a id="o-075ce"></a><strong>Scaffale degli attrezzi</strong> <code>075ce</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>) — voce «Scaffale degli attrezzi / (100 log e 20 iron)»</td><td>Carpentry 90,1</td><td>100 <a href="risorse.html#o-01bdd">log</a>, 20 <a href="fabbro.html#o-01bef">iron ingot</a></td><td>Scaffale degli attrezzi /; si usa con doppio clic</td></tr>
+<tr><td><a id="o-075cc"></a><strong>Scaffale degli attrezzi</strong> <code>075cc</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>) — voce «Scaffale degli attrezzi \ (100 log e 20 iron)»</td><td>Carpentry 90,1</td><td>100 <a href="risorse.html#o-01bdd">log</a>, 20 <a href="fabbro.html#o-01bef">iron ingot</a></td><td>Scaffale degli attrezzi \; si usa con doppio clic</td></tr>
+<tr><td><a id="o-01bd7"></a><strong>board</strong> <code>01bd7</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>) — voce «100 assi di legno»</td><td>Carpentry 60,1</td><td>100 <a href="risorse.html#o-01bdd">log</a></td><td>tronco; Single Board</td></tr>
+<tr><td><a id="o-07509"></a><strong>Scatola x tarocchi</strong> <code>07509</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>) — voce «Scatola x Tarocchi»</td><td>Carpentry 60,1</td><td>5 <a href="risorse.html#o-01bdd">log</a></td><td>si usa con doppio clic; «Non hai tarocchi da mettere nella scatola»</td></tr>
+<tr><td><a id="o-072a6"></a><strong>Paletto di frassino</strong> <code>072a6</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>) — voce «Paletto di frassino (20Logs)»</td><td>Carpentry 80,1</td><td>20 <a href="risorse.html#o-01bdd">log</a></td><td>si usa con doppio clic; «Con questo al massimo puoi usarlo come stuzzicadenti!»</td></tr>
+<tr><td><a id="o-07f6e"></a><strong>Abbeveratoio</strong> <code>07f6e</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>)</td><td>Carpentry 90,1</td><td>2 <a href="#o-0e7b">water tub</a>, 18 <a href="risorse.html#o-01bdd">log</a></td><td>(Deed); si usa con doppio clic; «Appena provi ad infilarlo nello zaino ti scivola a terra e non lo trovi piu'.»</td></tr>
+<tr><td><a id="o-06013"></a><strong>Illegale!</strong> <code>06013</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>)</td><td>Carpentry 90,1</td><td>5 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="arcaio.html#o-01bd4">shaft</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td></td></tr>
+<tr><td><a id="o-07f6f"></a><strong>Deed parti di legno (mod. atreiu)</strong> <code>07f6f</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>) — voce «Bunker - parti legnose»</td><td>Carpentry 90,1</td><td>100 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>si usa con doppio clic; «Questo e' uno dei componenti che servono per costruire il bunker sotterraneo.»</td></tr>
+<tr><td><a id="o-07544"></a><strong>Mattone</strong> <code>07544</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>)</td><td>Carpentry 699,1</td><td>1 <a href="minatore.html#o-07543">Pietra grezza</a>, 1 <a href="risorse.html#o-019b7">iron ore</a>, 1 <a href="altre-script.html#o-0de9">Braci</a></td><td></td></tr>
+<tr><td><a id="o-07f9e"></a><strong>Pipa Deluxe</strong> <code>07f9e</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>) — voce «Pipa Deluxe»</td><td>Carpentry 85,1</td><td>2 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a>, 1 <a href="risorse.html#o-019b7">iron ore</a></td><td></td></tr>
+<tr><td><a id="o-01f14"></a><strong>recall rune</strong> <code>01f14</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>)</td><td>Carpentry 75,1</td><td>1 <a href="inventore.html#o-0102e">nails</a>, 1 <a href="risorse.html#o-01bdd">log</a></td><td>runa; «Devi tenerla nello zaino»</td></tr>
+<tr><td><a id="o-01f15"></a><strong>recall rune</strong> <code>01f15</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>)</td><td>Carpentry 75,1</td><td>1 <a href="inventore.html#o-0102e">nails</a>, 1 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-01f16"></a><strong>recall rune</strong> <code>01f16</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>)</td><td>Carpentry 75,1</td><td>1 <a href="inventore.html#o-0102e">nails</a>, 1 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-01f17"></a><strong>recall rune</strong> <code>01f17</code></td><td>menu <code>ITEMMENU 2001</code> (da <code>[ITEMMENU 2009]</code>)</td><td>Carpentry 75,1</td><td>1 <a href="inventore.html#o-0102e">nails</a>, 1 <a href="risorse.html#o-01bdd">log</a></td><td></td></tr>
+<tr><td><a id="o-04a5"></a><strong>wooden boards</strong> <code>04a5</code></td><td>menu <code>ITEMMENU 2010</code> (da <code>[ITEMMENU 2009]</code>) — voce «Assi di legno»</td><td>Carpentry 88,1</td><td>1 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td>@</td></tr>
+<tr><td><a id="o-04cd"></a><strong>wooden planks</strong> <code>04cd</code></td><td>menu <code>ITEMMENU 2010</code> (da <code>[ITEMMENU 2009]</code>)</td><td>Carpentry 90,1</td><td>1 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="inventore.html#o-0102e">nails</a></td><td></td></tr>
+<tr><td><a id="o-07f69"></a><strong>Letto singolo /</strong> <code>07f69</code></td><td>menu <code>ITEMMENU 2014</code> (da <code>[ITEMMENU 2009]</code>) — voce «Letto singolo /»</td><td>Carpentry 75,1</td><td>1 <a href="sarto.html#o-0a92">folded sheet</a>, 50 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="sarto.html#o-07f68">Illegale!</a>, 1 <a href="inventore.html#o-0102e">nails</a>, 1 <a href="sarto.html#o-01915">pillow</a></td><td>(Deed); si usa con doppio clic; «Appena provi ad infilarlo nello zaino ti scivola a terra e non lo trovi piu'.»</td></tr>
+<tr><td><a id="o-07fa7"></a><strong>Letto singolo \</strong> <code>07fa7</code></td><td>menu <code>ITEMMENU 2014</code> (da <code>[ITEMMENU 2009]</code>) — voce «Letto singolo \»</td><td>Carpentry 75,1</td><td>1 <a href="sarto.html#o-0a92">folded sheet</a>, 50 <a href="risorse.html#o-01bdd">log</a>, 1 <a href="sarto.html#o-07f68">Illegale!</a>, 1 <a href="inventore.html#o-0102e">nails</a>, 1 <a href="sarto.html#o-01915">pillow</a></td><td>(Deed); si usa con doppio clic; «Appena provi ad infilarlo nello zaino ti scivola a terra e non lo trovi piu'.»</td></tr>
+<tr><td><a id="o-04219"></a><strong>Appalto x una Fontana</strong> <code>04219</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Una Fontana Decorativa»</td><td>Carpentry 80,1</td><td>4 <a href="altre-script.html#o-07510">Lotto completo di 100 marmo da costruzione</a>, 5 <a href="altre-script.html#o-0754b">Lotto completo di 100 mattoni</a>, 40 <a href="risorse.html#o-0ff8">pitcher of water</a></td><td>Deed to a Fountain; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-0421b"></a><strong>Appalto x un Serpente di Pietra</strong> <code>0421b</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Una Torre di Marmo Nero a forma di Serpente»</td><td>Carpentry 95,1</td><td>7 <a href="altre-script.html#o-07510">Lotto completo di 100 marmo da costruzione</a>, 3 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a></td><td>si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-07411"></a><strong>Casa Galleggiante Mod. Pestilence.</strong> <code>07411</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Casa Galleggiante \»</td><td>Carpentry 999,1</td><td>20 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 120 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 50 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 100 <a href="sarto.html#o-0a92">folded sheet</a>, 2 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Casa Galleggiante Deed</td></tr>
+<tr><td><a id="o-04202"></a><strong>Deed to a Small Stone House</strong> <code>04202</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Small Stone»</td><td>Carpentry 999,1</td><td>30 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 8 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 1 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 5 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a>, 3 <a href="altre-script.html#o-0754b">Lotto completo di 100 mattoni</a>, 1 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Small Stone House; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-04200"></a><strong>Deed to a Small Stone and Plaster House</strong> <code>04200</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Small Stone and Plaster House»</td><td>Carpentry 999,1</td><td>30 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 5 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 1 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 5 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a>, 5 <a href="altre-script.html#o-0754b">Lotto completo di 100 mattoni</a>, 1 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Small Stone and Plaster House; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-04208"></a><strong>Deed to a Small Wood and Plaster House</strong> <code>04208</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Small Wood and Plaster House»</td><td>Carpentry 999,1</td><td>30 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 15 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 6 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 2 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a>, 5 <a href="altre-script.html#o-0754b">Lotto completo di 100 mattoni</a>, 1 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Small Wood and Plaster House; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-04210"></a><strong>Deed to a Small Wood House Thatched Roof</strong> <code>04210</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Small Wood House Thatched Roof»</td><td>Carpentry 999,1</td><td>30 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 30 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 4 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 2 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a>, 1 <a href="altre-script.html#o-0754b">Lotto completo di 100 mattoni</a>, 1 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Small Wood House Thatched Roof; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-04204"></a><strong>Deed to a Small Brick House</strong> <code>04204</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Small Brick House»</td><td>Carpentry 999,1</td><td>30 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 2 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 1 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 2 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a>, 9 <a href="altre-script.html#o-0754b">Lotto completo di 100 mattoni</a>, 1 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Small Brick House; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-04206"></a><strong>Deed to a Small Wood House</strong> <code>04206</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Small Wood House»</td><td>Carpentry 999,1</td><td>30 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 30 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 10 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 2 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a>, 1 <a href="altre-script.html#o-0754b">Lotto completo di 100 mattoni</a>, 1 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Small Wood House; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-04212"></a><strong>Deed to a Blue Tent</strong> <code>04212</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Blue Tent (Porte escluse)»</td><td>Carpentry 999,1</td><td>20 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 5 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 5 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 200 <a href="sarto.html#o-0a92">folded sheet</a>, 1 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Blue Tent; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-04214"></a><strong>Deed to a Green Tent</strong> <code>04214</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Green Tent (Porte escluse)»</td><td>Carpentry 999,1</td><td>20 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 5 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 5 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 200 <a href="sarto.html#o-0a92">folded sheet</a>, 1 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Green Tent; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-04216"></a><strong>Deed to a Three Room House</strong> <code>04216</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «Three Room»</td><td>Carpentry 999,1</td><td>60 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 30 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 3 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 12 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a>, 18 <a href="altre-script.html#o-0754b">Lotto completo di 100 mattoni</a>, 2 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Three Room House; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-04220"></a><strong>Deed to a Two Story Stone and Plaster House</strong> <code>04220</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>) — voce «2 Story brick and stone»</td><td>Carpentry 999,1</td><td>90 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 55 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 6 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 1 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a>, 45 <a href="altre-script.html#o-0754b">Lotto completo di 100 mattoni</a>, 3 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Two Story Stone and Plaster House; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-04222"></a><strong>Deed to a Tower</strong> <code>04222</code></td><td>menu <code>ITEMMENU 3200</code> (da <code>[ITEMMENU 2009]</code>)</td><td>Carpentry 999,1</td><td>200 <a href="alchimia.html#o-07550">Malta di adamantio</a>, 1 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 1 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 88 <a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a>, 9 <a href="altre-script.html#o-0754d">Lotto completo di 100 mattonelle di pietra</a>, 5 <a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></td><td>Tower; si usa con doppio clic; «La puo' piazzare solo un GM»</td></tr>
+<tr><td><a id="o-01201"></a><strong>stone table</strong> <code>01201</code></td><td>menu <code>ITEMMENU 3201</code> (da <code>[ITEMMENU 2009]</code>) — voce «Tavolo in Pietra»</td><td>Carpentry 899,1</td><td>15 <a href="minatore.html#o-07543">Pietra grezza</a></td><td>Table (Stone); si usa con doppio clic; «Hai fissato a terra il tavolo.»</td></tr>
+<tr><td><a id="o-01dbb"></a><strong>sandstone table</strong> <code>01dbb</code></td><td>menu <code>ITEMMENU 3201</code> (da <code>[ITEMMENU 2009]</code>) — voce «Tavolo in pietra chiara»</td><td>Carpentry 899,1</td><td>15 <a href="minatore.html#o-07543">Pietra grezza</a></td><td>si usa con doppio clic; «Hai fissato a terra il tavolo.»</td></tr>
+<tr><td><a id="o-01dc1"></a><strong>marble table</strong> <code>01dc1</code></td><td>menu <code>ITEMMENU 3201</code> (da <code>[ITEMMENU 2009]</code>) — voce «Tavolo in Marmo»</td><td>Carpentry 899,1</td><td>15 <a href="risorse.html#o-0750e">Marmo grezzo</a></td><td>si usa con doppio clic; «Hai fissato a terra il tavolo.»</td></tr>
+<tr><td><a id="o-0459"></a><strong>marble bench</strong> <code>0459</code></td><td>menu <code>ITEMMENU 3201</code> (da <code>[ITEMMENU 2009]</code>) — voce «Panchina in Marmo»</td><td>Carpentry 899,1</td><td>15 <a href="risorse.html#o-0750e">Marmo grezzo</a></td><td>sedia; Marble Bench 1 (n); marble bench against NE wall; si usa con doppio clic; «Hai fissato a terra il tavolo.»</td></tr>
+<tr><td><a id="o-01218"></a><strong>stone chair</strong> <code>01218</code></td><td>menu <code>ITEMMENU 3201</code> (da <code>[ITEMMENU 2009]</code>) — voce «Sedia in Pietra»</td><td>Carpentry 899,1</td><td>15 <a href="minatore.html#o-07543">Pietra grezza</a></td><td>sedia; Chair (Stone); stone chair throne; si usa con doppio clic; «Hai fissato a terra il tavolo.»</td></tr>
+<tr><td><a id="o-01dc7"></a><strong>sandstone bench</strong> <code>01dc7</code></td><td>menu <code>ITEMMENU 3201</code> (da <code>[ITEMMENU 2009]</code>) — voce «Panchina in PIETRA Chiara»</td><td>Carpentry 899,1</td><td>15 <a href="minatore.html#o-07543">Pietra grezza</a></td><td>sedia; si usa con doppio clic; «Hai fissato a terra il tavolo.»</td></tr>
+<tr><td><a id="o-01dcd"></a><strong>marble bench</strong> <code>01dcd</code></td><td>menu <code>ITEMMENU 3201</code> (da <code>[ITEMMENU 2009]</code>) — voce «Panchina in Marmo II»</td><td>Carpentry 899,1</td><td>15 <a href="risorse.html#o-0750e">Marmo grezzo</a></td><td>sedia; si usa con doppio clic; «Hai fissato a terra il tavolo.»</td></tr>
+<tr><td><a id="o-04240"></a><strong>Deed to a small ship</strong> <code>04240</code></td><td>menu <code>ITEMMENU 3217</code> (da <code>[ITEMMENU 2009]</code>) — voce «Small ship»</td><td>Carpentry 899,1</td><td>8 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 1 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 20 <a href="sarto.html#o-0a92">folded sheet</a></td><td>Small Ship</td></tr>
+<tr><td><a id="o-04241"></a><strong>Deed to a small dragon ship</strong> <code>04241</code></td><td>menu <code>ITEMMENU 3217</code> (da <code>[ITEMMENU 2009]</code>) — voce «Small Dragon ship»</td><td>Carpentry 919,1</td><td>8 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 1 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 20 <a href="sarto.html#o-0a92">folded sheet</a></td><td>Small Dragon Ship</td></tr>
+<tr><td><a id="o-04242"></a><strong>Deed to a medium ship</strong> <code>04242</code></td><td>menu <code>ITEMMENU 3217</code> (da <code>[ITEMMENU 2009]</code>) — voce «Medium ship»</td><td>Carpentry 939,1</td><td>10 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 1 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 30 <a href="sarto.html#o-0a92">folded sheet</a></td><td>Medium Ship</td></tr>
+<tr><td><a id="o-04243"></a><strong>Deed to a medium dragon ship</strong> <code>04243</code></td><td>menu <code>ITEMMENU 3217</code> (da <code>[ITEMMENU 2009]</code>) — voce «Medium Dragon ship»</td><td>Carpentry 959,1</td><td>12 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 1 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 30 <a href="sarto.html#o-0a92">folded sheet</a></td><td>Medium Dragon Ship</td></tr>
+<tr><td><a id="o-04244"></a><strong>Deed to a long ship</strong> <code>04244</code></td><td>menu <code>ITEMMENU 3217</code> (da <code>[ITEMMENU 2009]</code>) — voce «Long ship»</td><td>Carpentry 979,1</td><td>14 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 2 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 40 <a href="sarto.html#o-0a92">folded sheet</a></td><td>Long Ship</td></tr>
+<tr><td><a id="o-04245"></a><strong>Deed to a long dragon ship</strong> <code>04245</code></td><td>menu <code>ITEMMENU 3217</code> (da <code>[ITEMMENU 2009]</code>) — voce «Long Dragon Ship»</td><td>Carpentry 999,1</td><td>16 <a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a>, 2 <a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a>, 40 <a href="sarto.html#o-0a92">folded sheet</a></td><td>Long Dragon Ship</td></tr>
+</tbody></table></div>
+<p class="filtro-vuoto" id="nessuno" hidden>Nessuna riga corrisponde alla ricerca.</p>
+</main>
+</div>
+<script>
+// Filtra le righe delle tabelle con il testo cercato (senza distinguere maiuscole).
+(function () {
+  var campo = document.getElementById('filtro'), righe = document.querySelectorAll('main tbody tr'), vuoto = document.getElementById('nessuno');
+  campo.addEventListener('input', function () {
+    var q = campo.value.trim().toLowerCase(), viste = 0;
+    righe.forEach(function (r) { var ok = !q || r.textContent.toLowerCase().indexOf(q) !== -1; r.hidden = !ok; if (ok) viste++; });
+    vuoto.hidden = !(q && viste === 0);
+  });
+})();
+</script>
+</body>
+</html>

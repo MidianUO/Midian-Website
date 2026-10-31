@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+<title>Risorse del crafting · Crafting · Midian</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: indice fisso a sinistra (sotto, su telefono), colonna di lettura a destra; tabelle scorrevoli. */
+:root {
+  --bg: #f4f5f1; --panel: #ffffff; --ink: #1c2630; --muted: #5a6670; --line: #d9ddd5;
+  --brass: #8a5c14; --teal: #24605f; --tint: #eef1ea; --warn: #9b2c2c; --ok: #2f6b3a;
+  --f-display: "Marcellus SC", "Palatino Linotype", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.wrap { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  border-right: 1px solid var(--line); padding-right: 18px; font-size: 15px; }
+nav.toc h2 { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--brass); margin: 0 0 10px; font-weight: 400 }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 8px; border-radius: 4px }
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+nav.toc .sub a { padding-left: 22px; color: var(--muted); font-size: 14px }
+.search { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 15px; margin-bottom: 14px }
+.search:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px }
+main { min-width: 0 }
+header.top { border-bottom: 2px solid var(--brass); padding-bottom: 18px; margin-bottom: 8px }
+header.top .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal) }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 50px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance }
+header.top p { max-width: 68ch; color: var(--muted); margin: 0 }
+section.chap { padding-top: 34px; scroll-margin-top: 16px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; margin: 0 0 12px; color: var(--ink); text-wrap: balance;
+  display: flex; gap: 12px; align-items: baseline }
+h2 .num { font-family: var(--f-mono); font-size: 14px; color: var(--brass) }
+h3 { font-size: 20px; margin: 26px 0 8px; color: var(--teal); font-weight: 700 }
+h4 { font-size: 17px; margin: 18px 0 6px }
+p, li { max-width: 72ch }
+a { color: var(--teal) }
+code, .id { font-family: var(--f-mono); font-size: .82em; background: var(--tint); padding: 1px 5px; border-radius: 3px; white-space: nowrap }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { background: var(--tint); font-weight: 700; white-space: nowrap; font-size: 13px; letter-spacing: .03em }
+tr:last-child td { border-bottom: 0 }
+td.n, th.n { text-align: right; white-space: nowrap }
+.zero { color: var(--warn); font-weight: 700 }
+.note { border-left: 3px solid var(--brass); background: var(--tint); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; max-width: 76ch }
+.note b { color: var(--brass) }
+.warn { border-left-color: var(--warn) } .warn b { color: var(--warn) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0 }
+.card h4 { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: var(--brass) }
+.card p, .card ul { margin: 4px 0; font-size: 15px }
+.card ul { padding-left: 18px }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.tag { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--tint) }
+ol.steps { padding-left: 22px } ol.steps li { margin: 4px 0 }
+.empty { display: none; color: var(--muted); padding: 30px 0 }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 10px }
+  nav.toc { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 12px }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) }
+  nav.toc .sub { display: none }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+</style>
+<style>
+.sitebar { border-bottom: 1px solid var(--line); background: var(--panel) }
+.sitebar-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px }
+.sitebrand { font-family: var(--f-display); font-size: 22px; letter-spacing: .12em; color: var(--brass); text-decoration: none }
+.sitenav { display: flex; gap: 4px; flex-wrap: wrap }
+.sitenav a { color: var(--ink); text-decoration: none; padding: 6px 12px; border-radius: 4px }
+.sitenav a:hover, .sitenav a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+.sitenav a[aria-current="page"] { color: var(--brass); box-shadow: inset 0 -2px 0 var(--brass) }
+</style>
+<style>
+.filtro-vuoto { color: var(--muted); font-style: italic }
+@media (max-width: 860px) { nav.toc .qui { display: none } }
+tr[hidden] { display: none }
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="sitebar-in">
+  <a class="sitebrand" href="../../index.html">MIDIAN</a>
+  <nav class="sitenav" aria-label="Sezioni del sito">
+    <a href="../../index.html">Home</a>
+    <a href="../index.html">Wiki</a>
+    <a href="index.html" aria-current="page">Crafting</a>
+    <a href="../../download.html">Download</a>
+    <a href="../../contatti.html">Contatti</a>
+  </nav>
+</div></header>
+<div class="wrap">
+<nav class="toc" aria-label="Indice">
+  <input class="search" type="search" id="filtro" placeholder="Cerca in questa pagina…" aria-label="Cerca in questa pagina">
+  <h2>Crafting</h2>
+  <ol>
+    <li><a href="index.html">Indice del crafting</a></li>
+    <li><a href="alchimia.html">Alchimia (Alchemy)</a></li>
+    <li><a href="altre-script.html">Altre ricette delle script</a></li>
+    <li><a href="arcaio.html">Arcaio (Bowcraft)</a></li>
+    <li><a href="avvelenatore.html">Avvelenatore (Poisoning)</a></li>
+    <li><a href="cuoco.html">Cuoco (Cooking)</a></li>
+    <li><a href="fabbro.html">Fabbro (Blacksmithing)</a></li>
+    <li><a href="falegname.html">Falegname (Carpentry)</a></li>
+    <li><a href="identificazione.html">Identificazione (ItemID)</a></li>
+    <li><a href="inventore.html">Inventore (Tinkering)</a></li>
+    <li><a href="magia.html">Magia (Magery)</a></li>
+    <li><a href="minatore.html">Minatore (Mining)</a></li>
+    <li><a href="risorse.html" aria-current="page">Risorse del crafting</a></li>
+    <li><a href="sarto.html">Sarto (Tailoring)</a></li>
+    <li><a href="scriba.html">Scriba (Inscription)</a></li>
+    <li><a href="taming.html">Taming</a></li>
+  </ol>
+
+  <p style="margin-top:18px"><a href="../index.html">← Torna alla wiki</a></p>
+</nav>
+<main id="main">
+<header class="top">
+  <div class="eyebrow">Wiki · Crafting</div>
+  <h1>Risorse del crafting</h1>
+</header>
+<p><a href="index.html">← Indice del crafting</a> · <a href="risorse.html">Risorse</a></p>
+<p>Ogni risorsa usata dalle ricette: chi la vende, se si crea e con quale mestiere, quali personaggi o mostri la portano.</p>
+<div class="tbl"><table><thead><tr><th>Risorsa</th><th>Dove si trova</th></tr></thead><tbody>
+<tr><td><a id="o-055ae"></a><strong>055ae</strong> <code>055ae</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-05602"></a><strong>05602</strong> <code>05602</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-05604"></a><strong>05604</strong> <code>05604</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="alchimia.html#o-0756d">100 Piombini Fusi</a></strong> <code>0756d</code></td><td>si crea: Alchimia</td></tr>
+<tr><td><strong><a href="falegname.html#o-07f6e">Abbeveratoio</a></strong> <code>07f6e</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06683">Acciaio al Cobalto</a></strong> <code>06683</code></td><td>si crea: Minatore, Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06685">Acciaio al titanio</a></strong> <code>06685</code></td><td>si crea: Minatore, Fabbro</td></tr>
+<tr><td><strong><a href="altre-script.html#o-07541">Adamantio</a></strong> <code>07541</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-07542">Adamantio fuso</a></strong> <code>07542</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-07561">Adamantio in polvere</a></strong> <code>07561</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="sarto.html#o-06406">Adept Meditator Hat</a></strong> <code>06406</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04542">Agapite</a></strong> <code>04542</code></td><td>si crea: Minatore, Fabbro, script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04783">Agapite Plate Helm</a></strong> <code>04783</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04780">Agapite Platemail</a></strong> <code>04780</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04781">Agapite Platemail Arms</a></strong> <code>04781</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04785">Agapite Platemail Gauntlets</a></strong> <code>04785</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04784">Agapite Platemail Gorget</a></strong> <code>04784</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04782">Agapite Platemail Legs</a></strong> <code>04782</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><a id="o-07042"></a><strong>amber log</strong> <code>07042</code></td><td>dato dalle script: <code>703d</code></td></tr>
+<tr><td><a id="o-07043"></a><strong>amethist log</strong> <code>07043</code></td><td>dato dalle script: <code>703f</code></td></tr>
+<tr><td><a id="o-0f16"></a><strong>amethyst</strong> <code>0f16</code></td><td>si compra da: the Jeweler · lo portano: Efreet</td></tr>
+<tr><td><a id="o-0f22"></a><strong>amethyst</strong> <code>0f22</code></td><td>oggetto base: raccolta (miniera, legna, pesca, pelli...) o mondo</td></tr>
+<tr><td><strong><a href="alchimia.html#o-07294">Amuleto di Protezione</a></strong> <code>07294</code></td><td>si crea: Alchimia</td></tr>
+<tr><td><strong><a href="sarto.html#o-06403">Apprentice Meditator Hat</a></strong> <code>06403</code></td><td>si crea: Sarto</td></tr>
+<tr><td><a id="o-064bf"></a><strong>Bacchetta dell'abbattimento</strong> <code>064bf</code></td><td>dato dalle script: <code>64c8</code>, <code>64c9</code>, <code>64ca</code></td></tr>
+<tr><td><strong><a href="altre-script.html#o-06364">Balestra di piombo (15kg)</a></strong> <code>06364</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06365">Balestra di piombo (22kg)</a></strong> <code>06365</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0636a">Balestra di piombo (30kg)</a></strong> <code>0636a</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-07410">Balestra di piombo (7kg)</a></strong> <code>07410</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="sarto.html#o-0e1d">ball of yarn</a></strong> <code>0e1d</code></td><td>si compra da: the Weaver · si crea: Sarto</td></tr>
+<tr><td><strong><a href="inventore.html#o-01eb1">barrel staves</a></strong> <code>01eb1</code></td><td>si crea: Inventore</td></tr>
+<tr><td><strong><a href="inventore.html#o-01004">barrel tap</a></strong> <code>01004</code></td><td>si crea: Inventore</td></tr>
+<tr><td><strong><a href="inventore.html#o-01db7">barrle hoops</a></strong> <code>01db7</code></td><td>si crea: Inventore</td></tr>
+<tr><td><a id="o-0f78"></a><strong>Batwing</strong> <code>0f78</code></td><td>lo portano: the Witch, the High Witch, 04037, Spirito del Faraone</td></tr>
+<tr><td><a id="o-0a57"></a><strong>bedroll</strong> <code>0a57</code></td><td>oggetto base: raccolta (miniera, legna, pesca, pelli...) o mondo</td></tr>
+<tr><td><a id="o-01422"></a><strong>Beeswax</strong> <code>01422</code></td><td>oggetto base: raccolta (miniera, legna, pesca, pelli...) o mondo</td></tr>
+<tr><td><a id="o-0f7a"></a><strong>Black Pearl</strong> <code>0f7a</code></td><td>si compra da: the Alchemist, the Mage · lo portano: the Dragon, Water Elemental, Terathan Matriarch, Sea Monster, Phoenix…</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04546">Black Rock Ingot</a></strong> <code>04546</code></td><td>si crea: Minatore, Fabbro, script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04718">Black Rock Plate Helm</a></strong> <code>04718</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04715">Black Rock Platemail</a></strong> <code>04715</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04716">Black Rock Platemail Arms</a></strong> <code>04716</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0471a">Black Rock Platemail Gauntlets</a></strong> <code>0471a</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04719">Black Rock Platemail Gorget</a></strong> <code>04719</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04717">Black Rock Platemail Legs</a></strong> <code>04717</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><a id="o-0f79"></a><strong>Blackmoor</strong> <code>0f79</code></td><td>lo portano: Sea Monster, Sea Serpent, Liche Lord, Swamp Tentacles, 04037…</td></tr>
+<tr><td><a id="o-0f7b"></a><strong>Blood Moss</strong> <code>0f7b</code></td><td>si compra da: the Herbalist, the Alchemist, the Mage · lo portano: Terathan Matriarch, Sea Monster, Phoenix, the Frost Elf Shaman, the Warlock…</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04547">Blood Rock Ingot</a></strong> <code>04547</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04703">Blood Rock Plate Helm</a></strong> <code>04703</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04700">Blood Rock Platemail</a></strong> <code>04700</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04701">Blood Rock Platemail Arms</a></strong> <code>04701</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04705">Blood Rock Platemail Gauntlets</a></strong> <code>04705</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04704">Blood Rock Platemail Gorget</a></strong> <code>04704</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04702">Blood Rock Platemail Legs</a></strong> <code>04702</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0f7c">Bloodspawn</a></strong> <code>0f7c</code></td><td>si crea: script · lo portano: Zombie, Subterranean Mongbat, Blood Elemental, Arboreal Mongbat, Imp…</td></tr>
+<tr><td><strong><a href="falegname.html#o-01bd7">board</a></strong> <code>01bd7</code></td><td>si compra da: the Carpenter, the Tinker · si crea: Falegname</td></tr>
+<tr><td><a id="o-0f7e"></a><strong>Bone</strong> <code>0f7e</code></td><td>lo portano: 04037, Spirito del Faraone</td></tr>
+<tr><td><strong><a href="scriba.html#o-0ff2">book</a></strong> <code>0ff2</code></td><td>si crea: Scriba</td></tr>
+<tr><td><strong><a href="scriba.html#o-0ff1">book</a></strong> <code>0ff1</code></td><td>si crea: Scriba</td></tr>
+<tr><td><strong><a href="scriba.html#o-01e21">books</a></strong> <code>01e21</code></td><td>si crea: Scriba</td></tr>
+<tr><td><strong><a href="scriba.html#o-01e22">books</a></strong> <code>01e22</code></td><td>si crea: Scriba</td></tr>
+<tr><td><strong><a href="scriba.html#o-01e24">books</a></strong> <code>01e24</code></td><td>si crea: Scriba</td></tr>
+<tr><td><a id="o-086474"></a><strong>Bottino casuale piombini</strong> <code>086474</code></td><td>dato dalle script: <code>itemmenu 2061</code></td></tr>
+<tr><td><a id="o-072ac"></a><strong>Bozzolo</strong> <code>072ac</code></td><td>dato dalle script: <code>ITEMMENU 3224</code>, <code>GUMP 62 BUTTON</code></td></tr>
+<tr><td><strong><a href="altre-script.html#o-0de9">Braci</a></strong> <code>0de9</code></td><td>si crea: script</td></tr>
+<tr><td><a id="o-0f7f"></a><strong>Brimstone</strong> <code>0f7f</code></td><td>lo portano: the Daemon, Sea Monster, Sea Serpent, Liche Lord, Swamp Tentacles…</td></tr>
+<tr><td><a id="o-075bb"></a><strong>Brimstone Lavorata</strong> <code>075bb</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0454c">Bronze Ingot</a></strong> <code>0454c</code></td><td>si crea: Fabbro, Minatore, script</td></tr>
+<tr><td><strong><a href="identificazione.html#o-01cef">Budella</a></strong> <code>01cef</code></td><td>si crea: Identificazione</td></tr>
+<tr><td><a id="o-06675"></a><strong>Busto di acciaio al Cobalto</strong> <code>06675</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-064e0"></a><strong>cannon ball</strong> <code>064e0</code></td><td>dato dalle script: <code>64dd</code></td></tr>
+<tr><td><a id="o-07287"></a><strong>Cassa</strong> <code>07287</code></td><td>dato dalle script: <code>0589</code></td></tr>
+<tr><td><a id="o-075bc"></a><strong>Cavo d'argento</strong> <code>075bc</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-07530">Cera x libri</a></strong> <code>07530</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="inventore.html#o-01026">chisels</a></strong> <code>01026</code></td><td>si crea: Inventore</td></tr>
+<tr><td><a id="o-0f15"></a><strong>citrine</strong> <code>0f15</code></td><td>si compra da: the Jeweler · lo portano: Earth Elemental, Ettin delle Sabbie</td></tr>
+<tr><td><strong><a href="inventore.html#o-0104b">clock</a></strong> <code>0104b</code></td><td>si compra da: the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="inventore.html#o-0104d">clock frame</a></strong> <code>0104d</code></td><td>si crea: Inventore</td></tr>
+<tr><td><strong><a href="inventore.html#o-0104e">clock frame</a></strong> <code>0104e</code></td><td>si crea: Inventore</td></tr>
+<tr><td><strong><a href="inventore.html#o-0104f">clock parts</a></strong> <code>0104f</code></td><td>si compra da: the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="inventore.html#o-01050">clock parts</a></strong> <code>01050</code></td><td>si crea: Inventore</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06674">Cobalto</a></strong> <code>06674</code></td><td>si crea: Fabbro, script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-07fa1">Colla</a></strong> <code>07fa1</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0635d">Collana Demi</a></strong> <code>0635d</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0635c">Collana di Annullamento</a></strong> <code>0635c</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0635a">Collana di Fase</a></strong> <code>0635a</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0635b">Collana di Opposizione</a></strong> <code>0635b</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06359">Collana Fasica</a></strong> <code>06359</code></td><td>si crea: script</td></tr>
+<tr><td><a id="o-075b1"></a><strong>Componente</strong> <code>075b1</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="scriba.html#o-07545">Concessione Edilizia da 50k</a></strong> <code>07545</code></td><td>si crea: Scriba</td></tr>
+<tr><td><strong><a href="falegname.html#o-06074">Contenitore per ago e filo</a></strong> <code>06074</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="fabbro.html#o-072a0">Contenitori per esplosivo</a></strong> <code>072a0</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-01be3">copper ingot</a></strong> <code>01be3</code></td><td>si crea: Fabbro, Minatore, script</td></tr>
+<tr><td><a id="o-075b5"></a><strong>Corda delle parche</strong> <code>075b5</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-065ab"></a><strong>Create Food II scroll</strong> <code>065ab</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-065a3"></a><strong>Create raw food scroll</strong> <code>065a3</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-0e2d"></a><strong>crystal ball</strong> <code>0e2d</code></td><td>si compra da: the Mage</td></tr>
+<tr><td><strong><a href="sarto.html#o-0600f">Cuscino ammortizza-caduta</a></strong> <code>0600f</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="magia.html#o-09f1">cut of raw ribs</a></strong> <code>09f1</code></td><td>si compra da: the Butcher · si crea: Magia</td></tr>
+<tr><td><a id="o-01067"></a><strong>cut up leather</strong> <code>01067</code></td><td>oggetto base: raccolta (miniera, legna, pesca, pelli...) o mondo</td></tr>
+<tr><td><a id="o-05612"></a><strong>Cyclop Hides</strong> <code>05612</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0f80">Daemon Bone</a></strong> <code>0f80</code></td><td>si crea: script · lo portano: Skeleton, Skeleton Archer, Skeleton Mage, Skeleton Knight, Necromante…</td></tr>
+<tr><td><a id="o-0f90"></a><strong>Dead Wood</strong> <code>0f90</code></td><td>lo portano: Reaper, Arboreal Mongbat, Swamp Tentacles, 04037, Spirito del Faraone</td></tr>
+<tr><td><a id="o-04ff1"></a><strong>Deciphered Treasure Map</strong> <code>04ff1</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-04ff2"></a><strong>Deciphered Treasure Map</strong> <code>04ff2</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-04ff3"></a><strong>Deciphered Treasure Map</strong> <code>04ff3</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-04ff4"></a><strong>Deciphered Treasure Map</strong> <code>04ff4</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-04ff5"></a><strong>Deciphered Treasure Map</strong> <code>04ff5</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="falegname.html#o-07f6f">Deed parti di legno (mod. atreiu)</a></strong> <code>07f6f</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0635e">Demi Necklace</a></strong> <code>0635e</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06360">Demi Necklace</a></strong> <code>06360</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06361">Demi Necklace</a></strong> <code>06361</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06362">Demi Necklace</a></strong> <code>06362</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06363">Demi Necklace</a></strong> <code>06363</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="minatore.html#o-0640b">Demonic</a></strong> <code>0640b</code></td><td>si crea: Minatore</td></tr>
+<tr><td><a id="o-0f26"></a><strong>diamond</strong> <code>0f26</code></td><td>si compra da: the Jeweler · lo portano: an Ettin Lord, Ettin delle Sabbie</td></tr>
+<tr><td><a id="o-07044"></a><strong>diamond log</strong> <code>07044</code></td><td>dato dalle script: <code>703c</code></td></tr>
+<tr><td><strong><a href="inventore.html#o-01028">dovetail saw</a></strong> <code>01028</code></td><td>si crea: Inventore</td></tr>
+<tr><td><a id="o-0f82"></a><strong>Dragon's Blood</strong> <code>0f82</code></td><td>lo portano: 04037, Spirito del Faraone</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0454b">Dull Copper Ingot</a></strong> <code>0454b</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><a id="o-072a4"></a><strong>Durlindana Rotta</strong> <code>072a4</code></td><td>dato dalle script: <code>7295</code></td></tr>
+<tr><td><strong><a href="falegname.html#o-0fa9">dyes</a></strong> <code>0fa9</code></td><td>si compra da: the Weaver, the Tailor · si crea: Falegname</td></tr>
+<tr><td><strong><a href="falegname.html#o-0fab">dying tub</a></strong> <code>0fab</code></td><td>si compra da: the Weaver, the Tailor · si crea: Falegname, script</td></tr>
+<tr><td><a id="o-06678"></a><strong>Elmo di acciaio al Cobalto</strong> <code>06678</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-0f10"></a><strong>emerald</strong> <code>0f10</code></td><td>si compra da: the Jeweler</td></tr>
+<tr><td><a id="o-07041"></a><strong>emerald log</strong> <code>07041</code></td><td>dato dalle script: <code>703e</code></td></tr>
+<tr><td><strong><a href="inventore.html#o-0f0e">empty bottle</a></strong> <code>0f0e</code></td><td>si compra da: the Alchemist, the Provisioner · si crea: Inventore</td></tr>
+<tr><td><a id="o-05613"></a><strong>Ettin Hides</strong> <code>05613</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-0f83"></a><strong>Executioner's Cap</strong> <code>0f83</code></td><td>lo portano: Corpser, Giant Serpent, Giant Spider, Giant Scorpion, Terathan Warrior…</td></tr>
+<tr><td><strong><a href="sarto.html#o-06405">Expert Meditator Hat</a></strong> <code>06405</code></td><td>si crea: Sarto</td></tr>
+<tr><td><a id="o-0f87"></a><strong>Eye of Newt</strong> <code>0f87</code></td><td>lo portano: the Witch, the High Witch, Necromante, Antico Necromante, 04037…</td></tr>
+<tr><td><strong><a href="sarto.html#o-01bd1">feather</a></strong> <code>01bd1</code></td><td>si compra da: the Bowyer · si crea: Sarto</td></tr>
+<tr><td><a id="o-0f81"></a><strong>Fertile Dirt</strong> <code>0f81</code></td><td>si compra da: the Mage · lo portano: Earth Elemental, Necromante, Antico Necromante, 04037, Spirito del Faraone…</td></tr>
+<tr><td><a id="o-06075"></a><strong>Filo delle parche</strong> <code>06075</code></td><td>lo portano: Antico Necromante</td></tr>
+<tr><td><strong><a href="sarto.html#o-06402">Filo magico</a></strong> <code>06402</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="inventore.html#o-011c7">flower pot</a></strong> <code>011c7</code></td><td>si crea: Inventore</td></tr>
+<tr><td><a id="o-0175d"></a><strong>folded cloth</strong> <code>0175d</code></td><td>oggetto base: raccolta (miniera, legna, pesca, pelli...) o mondo</td></tr>
+<tr><td><strong><a href="sarto.html#o-0a92">folded sheet</a></strong> <code>0a92</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="inventore.html#o-010e5">froe</a></strong> <code>010e5</code></td><td>si compra da: the Carpenter, the Tinker · si crea: Inventore</td></tr>
+<tr><td><a id="o-06677"></a><strong>Gambali di acciaio al Cobalto</strong> <code>06677</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-05609"></a><strong>Gargoyle Hides</strong> <code>05609</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-0f84"></a><strong>Garlic</strong> <code>0f84</code></td><td>si compra da: the Herbalist, the Alchemist, the Mage, the Healer, the Provisioner · lo portano: the Dragon, Terathan Matriarch, Sea Monster, Phoenix, Swamp Tentacles…</td></tr>
+<tr><td><strong><a href="inventore.html#o-01053">gears</a></strong> <code>01053</code></td><td>si compra da: the Tinker · si crea: Inventore</td></tr>
+<tr><td><a id="o-0f85"></a><strong>Ginseng</strong> <code>0f85</code></td><td>si compra da: the Herbalist, the Alchemist, the Mage, the Healer, the Provisioner · lo portano: the Dragon, Terathan Matriarch, Sea Monster, Phoenix, the Frost Elf Shaman…</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0eed">gold coin</a></strong> <code>0eed</code></td><td>si crea: script, Fabbro · lo portano: the Ogre, Ettin, Zombie, Gargoyle, the Orc Lord…</td></tr>
+<tr><td><strong><a href="fabbro.html#o-01be9">gold ingot</a></strong> <code>01be9</code></td><td>si crea: Fabbro, script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04556">Golden Plate Helm</a></strong> <code>04556</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04559">Golden Platemail</a></strong> <code>04559</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04554">Golden Platemail Arms</a></strong> <code>04554</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04558">Golden Platemail Gauntlets</a></strong> <code>04558</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04557">Golden Platemail Gorget</a></strong> <code>04557</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04555">Golden Platemail Legs</a></strong> <code>04555</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><a id="o-06679"></a><strong>Gorgiera di acciaio al Cobalto</strong> <code>06679</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="sarto.html#o-06408">Grand Master Meditator Hat</a></strong> <code>06408</code></td><td>si crea: Sarto</td></tr>
+<tr><td><a id="o-075cd"></a><strong>Granello di adamantio incastonato</strong> <code>075cd</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-072af">greeny</a></strong> <code>072af</code></td><td>si crea: script</td></tr>
+<tr><td><a id="o-0667a"></a><strong>Guanti di acciaio al Cobalto</strong> <code>0667a</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="inventore.html#o-0102a">hammer</a></strong> <code>0102a</code></td><td>si compra da: the Carpenter, the Tinker · si crea: Inventore</td></tr>
+<tr><td><a id="o-01ced"></a><strong>heart</strong> <code>01ced</code></td><td>dato dalle script: <code>728f</code>, <code>7290</code>, <code>7291</code></td></tr>
+<tr><td><strong><a href="inventore.html#o-01055">hinge</a></strong> <code>01055</code></td><td>si compra da: the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="fabbro.html#o-014e7">hitching post</a></strong> <code>014e7</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><a id="o-065a0"></a><strong>Ignite scroll</strong> <code>065a0</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="sarto.html#o-07f68">Illegale!</a></strong> <code>07f68</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="falegname.html#o-06013">Illegale!</a></strong> <code>06013</code></td><td>si crea: Falegname</td></tr>
+<tr><td><a id="o-075c8"></a><strong>Inchiostro da Scrittura</strong> <code>075c8</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="inventore.html#o-010e6">inshave</a></strong> <code>010e6</code></td><td>si compra da: the Carpenter, the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="fabbro.html#o-01bef">iron ingot</a></strong> <code>01bef</code></td><td>si compra da: the Tinker, the Blacksmith · si crea: Fabbro</td></tr>
+<tr><td><a id="o-019b7"></a><strong>iron ore</strong> <code>019b7</code></td><td>lo portano: Earth Elemental, Snow Elemental, Ettin delle Sabbie</td></tr>
+<tr><td><strong><a href="inventore.html#o-01876">iron wire</a></strong> <code>01876</code></td><td>si crea: Inventore</td></tr>
+<tr><td><a id="o-09ec"></a><strong>jar of honey</strong> <code>09ec</code></td><td>oggetto base: raccolta (miniera, legna, pesca, pelli...) o mondo</td></tr>
+<tr><td><strong><a href="inventore.html#o-01030">jointing plane</a></strong> <code>01030</code></td><td>si compra da: the Carpenter, the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="sarto.html#o-06404">Journeyman Meditator Hat</a></strong> <code>06404</code></td><td>si crea: Sarto</td></tr>
+<tr><td><a id="o-07301"></a><strong>Lacrima di Sirena</strong> <code>07301</code></td><td>si compra da: the Alchemist</td></tr>
+<tr><td><a id="o-075b4"></a><strong>Lamiera sagomata</strong> <code>075b4</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-0a25"></a><strong>lantern</strong> <code>0a25</code></td><td>si compra da: the Provisioner</td></tr>
+<tr><td><strong><a href="inventore.html#o-075e3">Lastra di Bronzo</a></strong> <code>075e3</code></td><td>si crea: Inventore</td></tr>
+<tr><td><strong><a href="inventore.html#o-075e2">Lastra di Rame</a></strong> <code>075e2</code></td><td>si crea: Inventore</td></tr>
+<tr><td><strong><a href="minatore.html#o-06684">Lega ultraleggera</a></strong> <code>06684</code></td><td>si crea: Minatore</td></tr>
+<tr><td><strong><a href="falegname.html#o-07f69">Letto singolo /</a></strong> <code>07f69</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="scriba.html#o-07268">Libro del mago</a></strong> <code>07268</code></td><td>si compra da: Giuseppe · si crea: Scriba</td></tr>
+<tr><td><strong><a href="scriba.html#o-07281">Libro della natura</a></strong> <code>07281</code></td><td>si compra da: Giuseppe · si crea: Scriba</td></tr>
+<tr><td><a id="o-075b2"></a><strong>Listello</strong> <code>075b2</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075b6"></a><strong>Listello per archi</strong> <code>075b6</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075ca"></a><strong>Listello per archi in amber</strong> <code>075ca</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075ba"></a><strong>Listello per archi in amethist</strong> <code>075ba</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075b7"></a><strong>Listello per archi in diamond</strong> <code>075b7</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075b9"></a><strong>Listello per archi in emerald</strong> <code>075b9</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075b8"></a><strong>Listello per archi in ruby</strong> <code>075b8</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-055ac"></a><strong>Lizard Hides</strong> <code>055ac</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-01bdd"></a><strong>log</strong> <code>01bdd</code></td><td>si compra da: the Carpenter, the Tinker, the Provisioner, the Bowyer · lo portano: Reaper</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0754f">Lotto completo di 100 assi di legno</a></strong> <code>0754f</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-07547">Lotto completo di 100 chiodi</a></strong> <code>07547</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-07510">Lotto completo di 100 marmo da costruzione</a></strong> <code>07510</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0754d">Lotto completo di 100 mattonelle di pietra</a></strong> <code>0754d</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0754b">Lotto completo di 100 mattoni</a></strong> <code>0754b</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-07549">Lotto completo di 100 pietra</a></strong> <code>07549</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="inventore.html#o-07255">Magical Pestle</a></strong> <code>07255</code></td><td>si crea: Inventore</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06353">Maglio Demi</a></strong> <code>06353</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06351">Maglio di piombo (15kg)</a></strong> <code>06351</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06352">Maglio di piombo (22kg)</a></strong> <code>06352</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0634c">Maglio di piombo (7kg)</a></strong> <code>0634c</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="alchimia.html#o-07550">Malta di adamantio</a></strong> <code>07550</code></td><td>si crea: Alchimia</td></tr>
+<tr><td><a id="o-0f86"></a><strong>Mandrake Root</strong> <code>0f86</code></td><td>si compra da: the Herbalist, the Alchemist, the Mage · lo portano: Terathan Matriarch, Sea Monster, Phoenix, the Frost Elf Shaman, the Warlock…</td></tr>
+<tr><td><strong><a href="scriba.html#o-060c3">Manuale dei veleni</a></strong> <code>060c3</code></td><td>si compra da: Giuseppe · si crea: Scriba</td></tr>
+<tr><td><strong><a href="scriba.html#o-07253">Manuale del Ranger</a></strong> <code>07253</code></td><td>si compra da: Giuseppe · si crea: Scriba</td></tr>
+<tr><td><strong><a href="scriba.html#o-072a3">Manuale dello stratega</a></strong> <code>072a3</code></td><td>si compra da: Giuseppe · si crea: Scriba</td></tr>
+<tr><td><a id="o-0426e"></a><strong>Map of Britain</strong> <code>0426e</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-04268"></a><strong>Map of Bucaneer's Den</strong> <code>04268</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-04265"></a><strong>Map of Jhelom</strong> <code>04265</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-0426b"></a><strong>Map of Magincia</strong> <code>0426b</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-04267"></a><strong>Map of Minoc</strong> <code>04267</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-0426d"></a><strong>Map of Moonglow</strong> <code>0426d</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-0426a"></a><strong>Map of Nujelm</strong> <code>0426a</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-0426c"></a><strong>Map of Ocllo</strong> <code>0426c</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-04269"></a><strong>Map of Serpent's Hold</strong> <code>04269</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-04264"></a><strong>Map of Skara Brae</strong> <code>04264</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-04266"></a><strong>Map of Trinsic</strong> <code>04266</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-04262"></a><strong>Map of Vesper</strong> <code>04262</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-04263"></a><strong>Map of Yew</strong> <code>04263</code></td><td>si compra da: the Mapmaker</td></tr>
+<tr><td><a id="o-07f9b"></a><strong>Mariajuana</strong> <code>07f9b</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-0750e"></a><strong>Marmo grezzo</strong> <code>0750e</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0668a">Maschera dell'Ira</a></strong> <code>0668a</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="sarto.html#o-06407">Master Meditator Hat</a></strong> <code>06407</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="falegname.html#o-07544">Mattone</a></strong> <code>07544</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0602b">Metallo Magico</a></strong> <code>0602b</code></td><td>si crea: Fabbro, script</td></tr>
+<tr><td><a id="o-075b0"></a><strong>Moduli x ottenere un permesso</strong> <code>075b0</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="inventore.html#o-0102c">moulding planes</a></strong> <code>0102c</code></td><td>si compra da: the Carpenter, the Tinker · si crea: Inventore</td></tr>
+<tr><td><a id="o-0fcb"></a><strong>Murice</strong> <code>0fcb</code></td><td>dato dalle script: <code>09cc</code></td></tr>
+<tr><td><strong><a href="alchimia.html#o-07280">Muschio magico</a></strong> <code>07280</code></td><td>si crea: Alchimia</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04545">Mytheril Ingot</a></strong> <code>04545</code></td><td>si crea: Minatore, script, Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0472d">Mytheril Plate Helm</a></strong> <code>0472d</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0472a">Mytheril Platemail</a></strong> <code>0472a</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0472b">Mytheril Platemail Arms</a></strong> <code>0472b</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0472f">Mytheril Platemail Gauntlets</a></strong> <code>0472f</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0472e">Mytheril Platemail Gorget</a></strong> <code>0472e</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0472c">Mytheril Platemail Legs</a></strong> <code>0472c</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="inventore.html#o-0102e">nails</a></strong> <code>0102e</code></td><td>si compra da: the Carpenter, the Tinker · si crea: Inventore</td></tr>
+<tr><td><a id="o-0fc7"></a><strong>nautilus</strong> <code>0fc7</code></td><td>dato dalle script: <code>09cc</code></td></tr>
+<tr><td><a id="o-0f88"></a><strong>Nightshade</strong> <code>0f88</code></td><td>si compra da: the Herbalist, the Alchemist, the Mage · lo portano: Gazer, Terathan Matriarch, Sea Monster, Phoenix, the Frost Elf Shaman…</td></tr>
+<tr><td><strong><a href="alchimia.html#o-07292">Ninja Potion</a></strong> <code>07292</code></td><td>si crea: Alchimia · lo portano: the Daemon Knight, the Dragon, Ice Fiend, Wyrm, Balron…</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0f89">Obsidian</a></strong> <code>0f89</code></td><td>si crea: script · lo portano: Gargoyle, Stone Gargoyle, 04037, Spirito del Faraone</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04549">Old Copper Ingot</a></strong> <code>04549</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0640a">Orialco</a></strong> <code>0640a</code></td><td>si crea: Minatore, Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06658">Orialco Plate Helm</a></strong> <code>06658</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06655">Orialco Platemail</a></strong> <code>06655</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06656">Orialco Platemail Arms</a></strong> <code>06656</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0665a">Orialco Platemail Gauntlets</a></strong> <code>0665a</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06659">Orialco Platemail Gorget</a></strong> <code>06659</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06657">Orialco Platemail Legs</a></strong> <code>06657</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06663">Orialco Shield</a></strong> <code>06663</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><a id="o-075ae"></a><strong>Pagina di libro scritta</strong> <code>075ae</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075af"></a><strong>Pagina di un appunto di viaggio</strong> <code>075af</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075c9"></a><strong>Pagina Runica</strong> <code>075c9</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-0fcc"></a><strong>Paguro</strong> <code>0fcc</code></td><td>dato dalle script: <code>09cc</code></td></tr>
+<tr><td><a id="o-06676"></a><strong>Parabraccia di acciaio al Cobalto</strong> <code>06676</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075be"></a><strong>Pelle di Balron tagliata ad Arte</strong> <code>075be</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075c1"></a><strong>Pelle di Ciclope tagliata ad Arte</strong> <code>075c1</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075cb"></a><strong>Pelle di Demone tagliata ad Arte</strong> <code>075cb</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075c0"></a><strong>Pelle di Drago tagliata ad Arte</strong> <code>075c0</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075c6"></a><strong>Pelle di Ettin tagliata ad Arte</strong> <code>075c6</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075c2"></a><strong>Pelle di Gargoyle tagliata ad Arte</strong> <code>075c2</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075c5"></a><strong>Pelle di Lizard tagliata ad Arte</strong> <code>075c5</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075c4"></a><strong>Pelle di Serpente tagliata ad Arte</strong> <code>075c4</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075c3"></a><strong>Pelle di Troll tagliata ad Arte</strong> <code>075c3</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075bf"></a><strong>Pelle di Wirm tagliata ad Arte</strong> <code>075bf</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075c7"></a><strong>Pelle tagliata ad Arte</strong> <code>075c7</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="sarto.html#o-06077">Pelle trattata</a></strong> <code>06077</code></td><td>si crea: Sarto</td></tr>
+<tr><td><a id="o-06078"></a><strong>Pelle Umana</strong> <code>06078</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="sarto.html#o-0561e">Pelli conciate di balron</a></strong> <code>0561e</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="sarto.html#o-05621">Pelli conciate di Ciclope</a></strong> <code>05621</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="sarto.html#o-0561b">Pelli conciate di Demone</a></strong> <code>0561b</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="sarto.html#o-0561c">Pelli conciate di Drago</a></strong> <code>0561c</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="sarto.html#o-05623">Pelli conciate di Ettin</a></strong> <code>05623</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="sarto.html#o-05620">Pelli conciate di Gargoyle</a></strong> <code>05620</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="sarto.html#o-0561f">Pelli conciate di Lizard</a></strong> <code>0561f</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="sarto.html#o-0561a">Pelli conciate di Serpente</a></strong> <code>0561a</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="sarto.html#o-05622">Pelli conciate di Troll</a></strong> <code>05622</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="sarto.html#o-0561d">Pelli conciate di Wirm</a></strong> <code>0561d</code></td><td>si crea: Sarto</td></tr>
+<tr><td><a id="o-0633f"></a><strong>Pelli di balron</strong> <code>0633f</code></td><td>dato dalle script: <code>64d7</code></td></tr>
+<tr><td><a id="o-0633d"></a><strong>Pelli di demone</strong> <code>0633d</code></td><td>dato dalle script: <code>64d7</code></td></tr>
+<tr><td><a id="o-0633e"></a><strong>Pelli di drago</strong> <code>0633e</code></td><td>dato dalle script: <code>64d7</code></td></tr>
+<tr><td><a id="o-0633c"></a><strong>Pelli di serpente</strong> <code>0633c</code></td><td>dato dalle script: <code>64d7</code></td></tr>
+<tr><td><a id="o-06340"></a><strong>Pelli di wirm</strong> <code>06340</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-0fc5"></a><strong>Pettini</strong> <code>0fc5</code></td><td>dato dalle script: <code>09cc</code></td></tr>
+<tr><td><a id="o-075aa"></a><strong>Pezzo di Acciaio al Cobalto Lavorato</strong> <code>075aa</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075a9"></a><strong>Pezzo di Acciaio al Titanio Lavorato</strong> <code>075a9</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075a1"></a><strong>Pezzo di Agapite Lavorato</strong> <code>075a1</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075a7"></a><strong>Pezzo di Black Rock Lavorato</strong> <code>075a7</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075a2"></a><strong>Pezzo di Blood Rock Lavorato</strong> <code>075a2</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075ab"></a><strong>Pezzo di Demonic Lavorato</strong> <code>075ab</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-0759f"></a><strong>Pezzo di Gold Lavorato</strong> <code>0759f</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075ad"></a><strong>Pezzo di Iron Lavorato</strong> <code>075ad</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075ac"></a><strong>Pezzo di Lega Ultraleggera Lavorato</strong> <code>075ac</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075a6"></a><strong>Pezzo di Mythrill Lavorato</strong> <code>075a6</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075a8"></a><strong>Pezzo di Orialco Lavorato</strong> <code>075a8</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075a0"></a><strong>Pezzo di Rose Lavorato</strong> <code>075a0</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075a3"></a><strong>Pezzo di Silver Lavorato</strong> <code>075a3</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075a5"></a><strong>Pezzo di Valorite Lavorato</strong> <code>075a5</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-075a4"></a><strong>Pezzo di Verite Lavorato</strong> <code>075a4</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06356">Picca Demi</a></strong> <code>06356</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06354">Picca di piombo (15kg)</a></strong> <code>06354</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06355">Picca di piombo (22kg)</a></strong> <code>06355</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0634b">Picca di piombo (7kg)</a></strong> <code>0634b</code></td><td>si crea: script</td></tr>
+<tr><td><a id="o-0f25"></a><strong>piece of amber</strong> <code>0f25</code></td><td>si compra da: the Jeweler · lo portano: a Frost Ettin</td></tr>
+<tr><td><strong><a href="minatore.html#o-07543">Pietra grezza</a></strong> <code>07543</code></td><td>si crea: Minatore</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0f8a">Pig Iron</a></strong> <code>0f8a</code></td><td>si crea: script · lo portano: Terathan Warrior, Terathan Drone, Terathan Matriarch, Terathan Avenger, the Sprite Sorceress…</td></tr>
+<tr><td><a id="o-075bd"></a><strong>Pig Iron Lavorato</strong> <code>075bd</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-01078"></a><strong>pil of hides</strong> <code>01078</code></td><td>si compra da: the Fur Trader</td></tr>
+<tr><td><a id="o-0df8"></a><strong>pile of wool</strong> <code>0df8</code></td><td>si compra da: the Shepherd, the Tailor</td></tr>
+<tr><td><strong><a href="sarto.html#o-01915">pillow</a></strong> <code>01915</code></td><td>si crea: Sarto</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06349">Piombini</a></strong> <code>06349</code></td><td>si crea: Fabbro, Minatore</td></tr>
+<tr><td><a id="o-0ff8"></a><strong>pitcher of water</strong> <code>0ff8</code></td><td>si compra da: the Waiter, the Waitress, the Innkeeper, the Tavernkeeper</td></tr>
+<tr><td><a id="o-0604d"></a><strong>Piume di fenice</strong> <code>0604d</code></td><td>lo portano: Phoenix</td></tr>
+<tr><td><strong><a href="alchimia.html#o-07252">Piume magiche</a></strong> <code>07252</code></td><td>si crea: Arcaio, Alchimia · lo portano: Cockatrice, Corruttrice</td></tr>
+<tr><td><strong><a href="alchimia.html#o-0729f">Polvere da sparo</a></strong> <code>0729f</code></td><td>si crea: Alchimia</td></tr>
+<tr><td><strong><a href="minatore.html#o-07f50">Prestazione di scavo</a></strong> <code>07f50</code></td><td>si crea: Minatore</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0f8b">Pumice</a></strong> <code>0f8b</code></td><td>si crea: script · lo portano: Lava Snake, Lava Serpent, Lava Lizard, 04037, Spirito del Faraone</td></tr>
+<tr><td><a id="o-064c7"></a><strong>Punti ThanatoS Game</strong> <code>064c7</code></td><td>dato dalle script: <code>64bf</code></td></tr>
+<tr><td><strong><a href="inventore.html#o-0108a">ring</a></strong> <code>0108a</code></td><td>si compra da: the Jeweler · si crea: Inventore · lo portano: the Guildmaster Merchant</td></tr>
+<tr><td><strong><a href="sarto.html#o-01f03">robe</a></strong> <code>01f03</code></td><td>si compra da: the Tailor · si crea: Sarto, script · lo portano: the Judge, the Monk, the Priest, the Priestess, the Mage…</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04544">Rose Ingot</a></strong> <code>04544</code></td><td>si crea: Minatore, Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04743">Rose Plate Helm</a></strong> <code>04743</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04740">Rose Platemail</a></strong> <code>04740</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04741">Rose Platemail Arms</a></strong> <code>04741</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04745">Rose Platemail Gauntlets</a></strong> <code>04745</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04744">Rose Platemail Gorget</a></strong> <code>04744</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04742">Rose Platemail Legs</a></strong> <code>04742</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><a id="o-0f13"></a><strong>rub</strong> <code>0f13</code></td><td>si compra da: the Jeweler</td></tr>
+<tr><td><a id="o-07040"></a><strong>ruby log</strong> <code>07040</code></td><td>dato dalle script: <code>703b</code></td></tr>
+<tr><td><strong><a href="fabbro.html#o-04548">Rusty Ingot</a></strong> <code>04548</code></td><td>si crea: Fabbro, script</td></tr>
+<tr><td><a id="o-01039"></a><strong>sack of flour</strong> <code>01039</code></td><td>si compra da: the Baker, the Cook</td></tr>
+<tr><td><a id="o-07572"></a><strong>Sangue Corrotto</strong> <code>07572</code></td><td>non trovato nelle script</td></tr>
+<tr><td><a id="o-0f11"></a><strong>sapphire</strong> <code>0f11</code></td><td>si compra da: the Jeweler · lo portano: Water Elemental</td></tr>
+<tr><td><a id="o-065a4"></a><strong>Sasso antiorder scroll</strong> <code>065a4</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="inventore.html#o-01034">saw</a></strong> <code>01034</code></td><td>si compra da: the Carpenter, the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="falegname.html#o-07509">Scatola x tarocchi</a></strong> <code>07509</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="inventore.html#o-010e7">scorp</a></strong> <code>010e7</code></td><td>si compra da: the Carpenter, the Tinker · si crea: Inventore</td></tr>
+<tr><td><a id="o-0667c"></a><strong>Scudo di acciaio al Cobalto</strong> <code>0667c</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="falegname.html#o-06646">Scudo di Balron</a></strong> <code>06646</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="falegname.html#o-06648">Scudo di Cyclope</a></strong> <code>06648</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="falegname.html#o-0664a">Scudo di Demone</a></strong> <code>0664a</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="falegname.html#o-06649">Scudo di Drago</a></strong> <code>06649</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="falegname.html#o-0664f">Scudo di Ettin</a></strong> <code>0664f</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="falegname.html#o-0664b">Scudo di Gargoyle</a></strong> <code>0664b</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="falegname.html#o-0664d">Scudo di Lucertola</a></strong> <code>0664d</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="falegname.html#o-0664c">Scudo di Serpente</a></strong> <code>0664c</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="falegname.html#o-0664e">Scudo di Troll</a></strong> <code>0664e</code></td><td>si crea: Falegname</td></tr>
+<tr><td><strong><a href="falegname.html#o-06647">Scudo di Wyrm</a></strong> <code>06647</code></td><td>si crea: Falegname</td></tr>
+<tr><td><a id="o-0f8e"></a><strong>Serpent's Scale</strong> <code>0f8e</code></td><td>lo portano: Necromante, Antico Necromante, 04037, Spirito del Faraone</td></tr>
+<tr><td><strong><a href="inventore.html#o-0f9d">sewing kit</a></strong> <code>0f9d</code></td><td>si compra da: the Tailor, the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="inventore.html#o-01057">sextant</a></strong> <code>01057</code></td><td>si compra da: the Tinker, the Shipwright · si crea: Inventore</td></tr>
+<tr><td><strong><a href="inventore.html#o-01059">sextant parts</a></strong> <code>01059</code></td><td>si compra da: the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="inventore.html#o-0105a">sextant parts</a></strong> <code>0105a</code></td><td>si crea: Inventore</td></tr>
+<tr><td><a id="o-0725a"></a><strong>Sfera del mana</strong> <code>0725a</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04541">Shadow Ingot</a></strong> <code>04541</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="arcaio.html#o-01bd4">shaft</a></strong> <code>01bd4</code></td><td>si compra da: the Bowyer · si crea: Arcaio</td></tr>
+<tr><td><a id="o-0fc8"></a><strong>shell</strong> <code>0fc8</code></td><td>oggetto base: raccolta (miniera, legna, pesca, pelli...) o mondo</td></tr>
+<tr><td><a id="o-0fc6"></a><strong>shells</strong> <code>0fc6</code></td><td>oggetto base: raccolta (miniera, legna, pesca, pelli...) o mondo</td></tr>
+<tr><td><a id="o-0fc9"></a><strong>shells</strong> <code>0fc9</code></td><td>oggetto base: raccolta (miniera, legna, pesca, pelli...) o mondo</td></tr>
+<tr><td><a id="o-0fca"></a><strong>shells</strong> <code>0fca</code></td><td>oggetto base: raccolta (miniera, legna, pesca, pelli...) o mondo</td></tr>
+<tr><td><strong><a href="inventore.html#o-0f39">shovel</a></strong> <code>0f39</code></td><td>si compra da: the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="fabbro.html#o-01bf5">silver ingot</a></strong> <code>01bf5</code></td><td>si crea: Fabbro, script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04568">Silver Plate Helm</a></strong> <code>04568</code></td><td>si crea: Fabbro · lo portano: Dogma</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04571">Silver Platemail</a></strong> <code>04571</code></td><td>si crea: Fabbro · lo portano: Dogma</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04566">Silver Platemail Arms</a></strong> <code>04566</code></td><td>si crea: Fabbro · lo portano: Dogma</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04570">Silver Platemail Gauntlets</a></strong> <code>04570</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04569">Silver Platemail Gorget</a></strong> <code>04569</code></td><td>si crea: Fabbro · lo portano: Dogma</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04567">Silver Platemail Legs</a></strong> <code>04567</code></td><td>si crea: Fabbro · lo portano: Dogma</td></tr>
+<tr><td><strong><a href="fabbro.html#o-01877">silver wire</a></strong> <code>01877</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="inventore.html#o-01032">smoothing plane</a></strong> <code>01032</code></td><td>si compra da: the Carpenter, the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="altre-script.html#o-06350">Spada Demi</a></strong> <code>06350</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0634e">Spada di piombo (15kg)</a></strong> <code>0634e</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0634f">Spada di piombo (22kg)</a></strong> <code>0634f</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0634a">Spada di piombo (7kg)</a></strong> <code>0634a</code></td><td>si crea: script</td></tr>
+<tr><td><strong><a href="scriba.html#o-060c7">Spartiti del bardo</a></strong> <code>060c7</code></td><td>si compra da: Giuseppe · si crea: Scriba</td></tr>
+<tr><td><a id="o-0f8d"></a><strong>Spider's Silk</strong> <code>0f8d</code></td><td>si compra da: the Alchemist, the Mage · lo portano: the Dragon, Terathan Drone, Terathan Matriarch, Sea Monster, Phoenix…</td></tr>
+<tr><td><a id="o-0fa0"></a><strong>spool of thread</strong> <code>0fa0</code></td><td>si compra da: the Tailor</td></tr>
+<tr><td><strong><a href="inventore.html#o-0105d">springs</a></strong> <code>0105d</code></td><td>si crea: Inventore</td></tr>
+<tr><td><a id="o-0105e"></a><strong>springs</strong> <code>0105e</code></td><td>si compra da: the Tinker</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0634d">Stagno</a></strong> <code>0634d</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><a id="o-0f0f"></a><strong>star sapphire</strong> <code>0f0f</code></td><td>si compra da: the Jeweler</td></tr>
+<tr><td><strong><a href="minatore.html#o-07f5f">steel ingot</a></strong> <code>07f5f</code></td><td>si crea: Minatore</td></tr>
+<tr><td><strong><a href="minatore.html#o-0519">stone pavers</a></strong> <code>0519</code></td><td>si crea: Minatore</td></tr>
+<tr><td><a id="o-0fc4"></a><strong>Strombo</strong> <code>0fc4</code></td><td>dato dalle script: <code>09cc</code></td></tr>
+<tr><td><a id="o-0f8c"></a><strong>Sulfurous Ash</strong> <code>0f8c</code></td><td>si compra da: the Alchemist, the Mage · lo portano: Wisp, Terathan Matriarch, Sea Monster, Hell Hound, Phoenix…</td></tr>
+<tr><td><a id="o-075b3"></a><strong>Tavola con tasselli</strong> <code>075b3</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="inventore.html#o-06358">Tavola piombata</a></strong> <code>06358</code></td><td>si crea: Inventore</td></tr>
+<tr><td><a id="o-07ff8"></a><strong>Terriccio Sacro</strong> <code>07ff8</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="inventore.html#o-01ebc">tinker's tools</a></strong> <code>01ebc</code></td><td>si compra da: the Tinker · si crea: Inventore</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06664">Titanio</a></strong> <code>06664</code></td><td>si crea: Fabbro, script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06668">Titanium Plate Helm</a></strong> <code>06668</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06665">Titanium Platemail</a></strong> <code>06665</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06666">Titanium Platemail Arms</a></strong> <code>06666</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0666a">Titanium Platemail Gauntlets</a></strong> <code>0666a</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06669">Titanium Platemail Gorget</a></strong> <code>06669</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06667">Titanium Platemail Legs</a></strong> <code>06667</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-06673">Titanium Shield</a></strong> <code>06673</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><a id="o-0f18"></a><strong>tourmaline</strong> <code>0f18</code></td><td>si compra da: the Jeweler</td></tr>
+<tr><td><a id="o-05614"></a><strong>Troll Hides</strong> <code>05614</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0454a">Valorite Ingot</a></strong> <code>0454a</code></td><td>si crea: Fabbro, script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04798">Valorite Plate Helm</a></strong> <code>04798</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04795">Valorite Platemail</a></strong> <code>04795</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04796">Valorite Platemail Arms</a></strong> <code>04796</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0479a">Valorite Platemail Gauntlets</a></strong> <code>0479a</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04799">Valorite Platemail Gorget</a></strong> <code>04799</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04797">Valorite Platemail Legs</a></strong> <code>04797</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="inventore.html#o-07f6c">Vanga diamantata</a></strong> <code>07f6c</code></td><td>si crea: Inventore</td></tr>
+<tr><td><strong><a href="fabbro.html#o-04543">Verite Ingot</a></strong> <code>04543</code></td><td>si crea: Fabbro, script</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0476d">Verite Plate Helm</a></strong> <code>0476d</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0476a">Verite Platemail</a></strong> <code>0476a</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0476b">Verite Platemail Arms</a></strong> <code>0476b</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0476f">Verite Platemail Gauntlets</a></strong> <code>0476f</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0476e">Verite Platemail Gorget</a></strong> <code>0476e</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><strong><a href="fabbro.html#o-0476c">Verite Platemail Legs</a></strong> <code>0476c</code></td><td>si crea: Fabbro</td></tr>
+<tr><td><a id="o-0f7d"></a><strong>Vial of Blood</strong> <code>0f7d</code></td><td>lo portano: Subterranean Mongbat, Blood Elemental, Arboreal Mongbat, Imp, 04037…</td></tr>
+<tr><td><strong><a href="altre-script.html#o-0f8f">Volcanic Ash</a></strong> <code>0f8f</code></td><td>si crea: script · lo portano: Wisp, Hellcat, Predator Hellcat, Efreet, 04037…</td></tr>
+<tr><td><a id="o-06067"></a><strong>Water Robe</strong> <code>06067</code></td><td>non trovato nelle script</td></tr>
+<tr><td><strong><a href="falegname.html#o-0e7b">water tub</a></strong> <code>0e7b</code></td><td>si crea: Falegname</td></tr>
+<tr><td><a id="o-0f91"></a><strong>Wyrm's Heart</strong> <code>0f91</code></td><td>lo portano: 04037, Spirito del Faraone</td></tr>
+</tbody></table></div>
+<p class="filtro-vuoto" id="nessuno" hidden>Nessuna riga corrisponde alla ricerca.</p>
+</main>
+</div>
+<script>
+// Filtra le righe delle tabelle con il testo cercato (senza distinguere maiuscole).
+(function () {
+  var campo = document.getElementById('filtro'), righe = document.querySelectorAll('main tbody tr'), vuoto = document.getElementById('nessuno');
+  campo.addEventListener('input', function () {
+    var q = campo.value.trim().toLowerCase(), viste = 0;
+    righe.forEach(function (r) { var ok = !q || r.textContent.toLowerCase().indexOf(q) !== -1; r.hidden = !ok; if (ok) viste++; });
+    vuoto.hidden = !(q && viste === 0);
+  });
+})();
+</script>
+</body>
+</html>

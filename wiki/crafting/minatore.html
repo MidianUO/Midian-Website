@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+<title>Minatore (Mining) · Crafting · Midian</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: indice fisso a sinistra (sotto, su telefono), colonna di lettura a destra; tabelle scorrevoli. */
+:root {
+  --bg: #f4f5f1; --panel: #ffffff; --ink: #1c2630; --muted: #5a6670; --line: #d9ddd5;
+  --brass: #8a5c14; --teal: #24605f; --tint: #eef1ea; --warn: #9b2c2c; --ok: #2f6b3a;
+  --f-display: "Marcellus SC", "Palatino Linotype", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.wrap { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  border-right: 1px solid var(--line); padding-right: 18px; font-size: 15px; }
+nav.toc h2 { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--brass); margin: 0 0 10px; font-weight: 400 }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 8px; border-radius: 4px }
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+nav.toc .sub a { padding-left: 22px; color: var(--muted); font-size: 14px }
+.search { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 15px; margin-bottom: 14px }
+.search:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px }
+main { min-width: 0 }
+header.top { border-bottom: 2px solid var(--brass); padding-bottom: 18px; margin-bottom: 8px }
+header.top .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal) }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 50px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance }
+header.top p { max-width: 68ch; color: var(--muted); margin: 0 }
+section.chap { padding-top: 34px; scroll-margin-top: 16px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; margin: 0 0 12px; color: var(--ink); text-wrap: balance;
+  display: flex; gap: 12px; align-items: baseline }
+h2 .num { font-family: var(--f-mono); font-size: 14px; color: var(--brass) }
+h3 { font-size: 20px; margin: 26px 0 8px; color: var(--teal); font-weight: 700 }
+h4 { font-size: 17px; margin: 18px 0 6px }
+p, li { max-width: 72ch }
+a { color: var(--teal) }
+code, .id { font-family: var(--f-mono); font-size: .82em; background: var(--tint); padding: 1px 5px; border-radius: 3px; white-space: nowrap }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { background: var(--tint); font-weight: 700; white-space: nowrap; font-size: 13px; letter-spacing: .03em }
+tr:last-child td { border-bottom: 0 }
+td.n, th.n { text-align: right; white-space: nowrap }
+.zero { color: var(--warn); font-weight: 700 }
+.note { border-left: 3px solid var(--brass); background: var(--tint); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; max-width: 76ch }
+.note b { color: var(--brass) }
+.warn { border-left-color: var(--warn) } .warn b { color: var(--warn) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0 }
+.card h4 { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: var(--brass) }
+.card p, .card ul { margin: 4px 0; font-size: 15px }
+.card ul { padding-left: 18px }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.tag { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--tint) }
+ol.steps { padding-left: 22px } ol.steps li { margin: 4px 0 }
+.empty { display: none; color: var(--muted); padding: 30px 0 }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 10px }
+  nav.toc { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 12px }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) }
+  nav.toc .sub { display: none }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+</style>
+<style>
+.sitebar { border-bottom: 1px solid var(--line); background: var(--panel) }
+.sitebar-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px }
+.sitebrand { font-family: var(--f-display); font-size: 22px; letter-spacing: .12em; color: var(--brass); text-decoration: none }
+.sitenav { display: flex; gap: 4px; flex-wrap: wrap }
+.sitenav a { color: var(--ink); text-decoration: none; padding: 6px 12px; border-radius: 4px }
+.sitenav a:hover, .sitenav a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+.sitenav a[aria-current="page"] { color: var(--brass); box-shadow: inset 0 -2px 0 var(--brass) }
+</style>
+<style>
+.filtro-vuoto { color: var(--muted); font-style: italic }
+@media (max-width: 860px) { nav.toc .qui { display: none } }
+tr[hidden] { display: none }
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="sitebar-in">
+  <a class="sitebrand" href="../../index.html">MIDIAN</a>
+  <nav class="sitenav" aria-label="Sezioni del sito">
+    <a href="../../index.html">Home</a>
+    <a href="../index.html">Wiki</a>
+    <a href="index.html" aria-current="page">Crafting</a>
+    <a href="../../download.html">Download</a>
+    <a href="../../contatti.html">Contatti</a>
+  </nav>
+</div></header>
+<div class="wrap">
+<nav class="toc" aria-label="Indice">
+  <input class="search" type="search" id="filtro" placeholder="Cerca in questa pagina…" aria-label="Cerca in questa pagina">
+  <h2>Crafting</h2>
+  <ol>
+    <li><a href="index.html">Indice del crafting</a></li>
+    <li><a href="alchimia.html">Alchimia (Alchemy)</a></li>
+    <li><a href="altre-script.html">Altre ricette delle script</a></li>
+    <li><a href="arcaio.html">Arcaio (Bowcraft)</a></li>
+    <li><a href="avvelenatore.html">Avvelenatore (Poisoning)</a></li>
+    <li><a href="cuoco.html">Cuoco (Cooking)</a></li>
+    <li><a href="fabbro.html">Fabbro (Blacksmithing)</a></li>
+    <li><a href="falegname.html">Falegname (Carpentry)</a></li>
+    <li><a href="identificazione.html">Identificazione (ItemID)</a></li>
+    <li><a href="inventore.html">Inventore (Tinkering)</a></li>
+    <li><a href="magia.html">Magia (Magery)</a></li>
+    <li><a href="minatore.html" aria-current="page">Minatore (Mining)</a></li>
+    <li><a href="risorse.html">Risorse del crafting</a></li>
+    <li><a href="sarto.html">Sarto (Tailoring)</a></li>
+    <li><a href="scriba.html">Scriba (Inscription)</a></li>
+    <li><a href="taming.html">Taming</a></li>
+  </ol>
+  <h2 class="qui" style="margin-top:18px">In questa pagina</h2>
+  <ol>
+    <li class="sub"><a href="#dalle-script-di-midian">Dalle script di Midian</a></li>
+  </ol>
+  <p style="margin-top:18px"><a href="../index.html">← Torna alla wiki</a></p>
+</nav>
+<main id="main">
+<header class="top">
+  <div class="eyebrow">Wiki · Crafting</div>
+  <h1>Minatore (Mining)</h1>
+</header>
+<p><a href="index.html">← Indice del crafting</a> · <a href="risorse.html">Risorse</a></p>
+<h2 id="dalle-script-di-midian">Dalle script di Midian</h2>
+<p>Oggetti creati da menu, gump o oggetti delle script: la colonna "Dove" dice cosa usare.</p>
+<div class="tbl"><table><thead><tr><th>Oggetto</th><th>Dove</th><th>Abilità</th><th>Risorse</th><th>A cosa serve</th></tr></thead><tbody>
+<tr><td><a id="o-07f5f"></a><strong>steel ingot</strong> <code>07f5f</code></td><td>menu <code>ITEMMENU 2007</code> (da <code>[ITEMMENU 2003]</code>) — voce «Lingotto d'acciaio»</td><td>Mining 75,1</td><td>1 <a href="altre-script.html#o-0de9">Braci</a>, 1 <a href="risorse.html#o-075ad">Pezzo di Iron Lavorato</a></td><td></td></tr>
+<tr><td><a id="o-0fb1"></a><strong>forge</strong> <code>0fb1</code></td><td>menu <code>ITEMMENU 2007</code> (da <code>[ITEMMENU 2003]</code>)</td><td>Mining 90,1</td><td>18 <a href="risorse.html#o-019b7">iron ore</a>, 2 <a href="altre-script.html#o-0de9">Braci</a></td><td>Forge 1</td></tr>
+<tr><td><a id="o-07f50"></a><strong>Prestazione di scavo</strong> <code>07f50</code></td><td>menu <code>ITEMMENU 2007</code> (da <code>[ITEMMENU 2003]</code>) — voce «Prestazione di scavo»</td><td>Mining 90,1</td><td>1 <a href="inventore.html#o-07f6c">Vanga diamantata</a></td><td>si usa con doppio clic; «Questo documento rappresenta la tua prestazione di scavo per le fondamenta di un edificio.»</td></tr>
+<tr><td><a id="o-0519"></a><strong>stone pavers</strong> <code>0519</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Pavimento di pietra (2 ORE)»</td><td>Mining 90,1</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-049b"></a><strong>floor tile</strong> <code>049b</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Pavimento blu (2 ORE)»</td><td>Mining 90,0</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td></td></tr>
+<tr><td><a id="o-0515"></a><strong>cobblestones</strong> <code>0515</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Ciottolame (2 ORE)»</td><td>Mining 89,9</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-04e2"></a><strong>bricks</strong> <code>04e2</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Mattonelle rosse (2 ORE)»</td><td>Mining 90,3</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-04fc"></a><strong>flagstones</strong> <code>04fc</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Mattonelle grigie (2 ORE)»</td><td>Mining 89,8</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-0500"></a><strong>flagstones</strong> <code>0500</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Mattonelle gialle (2 ORE)»</td><td>Mining 89,7</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-049c"></a><strong>grey slate tile</strong> <code>049c</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Pavimento grigio (2 ORE)»</td><td>Mining 90,4</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-0495"></a><strong>marble floor</strong> <code>0495</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Marmo bianco (2 ORE)»</td><td>Mining 90,5</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-050d"></a><strong>marble floor</strong> <code>050d</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Marmo beije (2 ORE)»</td><td>Mining 89,6</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-050f"></a><strong>marble floor</strong> <code>050f</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Marmo verde alpi (2 ORE)»</td><td>Mining 90,6</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-0511"></a><strong>marble floor</strong> <code>0511</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Marmo rosa (2 ORE)»</td><td>Mining 89,5</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-0513"></a><strong>marble floor</strong> <code>0513</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Marmo bianco carrara (2 ORE)»</td><td>Mining 90,7</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-04f3"></a><strong>red tiles</strong> <code>04f3</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Pavimento rosso verona (2 ORE)»</td><td>Mining 89,4</td><td>2 <a href="risorse.html#o-019b7">iron ore</a></td><td>@</td></tr>
+<tr><td><a id="o-052f"></a><strong>sandstone floor</strong> <code>052f</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Mattonelle argilla scure (2 ORE)»</td><td>Mining 90,8</td><td>1 <a href="risorse.html#o-019b7">iron ore</a>, 1 <a href="altre-script.html#o-0de9">Braci</a>, 1 <a href="risorse.html#o-0f81">Fertile Dirt</a></td><td>@</td></tr>
+<tr><td><a id="o-0525"></a><strong>sandstone floor</strong> <code>0525</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Mattonelle argilla chiare (2 ORE)»</td><td>Mining 80,3</td><td>1 <a href="risorse.html#o-019b7">iron ore</a>, 1 <a href="altre-script.html#o-0de9">Braci</a>, 1 <a href="risorse.html#o-0f81">Fertile Dirt</a></td><td>@</td></tr>
+<tr><td><a id="o-049d"></a><strong>sandstone paver</strong> <code>049d</code></td><td>menu <code>ITEMMENU 2008</code> (da <code>[ITEMMENU 2003]</code>) — voce «Pavimento di argilla (2 ORE)»</td><td>Mining 90,9</td><td>1 <a href="risorse.html#o-019b7">iron ore</a>, 1 <a href="altre-script.html#o-0de9">Braci</a>, 1 <a href="risorse.html#o-0f81">Fertile Dirt</a></td><td>@</td></tr>
+<tr><td><a id="o-07543"></a><strong>Pietra grezza</strong> <code>07543</code></td><td>menu <code>itemmenu 2060</code> (da <code>[ITEMMENU 2003]</code>) — voce «Pietra grezza (25 ore)»</td><td>Mining 65,0</td><td>25 <a href="risorse.html#o-019b7">iron ore</a></td><td></td></tr>
+<tr><td><strong>copper ingot</strong> <code>01be3</code></td><td>menu <code>itemmenu 2060</code> (da <code>[ITEMMENU 2003]</code>) — voce «Rame (3 Old, 3 Dull)»</td><td>Mining 65,0</td><td>3 <a href="fabbro.html#o-0454b">Dull Copper Ingot</a>, 3 <a href="fabbro.html#o-04549">Old Copper Ingot</a></td><td>lingotto; copper ingot facing SE</td></tr>
+<tr><td><strong>Rose Ingot</strong> <code>04544</code></td><td>menu <code>itemmenu 2060</code> (da <code>[ITEMMENU 2003]</code>) — voce «Rose (8 copper)»</td><td>Mining 85,0</td><td>8 <a href="fabbro.html#o-01be3">copper ingot</a></td><td>lingotto</td></tr>
+<tr><td><strong>Agapite</strong> <code>04542</code></td><td>menu <code>itemmenu 2060</code> (da <code>[ITEMMENU 2003]</code>) — voce «Agapite (10 bronzo)»</td><td>Mining 91,0</td><td>10 <a href="fabbro.html#o-0454c">Bronze Ingot</a></td><td>lingotto; Agapite Ingot</td></tr>
+<tr><td><strong>Black Rock Ingot</strong> <code>04546</code></td><td>menu <code>itemmenu 2060</code> (da <code>[ITEMMENU 2003]</code>) — voce «Black Rock (20 Shadow)»</td><td>Mining 95,9</td><td>20 <a href="fabbro.html#o-04541">Shadow Ingot</a></td><td>lingotto</td></tr>
+<tr><td><strong>Piombini</strong> <code>06349</code></td><td>menu <code>itemmenu 2061</code> (da <code>[ITEMMENU 2003]</code>) — voce «Piombini (2 Ferro, 2 Braci)»</td><td>Mining 55,0</td><td>2 <a href="fabbro.html#o-01bef">iron ingot</a>, 2 <a href="altre-script.html#o-0de9">Braci</a></td><td>lingotto</td></tr>
+<tr><td><strong>Bronze Ingot</strong> <code>0454c</code></td><td>menu <code>itemmenu 2061</code> (da <code>[ITEMMENU 2003]</code>) — voce «Bronzo (3 Copper, 1 Stagno)»</td><td>Mining 63,0</td><td>3 <a href="fabbro.html#o-01be3">copper ingot</a>, 1 <a href="fabbro.html#o-0634d">Stagno</a></td><td>lingotto; Metalli tot scudo plate chain ring</td></tr>
+<tr><td><strong>Mytheril Ingot</strong> <code>04545</code></td><td>menu <code>itemmenu 2061</code> (da <code>[ITEMMENU 2003]</code>) — voce «Mytheril (2 Silver, 1 Valorite)»</td><td>Mining 95,0</td><td>2 <a href="fabbro.html#o-01bf5">silver ingot</a>, 1 <a href="fabbro.html#o-0454a">Valorite Ingot</a></td><td>lingotto</td></tr>
+<tr><td><strong>Orialco</strong> <code>0640a</code></td><td>menu <code>itemmenu 2061</code> (da <code>[ITEMMENU 2003]</code>) — voce «Orialco (4 Rose, 2 Agapite)»</td><td>Mining 100,0</td><td>4 <a href="fabbro.html#o-04544">Rose Ingot</a>, 2 <a href="fabbro.html#o-04542">Agapite</a></td><td>lingotto</td></tr>
+<tr><td><a id="o-0640b"></a><strong>Demonic</strong> <code>0640b</code></td><td>menu <code>itemmenu 2061</code> (da <code>[ITEMMENU 2003]</code>) — voce «Demonic (4 Bloodrock,6 Shadow)»</td><td>Mining 105,0</td><td>4 <a href="fabbro.html#o-04547">Blood Rock Ingot</a>, 6 <a href="fabbro.html#o-04541">Shadow Ingot</a></td><td>lingotto; ////contratti</td></tr>
+<tr><td><strong>Acciaio al titanio</strong> <code>06685</code></td><td>menu <code>ITEMMENU 2062</code> (da <code>[ITEMMENU 2003]</code>) — voce «al Titanio (6 Acc,6 Ti)»</td><td>Mining 115,0</td><td>6 <a href="#o-07f5f">steel ingot</a>, 6 <a href="fabbro.html#o-06664">Titanio</a></td><td>lingotto</td></tr>
+<tr><td><a id="o-06684"></a><strong>Lega ultraleggera</strong> <code>06684</code></td><td>menu <code>ITEMMENU 2062</code> (da <code>[ITEMMENU 2003]</code>) — voce «Ultraleggero (3 Acc,2 Ti,6 Val)»</td><td>Mining 120,0</td><td>3 <a href="#o-07f5f">steel ingot</a>, 2 <a href="fabbro.html#o-06664">Titanio</a>, 6 <a href="fabbro.html#o-0454a">Valorite Ingot</a></td><td>lingotto</td></tr>
+<tr><td><strong>Acciaio al Cobalto</strong> <code>06683</code></td><td>menu <code>ITEMMENU 2062</code> (da <code>[ITEMMENU 2003]</code>) — voce «al Cobalto (6 Acc,6 Co)»</td><td>Mining 125,0</td><td>6 <a href="#o-07f5f">steel ingot</a>, 6 <a href="fabbro.html#o-06674">Cobalto</a></td><td>lingotto; acciaio cobalto</td></tr>
+<tr><td><a id="o-018e0d"></a><strong>Bottino casuale TM_LOOT_1</strong> <code>018e0d</code></td><td><code>[TRIG 1111]</code></td><td>Mining 50,1</td><td>1 <a href="risorse.html#o-04ff1">Deciphered Treasure Map</a></td><td>template di oggetti a caso (bottino): ne esce uno degli oggetti elencati nel template</td></tr>
+<tr><td><a id="o-04ffa"></a><strong>hole</strong> <code>04ffa</code></td><td><code>[TRIG 1111]</code></td><td>Mining 50,1</td><td>1 <a href="risorse.html#o-04ff1">Deciphered Treasure Map</a></td><td>Monster Spawn; Very Easy Treasure Map Random Monster Spawn</td></tr>
+<tr><td><a id="o-018e0e"></a><strong>Bottino casuale TM_LOOT_2</strong> <code>018e0e</code></td><td><code>[TRIG 1112]</code></td><td>Mining 60,1</td><td>1 <a href="risorse.html#o-04ff2">Deciphered Treasure Map</a></td><td>template di oggetti a caso (bottino): ne esce uno degli oggetti elencati nel template</td></tr>
+<tr><td><a id="o-04ffb"></a><strong>hole</strong> <code>04ffb</code></td><td><code>[TRIG 1112]</code></td><td>Mining 60,1</td><td>1 <a href="risorse.html#o-04ff2">Deciphered Treasure Map</a></td><td>Monster Spawn; Easy Treasure Map Random Monster Spawn</td></tr>
+<tr><td><a id="o-018e0f"></a><strong>Bottino casuale TM_LOOT_3</strong> <code>018e0f</code></td><td><code>[TRIG 1113]</code></td><td>Mining 70,1</td><td>1 <a href="risorse.html#o-04ff3">Deciphered Treasure Map</a></td><td>template di oggetti a caso (bottino): ne esce uno degli oggetti elencati nel template</td></tr>
+<tr><td><a id="o-04ffc"></a><strong>hole</strong> <code>04ffc</code></td><td><code>[TRIG 1113]</code></td><td>Mining 70,1</td><td>1 <a href="risorse.html#o-04ff3">Deciphered Treasure Map</a></td><td>Monster Spawn; Average Treasure Map Random Monster Spawn</td></tr>
+<tr><td><a id="o-018e10"></a><strong>Bottino casuale TM_LOOT_4</strong> <code>018e10</code></td><td><code>[TRIG 1114]</code></td><td>Mining 80,1</td><td>1 <a href="risorse.html#o-04ff4">Deciphered Treasure Map</a></td><td>template di oggetti a caso (bottino): ne esce uno degli oggetti elencati nel template</td></tr>
+<tr><td><a id="o-04ffd"></a><strong>hole</strong> <code>04ffd</code></td><td><code>[TRIG 1114]</code></td><td>Mining 80,1</td><td>1 <a href="risorse.html#o-04ff4">Deciphered Treasure Map</a></td><td>Monster Spawn; Hard Treasure Map Random Monster Spawn</td></tr>
+<tr><td><a id="o-018e11"></a><strong>Bottino casuale TM_LOOT_5</strong> <code>018e11</code></td><td><code>[TRIG 1115]</code></td><td>Mining 90,1</td><td>1 <a href="risorse.html#o-04ff5">Deciphered Treasure Map</a></td><td>template di oggetti a caso (bottino): ne esce uno degli oggetti elencati nel template</td></tr>
+<tr><td><a id="o-04ffe"></a><strong>hole</strong> <code>04ffe</code></td><td><code>[TRIG 1115]</code></td><td>Mining 90,1</td><td>1 <a href="risorse.html#o-04ff5">Deciphered Treasure Map</a></td><td>Monster Spawn; Treasure Map Very Hard Random Monster Spawn</td></tr>
+<tr><td><strong>Bronze Ingot</strong> <code>0454c</code></td><td>doppio clic su anvil</td><td>Mining 63,0</td><td>3 <a href="fabbro.html#o-01be3">copper ingot</a>, 1 <a href="fabbro.html#o-0634d">Stagno</a></td><td>lingotto; Metalli tot scudo plate chain ring</td></tr>
+</tbody></table></div>
+<p class="filtro-vuoto" id="nessuno" hidden>Nessuna riga corrisponde alla ricerca.</p>
+</main>
+</div>
+<script>
+// Filtra le righe delle tabelle con il testo cercato (senza distinguere maiuscole).
+(function () {
+  var campo = document.getElementById('filtro'), righe = document.querySelectorAll('main tbody tr'), vuoto = document.getElementById('nessuno');
+  campo.addEventListener('input', function () {
+    var q = campo.value.trim().toLowerCase(), viste = 0;
+    righe.forEach(function (r) { var ok = !q || r.textContent.toLowerCase().indexOf(q) !== -1; r.hidden = !ok; if (ok) viste++; });
+    vuoto.hidden = !(q && viste === 0);
+  });
+})();
+</script>
+</body>
+</html>
