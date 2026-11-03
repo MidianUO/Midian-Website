@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<title>Abilità oltre 100 · Midian</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: indice fisso a sinistra (sotto, su telefono), colonna di lettura a destra; tabelle scorrevoli. */
+:root {
+  --bg: #f4f5f1; --panel: #ffffff; --ink: #1c2630; --muted: #5a6670; --line: #d9ddd5;
+  --brass: #8a5c14; --teal: #24605f; --tint: #eef1ea; --warn: #9b2c2c; --ok: #2f6b3a;
+  --f-display: "Marcellus SC", "Palatino Linotype", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.wrap { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  border-right: 1px solid var(--line); padding-right: 18px; font-size: 15px; }
+nav.toc h2 { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--brass); margin: 0 0 10px; font-weight: 400 }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 8px; border-radius: 4px }
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+nav.toc .sub a { padding-left: 22px; color: var(--muted); font-size: 14px }
+.search { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 15px; margin-bottom: 14px }
+.search:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px }
+main { min-width: 0 }
+header.top { border-bottom: 2px solid var(--brass); padding-bottom: 18px; margin-bottom: 8px }
+header.top .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal) }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 50px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance }
+header.top p { max-width: 68ch; color: var(--muted); margin: 0 }
+section.chap { padding-top: 34px; scroll-margin-top: 16px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; margin: 0 0 12px; color: var(--ink); text-wrap: balance;
+  display: flex; gap: 12px; align-items: baseline }
+h2 .num { font-family: var(--f-mono); font-size: 14px; color: var(--brass) }
+h3 { font-size: 20px; margin: 26px 0 8px; color: var(--teal); font-weight: 700 }
+h4 { font-size: 17px; margin: 18px 0 6px }
+p, li { max-width: 72ch }
+a { color: var(--teal) }
+code, .id { font-family: var(--f-mono); font-size: .82em; background: var(--tint); padding: 1px 5px; border-radius: 3px; white-space: nowrap }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { background: var(--tint); font-weight: 700; white-space: nowrap; font-size: 13px; letter-spacing: .03em }
+tr:last-child td { border-bottom: 0 }
+td.n, th.n { text-align: right; white-space: nowrap }
+.zero { color: var(--warn); font-weight: 700 }
+.note { border-left: 3px solid var(--brass); background: var(--tint); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; max-width: 76ch }
+.note b { color: var(--brass) }
+.warn { border-left-color: var(--warn) } .warn b { color: var(--warn) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0 }
+.card h4 { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: var(--brass) }
+.card p, .card ul { margin: 4px 0; font-size: 15px }
+.card ul { padding-left: 18px }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.tag { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--tint) }
+ol.steps { padding-left: 22px } ol.steps li { margin: 4px 0 }
+.empty { display: none; color: var(--muted); padding: 30px 0 }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 10px }
+  nav.toc { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 12px }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) }
+  nav.toc .sub { display: none }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+</style>
+
+</head>
+<body>
+<header class="sitebar"><div class="sitebar-in">
+  <a class="sitebrand" href="../index.html">MIDIAN</a>
+  <nav class="sitenav" aria-label="Sezioni del sito">
+    <a href="../index.html">Home</a>
+    <a href="index.html" aria-current="page">Wiki</a>
+    <a href="crafting/index.html">Crafting</a>
+    <a href="../download.html">Download</a>
+    <a href="../contatti.html">Contatti</a>
+  </nav>
+</div></header>
+<style>
+.sitebar { border-bottom: 1px solid var(--line); background: var(--panel) }
+.sitebar-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px }
+.sitebrand { font-family: var(--f-display); font-size: 22px; letter-spacing: .12em; color: var(--brass); text-decoration: none }
+.sitenav { display: flex; gap: 4px; flex-wrap: wrap }
+.sitenav a { color: var(--ink); text-decoration: none; padding: 6px 12px; border-radius: 4px }
+.sitenav a:hover, .sitenav a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+.sitenav a[aria-current="page"] { color: var(--brass); box-shadow: inset 0 -2px 0 var(--brass) }
+</style>
+<div class="wrap">
+<nav class="toc" aria-label="Indice">
+  <input class="search" id="q" type="search" placeholder="Cerca in questa pagina (es. collana, balestra)" aria-label="Cerca in questa pagina">
+  <h2>Indice</h2>
+  <ol>
+    <li><a href="#fino-100">Fino a 100</a></li>
+    <li><a href="#magery">Magery fino a 125: le Demi Necklace</a></li>
+    <li><a href="#armi">Armi bianche fino a 130: le armi di piombo</a></li>
+    <li><a href="#archery">Archery fino a 130: le balestre di piombo</a></li>
+    <li><a href="#bonus">Bonus mentre li usi</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+<header class="top">
+  <div class="eyebrow">Wiki di Midian · Abilità</div>
+  <h1>Abilità oltre 100</h1>
+  <p>Come si arriva a 100 in un'abilità e come la si porta oltre senza l'aiuto di un GM: collane, armi e balestre di piombo. I numeri delle abilità sono in punti (100,0 = gran maestro). I codici in grigio sono gli identificativi degli oggetti nelle script. Torna al <a href="index.html">compendio</a>.</p>
+</header>
+<p class="empty" id="noresults">Nessuna sezione contiene questa parola.</p>
+
+<section class="chap" id="fino-100" data-k="fino a 100 allenamento macro punti esperienza limite classe 99,9">
+<h2><span class="num">01</span>Fino a 100</h2>
+<p>Con l'uso (o il macro) ogni abilità sale fino a <b>100,0</b>, o fino al limite della tua classe se è più basso: vedi <a href="index.html#limiti-classi">Limiti delle abilità per classe</a>. Oltre 100 l'allenamento normale non fa salire più niente.</p>
+<p>I <b>punti esperienza</b> <span class="id">7311</span> che lasciano i mostri alzano un'abilità di 0,1 alla volta, ma solo <b>fino a 99,9</b>, e non funzionano mentre indossi una Demi Necklace (vedi <a href="index.html#stat">Statistiche ed esperienza</a>).</p>
+<p>Per andare oltre 100 senza un GM ci sono oggetti che <b>abbassano l'abilità mentre li porti</b>: ti alleni di nuovo fino a 100, li togli e l'abilità torna su dei punti che avevano tolto. Ogni oggetto si può indossare solo se hai già raggiunto il livello del precedente.</p>
+</section>
+
+<section class="chap" id="magery" data-k="magery mago collana demi necklace 105 110 115 120 125">
+<h2><span class="num">02</span>Magery fino a 125: le Demi Necklace</h2>
+<p>Ogni collana abbassa Magery finché la indossi. Ti alleni fino a 100, la togli e Magery sale dei punti che la collana aveva tolto.</p>
+<div class="tbl"><table>
+<tr><th>Collana</th><th>Si indossa con Magery</th><th>Toglie</th><th>Togliendola a 100 arrivi a</th></tr>
+<tr><td>Demi Necklace −5 <span class="id">635e</span></td><td>almeno 95</td><td>5</td><td><b>105</b></td></tr>
+<tr><td>Demi Necklace −10 <span class="id">6360</span></td><td>almeno 105</td><td>10</td><td><b>110</b></td></tr>
+<tr><td>Demi Necklace −15 <span class="id">6361</span></td><td>almeno 110</td><td>15</td><td><b>115</b></td></tr>
+<tr><td>Demi Necklace −20 <span class="id">6362</span></td><td>almeno 115</td><td>20</td><td><b>120</b></td></tr>
+<tr><td>Demi Necklace −25 <span class="id">6363</span></td><td>almeno 120</td><td>25</td><td><b>125</b></td></tr>
+</table></div>
+<ul>
+  <li>Le collane −5, −10 e −15 si comprano nel <b>negozio degli oggetti Demi</b> (30.000, 40.000 e 50.000 gold); lì si rivendono anche.</li>
+  <li>Le −20 e −25 si ottengono incastonando gemme nella <b>Collana da incastonare</b> <span class="id">756f</span>. Alcune collane escono anche dal bottino dei mostri.</li>
+  <li>Per l'intelligenza esistono collane simili, da −10 a −50 INT.</li>
+</ul>
+</section>
+
+<section class="chap" id="armi" data-k="swordsmanship fencing macefighting spada picca maglio piombo demi 107 115 122 130 guerriero">
+<h2><span class="num">03</span>Armi bianche fino a 130: le armi di piombo</h2>
+<p>Spade, picche e magli di piombo funzionano come le collane: impugnati abbassano l'abilità, tolti la restituiscono.</p>
+<div class="tbl"><table>
+<tr><th>Arma</th><th>Si impugna con l'abilità</th><th>Toglie</th><th>Togliendola a 100 arrivi a</th></tr>
+<tr><td>di piombo 7 kg</td><td>almeno 100</td><td>7</td><td><b>107</b></td></tr>
+<tr><td>di piombo 15 kg</td><td>almeno 107</td><td>15</td><td><b>115</b></td></tr>
+<tr><td>di piombo 22 kg</td><td>almeno 115</td><td>22</td><td><b>122</b></td></tr>
+<tr><td>Demi</td><td>almeno 122</td><td>30</td><td><b>130</b></td></tr>
+</table></div>
+<ul>
+  <li><b>Spada</b> (Swordsmanship) <span class="id">634a</span> <span class="id">634e</span> <span class="id">634f</span> <span class="id">6350</span>, <b>picca</b> (Fencing) <span class="id">634b</span> <span class="id">6354</span> <span class="id">6355</span> <span class="id">6356</span>, <b>maglio</b> (Mace Fighting) <span class="id">634c</span> <span class="id">6351</span> <span class="id">6352</span> <span class="id">6353</span>.</li>
+  <li>Le spade di piombo costano 50.000 gold ciascuna nel negozio degli oggetti Demi.</li>
+  <li>Il massimo resta quello della classe: il Guerriero arriva a 130.</li>
+</ul>
+</section>
+
+<section class="chap" id="archery" data-k="archery tactics arciere balestra piombo 107 115 122 130">
+<h2><span class="num">04</span>Archery fino a 130: le balestre di piombo</h2>
+<p>Le balestre di piombo funzionano in modo diverso: <b>non abbassano</b> Archery. Si usano in combattimento: ogni colpo andato a segno ha <b>1 possibilità su 65</b> di dare +0,1 Archery e <b>1 su 80</b> di dare +0,1 Tactics, fino al limite della balestra.</p>
+<div class="tbl"><table>
+<tr><th>Balestra</th><th>Si impugna con Archery</th><th>Archery sale fino a</th><th>Tactics sale fino a</th><th>Prezzo</th></tr>
+<tr><td>di piombo 7 kg <span class="id">7410</span></td><td>almeno 100</td><td><b>107</b></td><td>102</td><td>60.000</td></tr>
+<tr><td>di piombo 15 kg <span class="id">6364</span></td><td>almeno 107</td><td><b>115</b></td><td>105</td><td>70.000</td></tr>
+<tr><td>di piombo 22 kg <span class="id">6365</span></td><td>almeno 115</td><td><b>122</b></td><td>110</td><td>80.000</td></tr>
+<tr><td>di piombo 30 kg <span class="id">636a</span></td><td>almeno 122</td><td><b>130</b></td><td>115</td><td>80.000</td></tr>
+</table></div>
+<p>Si comprano nel negozio degli oggetti Demi.</p>
+</section>
+
+<section class="chap" id="bonus" data-k="arco professionale parche crazy compound dark elven forza della natura bonus archery tactics magery">
+<h2><span class="num">05</span>Bonus mentre li usi</h2>
+<p>Questi oggetti non alzano l'abilità per sempre: danno un bonus solo finché li usi.</p>
+<ul>
+  <li><b>Archi</b>: Arco Professionale <span class="id">6366</span>, Dark Elven <span class="id">6367</span>, Crazy Bow <span class="id">6368</span>, Compound <span class="id">6369</span>, Arco dei boschi <span class="id">7243</span>, Arco delle Parche <span class="id">7540</span>: <b>+10 Archery e +15 Tactics</b> finché sono in mano. Ognuno richiede un livello minimo di Archery e Tactics per impugnarlo.</li>
+  <li><b>Forza della natura</b> <span class="id">727c</span> (abilità del druido): <b>+15 Magery</b> per qualche minuto.</li>
+</ul>
+</section>
+
+<footer>Ricavato dalle script di Midian (repository Midian-Script): Sphereitem2, SPHEREMenu2, SPHEREgump2, SPHEREtrig.</footer>
+</main>
+</div>
+
+<script>
+(function () {
+  var q = document.getElementById('q');
+  var secs = Array.prototype.slice.call(document.querySelectorAll('section.chap'));
+  var none = document.getElementById('noresults');
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  var texts = secs.map(function (s) { return norm((s.getAttribute('data-k') || '') + ' ' + s.textContent); });
+  q.addEventListener('input', function () {
+    var v = norm(q.value.trim()); var shown = 0;
+    secs.forEach(function (s, i) { var ok = !v || texts[i].indexOf(v) >= 0; s.hidden = !ok; if (ok) shown++; });
+    none.style.display = shown ? 'none' : 'block';
+    links.forEach(function (a) { var t = document.querySelector(a.getAttribute('href')); var sec = t && t.closest('section.chap'); a.parentNode.hidden = !!(sec && sec.hidden); });
+  });
+})();
+</script>
+
+</body>
+</html>
