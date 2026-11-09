@@ -207,7 +207,7 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 </section>
 
 <!-- 3 -->
-<section class="chap" id="classi" data-k="classi guerriero mago arciere druido cavaliere nero paladino assassino chierico necromante bardo armature restrizioni">
+<section class="chap" id="classi" data-k="classi guerriero mago arciere druido cavaliere nero paladino assassino chierico necromante bardo armature restrizioni libri manuali durlindana necronomicon liber mortis versetti veste sacra scudo sacro scudo maledetto trappole punti fede">
 <h2><span class="num">03</span>Classi</h2>
 <p>Ogni classe ha limiti massimi alle abilità e restrizioni sull'equipaggiamento. I limiti vengono applicati ogni volta che il personaggio indossa un oggetto: per questo, dopo un cambio di classe, conviene mettersi e togliersi un abito.</p>
 <h3>Restrizioni comuni</h3>
@@ -236,9 +236,14 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 </table></div>
 
 <h3 id="libri">Abilità di classe</h3>
-<p>Ogni classe ha un libro o un manuale che apre il pannello delle abilità speciali. Libro e icone delle abilità vanno tenuti in mano o nello zaino. Un'abilità preparata funziona solo per chi l'ha preparata. Molte abilità sono più forti con l'esperienza (Necromancy, abbreviata "esp.") e, usandole, la fanno salire. Tra un uso e l'altro c'è un'attesa, e i libri si rompono dopo un certo numero di aperture (di solito 300). Dove il bersaglio è un giocatore non criminale, usarle rende criminali.</p>
+<p>Ogni classe ha due libri (o un libro e un oggetto sacro) che danno accesso alle abilità speciali. Libri e icone delle abilità vanno tenuti in mano o nello zaino, e non se ne può usare più di uno dello stesso tipo alla volta. Molte abilità sono più forti con l'esperienza (Necromancy, abbreviata "esp.") e, usandole, la fanno salire. Tra un uso e l'altro c'è un'attesa, e i libri si rompono dopo un certo numero di aperture (di solito 300). Dove il bersaglio è un giocatore non criminale, usarle rende criminali.</p>
+<p>I libri sono di due tipi:</p>
+<ul>
+  <li><b>Manuali dello scriba</b> (manuale da mago, da guerriero, da druido). Lo scriba li scrive vuoti e prepara a parte una <b>sfera</b> per ogni abilità. Doppio clic sulla sfera e poi sul manuale: l'abilità viene scritta nel libro. Il manuale si apre solo quando le contiene tutte. Dal menu si sceglie l'abilità e si riceve la sua <b>icona</b>, che vale solo per chi l'ha preparata: doppio clic sull'icona per usarla. Dal menu si può anche vedere il proprio livello di esperienza.</li>
+  <li><b>Libri a pannello</b> (tutti gli altri). Il doppio clic apre un pannello con un pulsante per ogni abilità. Premendolo si pagano mana, reagenti o punti fede e l'abilità parte subito, oppure compare il cursore per scegliere il bersaglio.</li>
+</ul>
 <h4>Guerriero</h4>
-<p>Manuale dello stratega <span class="id">72a3</span> (pannello "Ira!") e manuale da guerriero <span class="id">60f6</span> (abilità speciali). Quasi tutte le mosse dell'Ira richiedono la spada Durlindana <span class="id">7295</span> in mano e consumano stamina, mana e cibo.</p>
+<p><b>Manuale da guerriero</b> <span class="id">60f6</span>, manuale dello scriba (5 secondi di attesa tra un'apertura e l'altra).</p>
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
 <tr><td><b>Attacco improvviso</b></td><td>Colpo a mani nude su un nemico adiacente: 20 danni (40 contro gli NPC), contro i giocatori ridotti dalla loro Wrestling. Se si è troppo lontani si spreca metà del mana.</td><td>30 mana</td></tr>
@@ -247,46 +252,59 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <tr><td><b>Recupero</b></td><td>Recupera punti ferita pari a esp./20.</td><td>20 mana</td></tr>
 <tr><td><b>Prontezza</b></td><td>Per 30 secondi alza la Tactics. Non si cumula con altre abilità speciali attive.</td><td>33 mana</td></tr>
 <tr><td><b>Precisione</b></td><td>Per 30 secondi aumenta la precisione dei colpi. Non si cumula con altre abilità speciali attive.</td><td>Tactics/30 mana</td></tr>
-<tr><td><b>Maschera dell'ira</b></td><td>Crea la maschera dell'ira, che serve alle altre mosse.</td><td>20 stamina, 10 mana</td></tr>
+</table></div>
+<p><b>Manuale dello stratega</b> <span class="id">72a3</span>, pannello "Ira!" (5 secondi di attesa). Oltre a stamina e mana, quasi tutte le mosse consumano cibo: chi è affamato non può usarle. Bow Break, Disarmare e Last Blow richiedono la spada <b>Durlindana</b> <span class="id">7295</span> in mano. Non si usano subito: <b>caricano la spada</b> per esp./50 secondi, e l'effetto parte al primo colpo che va a segno.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Maschera dell'ira</b></td><td>Crea e indossa la maschera dell'ira (armatura 50), che dura 5 minuti. Se il guerriero viene paralizzato, la maschera lo scuote con un ruggito e rompe la paralisi, fino a 10 volte.</td><td>20 stamina, 10 mana, 5 cibo</td></tr>
 <tr><td><b>Stordimento</b></td><td>Colpo su un nemico adiacente: 15 + esp./30 danni e lo paralizza per qualche istante.</td><td>25 stamina, 20 mana</td></tr>
 <tr><td><b>Bolas</b></td><td>Lancia le bolas su un bersaglio entro 5 caselle e lo blocca a terra per qualche secondo. Non funziona contro chi riflette le magie.</td><td>30 stamina, 25 mana</td></tr>
 <tr><td><b>Stone Break</b></td><td>Spezza la pietrificazione di un personaggio adiacente: torna normale ma con un terzo di vita in meno.</td><td>20 stamina, 15 mana</td></tr>
-<tr><td><b>Bow Break</b></td><td>Spezza l'arco dell'avversario.</td><td>25 stamina, 10 mana</td></tr>
-<tr><td><b>Disarmare</b></td><td>Fa volare via l'arma dell'avversario.</td><td>40 stamina, 25 mana</td></tr>
-<tr><td><b>Last Blow</b></td><td>Colpo finale devastante.</td><td>50 stamina, 30 mana</td></tr>
+<tr><td><b>Bow Break</b></td><td>Carica la Durlindana: il colpo successivo spezza l'arco che il bersaglio impugna.</td><td>25 stamina, 10 mana, 3 cibo</td></tr>
+<tr><td><b>Disarmare</b></td><td>Carica la Durlindana: il colpo successivo fa cadere nello zaino del bersaglio le armi che impugna. Funziona solo sui giocatori, e non sulle armi che non si possono perdere.</td><td>40 stamina, 25 mana, 10 cibo</td></tr>
+<tr><td><b>Last Blow</b></td><td>Carica la Durlindana: il colpo successivo infligge 30 danni a un giocatore o 100-300 a un mostro, ma la spada si spezza e diventa una Durlindana rotta, inservibile. Dopo 200 colpi la Durlindana scatena da sola un Last Blow e si spezza.</td><td>50 stamina, 30 mana, 15 cibo</td></tr>
 <tr><td><b>Berserk</b></td><td>Per 3 minuti: grandi bonus a Forza, Destrezza e abilità di combattimento.</td><td>50 stamina, 30 mana, 8 sangue di drago</td></tr>
 <tr><td><b>Esplosivo</b></td><td>Crea un esplosivo da lanciare (esplosione ad area). Con poca esperienza può scoppiare in mano (-25 punti ferita).</td><td>70 stamina, 20 mana, polvere da sparo + contenitore</td></tr>
 </table></div>
 <h4>Mago</h4>
-<p>Manuale da mago <span class="id">60f5</span> (abilità speciali) e Libro del mago <span class="id">7268</span> (incantesimi rituali con reagenti).</p>
+<p><b>Manuale da mago</b> <span class="id">60f5</span>, manuale dello scriba. A ogni apertura c'è una piccola probabilità di consumare cibo, e chi è affamato perde tutta la stamina.</p>
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
 <tr><td><b>Meditazione</b></td><td>Ripristina mana pari a esp./20, consumando altrettanta stamina.</td><td>5 black pearl</td></tr>
 <tr><td><b>Cono di ghiaccio</b></td><td>Bersaglio entro 9 caselle: 20 danni, lo intorpidisce (Clumsy al livello di Magery) e lo chiude in una prigione di blocchi di ghiaccio che dura in base all'esperienza. Attesa di 30 secondi.</td><td>60 mana, 5 executioner's cap</td></tr>
-<tr><td><b>Sfera incantata</b></td><td>Crea una sfera magica che accumula cariche.</td><td>80 mana, 10 garlic, 10 ginseng</td></tr>
-<tr><td><b>Ricarica magica</b></td><td>Ricarica un oggetto magico (la sfera): le cariche dipendono dall'esperienza.</td><td>50 mana, 10 garlic, 10 ginseng</td></tr>
-<tr><td><b>Serpent Rune (Sigillo del serpente)</b></td><td>Applica un sigillo magico su un oggetto. Non si usa dove ci sono le guardie.</td><td>reagenti del libro</td></tr>
-<tr><td><b>Obsidian Sash (Fascia di ossidiana)</b></td><td>Una fascia che, indossata, aumenta la difesa in base all'esperienza. Si brucia se colpita da una magia.</td><td>reagenti del libro</td></tr>
-<tr><td><b>Dimensional Door</b></td><td>Apre una porta dimensionale per spostarsi. Non dove ci sono le guardie.</td><td>reagenti del libro</td></tr>
-<tr><td><b>Vampire Touch</b></td><td>Tocco su un bersaglio entro 4 caselle: 10 + esp./50 danni, recuperati come punti ferita. Attesa di 60 secondi.</td><td>reagenti del libro</td></tr>
+<tr><td><b>Sfera incantata</b></td><td>Serve almeno 10 di esperienza. Trasforma una sfera di cristallo in una sfera incantata con un incantesimo a scelta: Heal, Protection, Night Sight o Cure. La sfera va tenuta nello zaino. Ogni uso consuma una carica e 6 mana, e la potenza dipende dall'esperienza.</td><td>80 mana, 1 sfera di cristallo, 10 garlic, 10 ginseng + 10 di un reagente legato all'incantesimo</td></tr>
+<tr><td><b>Ricarica magica</b></td><td>Ricarica la sfera incantata: esp./50 cariche (20 a esperienza 100). Con poca esperienza può fallire.</td><td>50 mana, 10 garlic, 10 ginseng</td></tr>
+</table></div>
+<p><b>Libro del mago</b> <span class="id">7268</span>, libro a pannello per incantesimi rituali. Serve Magery sopra 65; 10 secondi di attesa.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
 <tr><td><b>Enchant</b></td><td>Incanta armature (piastra, maglia, anelli) e armi: la potenza dipende da esperienza e Magery. Per la piastra servono 150 sangue di drago e 50 ossidiana.</td><td>100 mana + reagenti</td></tr>
-<tr><td><b>Lightning Storm</b></td><td>Fa cadere una tempesta di fulmini su tutta l'area intorno.</td><td>reagenti del libro</td></tr>
+<tr><td><b>Dimensional Door</b></td><td>Apre sul posto un passaggio dimensionale fatto di due porte collegate. Non dove ci sono le guardie.</td><td>50 mana, 1 worm heart</td></tr>
+<tr><td><b>Serpent Rune (Sigillo del serpente)</b></td><td>Applica un sigillo magico su una porta o un contenitore, che resta legato al mago. Non dove ci sono le guardie.</td><td>50 mana, 30 serpent scale</td></tr>
+<tr><td><b>Obsidian Sash (Fascia di ossidiana)</b></td><td>Una fascia che, indossata, aumenta la difesa in base all'esperienza. Dura di più con Magery ed esperienza alte (fino a circa 35 minuti). Si brucia se colpita da una magia.</td><td>60 mana, 8 ossidiana</td></tr>
+<tr><td><b>Vampire Touch</b></td><td>Tocco su un bersaglio entro 4 caselle: 10 + esp./50 danni, recuperati come punti ferita. Attesa di 60 secondi.</td><td>40 mana, 10 blood moss</td></tr>
+<tr><td><b>Lightning Storm</b></td><td>Fa cadere una tempesta di fulmini su una ventina di punti attorno al mago, fino a circa 10 caselle. Rende criminali.</td><td>60 mana, 8 brimstone</td></tr>
 </table></div>
 <h4>Druido</h4>
-<p>Manuale da druido <span class="id">60f7</span> e Libro della natura <span class="id">7281</span> (richiede karma sopra 1500).</p>
+<p><b>Manuale da druido</b> <span class="id">60f7</span>, manuale dello scriba (7 secondi di attesa).</p>
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
 <tr><td><b>Grande controllo</b></td><td>Potenzia un proprio elementale entro 7 caselle: +50 a Forza, Destrezza e Intelligenza. Una sola volta per elementale.</td><td>30 mana</td></tr>
 <tr><td><b>Rigenera albero</b></td><td>Guarisce completamente un albero vivente (un alleato evocato) entro 7 caselle.</td><td>40 mana</td></tr>
 <tr><td><b>Congelare il metallo</b></td><td>Congela un'arma metallica. Le armi troppo potenti respingono l'incantesimo (-35 punti ferita).</td><td>50 mana</td></tr>
-<tr><td><b>Forza vitale (Forza della natura)</b></td><td>Per 5 minuti il potere della natura scorre nel druido, in base alla Magery.</td><td>reagenti del libro</td></tr>
-<tr><td><b>Call Lightning (Invocare il fulmine)</b></td><td>Benedice un alleato entro 9 caselle: per un periodo che dipende da esperienza e Magery i suoi colpi scatenano fulmini.</td><td>reagenti del libro</td></tr>
-<tr><td><b>Sciame di insetti</b></td><td>Uno sciame avvolge un bersaglio entro 14 caselle: 10 + esp./50 danni subito e poi nel tempo, e gli impedisce di usare le abilità del druido.</td><td>reagenti del libro</td></tr>
-<tr><td><b>Nature Power (Potenziamento elementale)</b></td><td>Potenzia un elementale: da +100 a +500 punti ferita, Forza e Destrezza secondo l'esperienza.</td><td>reagenti del libro</td></tr>
-<tr><td><b>Distruggi elementale</b></td><td>Distrugge un elementale. Con esperienza sufficiente se ne ricava muschio magico.</td><td>reagenti del libro</td></tr>
+</table></div>
+<p><b>Libro della natura</b> <span class="id">7281</span>, libro a pannello. Servono Magery sopra 65 e karma sopra 1500; 10 secondi di attesa. Il reagente principale è il <b>muschio magico</b> <span class="id">7280</span>.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Forza vitale</b></td><td>Il druido trasforma la propria vita in energia: recupera esp./20 di mana e vede al buio.</td><td>25 punti ferita, 20 muschio magico</td></tr>
+<tr><td><b>Forza della natura</b></td><td>Per 5 minuti il druido ha +15 di Magery.</td><td>40 mana, 30 muschio magico</td></tr>
+<tr><td><b>Call Lightning (Invocare il fulmine)</b></td><td>Benedice un alleato entro 9 caselle: per un periodo che dipende da esperienza e Magery i suoi colpi scatenano fulmini.</td><td>40 mana, 30 muschio magico</td></tr>
+<tr><td><b>Sciame di insetti</b></td><td>Uno sciame avvolge un bersaglio entro 14 caselle: 10 + esp./50 danni subito e poi nel tempo, e gli impedisce di usare le abilità del druido.</td><td>80 mana, 80 muschio magico</td></tr>
+<tr><td><b>Potenziamento elementale</b></td><td>Trasforma un elementale normale in una creatura molto più forte, da +100 a +500 a punti ferita, Forza e Destrezza secondo il tipo. L'elementale dell'aria diventa Tempest, quello della terra Terrasque, quello del fuoco Vulcan.</td><td>50 mana, 30 muschio magico</td></tr>
+<tr><td><b>Distruggi elementale</b></td><td>Distrugge un elementale. Con esperienza sufficiente se ne ricava muschio magico.</td><td>20 mana, 5 mandrake root</td></tr>
 </table></div>
 <h4>Arciere</h4>
-<p>Manuale del Ranger <span class="id">7253</span> (pannello "Frecce magiche"). Servono l'arco in mano e le piume magiche <span class="id">7252</span>. Portata fino a 12 caselle.</p>
+<p>L'arciere ha un solo libro, il <b>Manuale del Ranger</b> <span class="id">7253</span> (pannello "Frecce magiche", 5 secondi di attesa). Il pulsante "Cambia menu" apre le stesse abilità in un elenco a scelta. Servono l'arco in mano e le piume magiche <span class="id">7252</span>. Portata fino a 12 caselle.</p>
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
 <tr><td><b>Freccia di fuoco</b></td><td>Freccia esplosiva a tempo: esplode dopo qualche secondo con 20 + esp./50 danni (40 + esp./20 contro gli NPC).</td><td>25 mana, 3 piume</td></tr>
@@ -301,50 +319,60 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <tr><td><b>Faretra di Taumaril</b></td><td>Una faretra che crea frecce e dardi quando finiscono, per 2 minuti.</td><td>30 mana, 3 piume</td></tr>
 </table></div>
 <h4>Chierico</h4>
-<p>Versetti <span class="id">6515</span> (500 aperture) e pannello del chierico, che usa i punti fede.</p>
+<p>I <b>punti fede</b> del chierico stanno nella <b>Veste sacra</b> <span class="id">608a</span>, che va indossata (serve karma positivo). Si guadagnano pregando dai Versetti.</p>
+<p><b>Veste sacra</b>: doppio clic sulla veste indossata per aprire il pannello del chierico (10 secondi di attesa). Il pulsante "Cambia menu" mostra le stesse abilità in un elenco.</p>
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
-<tr><td><b>Barriera di lame</b></td><td>Circonda il chierico con lame rotanti che feriscono chi si avvicina. Durata 5 + esp./50.</td><td>40 mana</td></tr>
-<tr><td><b>Cura di massa</b></td><td>Cura chiunque si trovi in un'area 11x11 attorno al bersaglio.</td><td>30 mana</td></tr>
-<tr><td><b>Esorcismo / Scaccia non morto</b></td><td>Colpisce un non morto con la luce sacra. Benedice anche un paletto di frassino, che diventa un'arma contro i non morti.</td><td>20 mana</td></tr>
-<tr><td><b>Resurrezione</b></td><td>Resuscita un fantasma con 60 punti ferita.</td><td>60 mana</td></tr>
-<tr><td><b>Martello benedetto</b></td><td>Crea un martello benedetto.</td><td>35 mana</td></tr>
-<tr><td><b>Invocare gli dei</b></td><td>Invoca l'aiuto degli dei.</td><td>tutto il mana</td></tr>
-<tr><td><b>Pietra in carne</b></td><td>Riporta in vita di carne una persona pietrificata.</td><td>20 mana</td></tr>
-<tr><td><b>Dito della morte</b></td><td>Bersaglio entro 9 caselle: 30 + esp./50 danni. Se il bersaglio riflette le magie, il danno torna indietro.</td><td>40 mana</td></tr>
-<tr><td><b>Angelo custode</b></td><td>Mette un angelo custode su un alleato: durata esp. x 2 secondi.</td><td>80 mana</td></tr>
-<tr><td><b>Preghiera: Respingere</b></td><td>Respinge le creature.</td><td>punti fede</td></tr>
-<tr><td><b>Preghiera: Incanta Plate</b></td><td>Incanta un'armatura di piastra.</td><td>punti fede</td></tr>
-<tr><td><b>Preghiera: Consacra armatura</b></td><td>Consacra un'armatura magica e ne aumenta la protezione di esp./100 + 2.</td><td>100 mana, 300 punti fede</td></tr>
+<tr><td><b>Barriera di lame</b></td><td>Circonda il chierico con lame rotanti che feriscono chi si avvicina. Durata 5 + esp./50.</td><td>40 mana, 40 punti fede</td></tr>
+<tr><td><b>Cura di massa</b></td><td>Cura chiunque si trovi in un'area 11x11 attorno al bersaglio.</td><td>30 mana, 30 punti fede</td></tr>
+<tr><td><b>Esorcismo / Scaccia non morto</b></td><td>Distrugge all'istante un mostro non morto colpito con la luce sacra. Se il chierico ha un paletto di frassino, invece, lo benedice e lo trasforma in un'arma contro i non morti.</td><td>20 mana, 30 punti fede</td></tr>
+<tr><td><b>Resurrezione</b></td><td>Resuscita un fantasma con 60 punti ferita.</td><td>60 mana, 80 punti fede</td></tr>
+<tr><td><b>Martello benedetto</b></td><td>Crea e impugna un martello benedetto (Mace Fighting, 30-40 danni) che dura 2 minuti. Le magie non hanno effetto su di esso.</td><td>35 mana, 60 punti fede</td></tr>
+<tr><td><b>Invocare gli dei</b></td><td>Gli dei ridanno al chierico esp./10 di mana, fino al massimo.</td><td>80 punti fede</td></tr>
+<tr><td><b>Pietra in carne</b></td><td>Riporta in vita di carne una persona pietrificata.</td><td>20 mana, 20 punti fede</td></tr>
+<tr><td><b>Dito della morte</b></td><td>Bersaglio entro 9 caselle: 30 + esp./50 danni. Se il bersaglio riflette le magie, il danno torna indietro.</td><td>50 mana, 60 punti fede</td></tr>
+<tr><td><b>Angelo custode</b></td><td>Mette un angelo custode su un alleato: durata esp. x 2 secondi.</td><td>80 mana, 100 punti fede</td></tr>
+</table></div>
+<p><b>Versetti</b> <span class="id">6515</span> (500 aperture, 10 secondi di attesa): le preghiere. Funzionano solo indossando la Veste sacra.</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Preghiera</b></td><td>Il chierico prega Lerren e guadagna 20 punti fede, fino a 3000.</td><td>40 mana</td></tr>
+<tr><td><b>Respingere</b></td><td>Doveva respingere chi lancia magie sul chierico, ma al momento l'effetto è disattivato e la preghiera consuma solo i costi.</td><td>50 mana, 100 punti fede</td></tr>
+<tr><td><b>Incanta</b></td><td>Incanta un'armatura di maglia non colorata e non magica: la protezione sale di (esperienza + Magery)/2 diviso 50, fino a +20.</td><td>100 mana, 120 sangue di drago, 30 ossidiana</td></tr>
+<tr><td><b>Consacra armatura</b></td><td>Consacra un'armatura magica e ne aumenta la protezione di esp./100 + 2.</td><td>100 mana, 300 punti fede</td></tr>
 </table></div>
 <h4>Paladino</h4>
-<p>Libro dei paladini <span class="id">60a7</span>: con lo Scudo sacro <span class="id">60a5</span> in mano si dona oro alla chiesa per i punti fede (massimo 1500). Le abilità si usano dal pannello del paladino.</p>
+<p>I punti fede del paladino stanno nello <b>Scudo sacro</b> <span class="id">60a5</span>, che va impugnato (serve karma positivo).</p>
+<p><b>Scudo sacro</b>: doppio clic sullo scudo per aprire il pannello del paladino (10 secondi di attesa). Il pulsante "Cambia menu" mostra le stesse abilità in un elenco.</p>
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
-<tr><td><b>Imposizione delle mani</b></td><td>Cura un alleato con il tocco.</td><td>30 mana</td></tr>
-<tr><td><b>Cura di massa</b></td><td>Cura chiunque in un'area 11x11.</td><td>30 mana</td></tr>
-<tr><td><b>Distruggi non morti</b></td><td>Area 11x11 che danneggia i non morti.</td><td>20 mana</td></tr>
-<tr><td><b>Resurrezione</b></td><td>Resuscita un fantasma con 60 punti ferita.</td><td>60 mana</td></tr>
-<tr><td><b>Spada santa</b></td><td>Crea la Holy Sword (danno base 20-30).</td><td>35 mana</td></tr>
-<tr><td><b>Protezione divina</b></td><td>Protezione sacra sul paladino.</td><td>molto mana e punti ferita</td></tr>
-<tr><td><b>Fulmine sacro</b></td><td>Fulmine su un bersaglio entro 12 caselle: 15 + esp./60 danni (30 + esp./30 contro gli NPC).</td><td>20 mana</td></tr>
-<tr><td><b>Verdetto divino</b></td><td>Incanta la spada sacra: diventa la Spada del vendicatore sacro.</td><td>50 mana</td></tr>
+<tr><td><b>Imposizione delle mani</b></td><td>Il paladino si cura di 30 + esp./20 punti ferita, fino al massimo.</td><td>30 mana, 20 punti fede</td></tr>
+<tr><td><b>Cura di massa</b></td><td>Cura chiunque in un'area 11x11.</td><td>30 mana, 30 punti fede</td></tr>
+<tr><td><b>Distruggi non morti</b></td><td>Area 11x11 che danneggia i non morti.</td><td>20 mana, 35 punti fede</td></tr>
+<tr><td><b>Resurrezione</b></td><td>Resuscita un fantasma con 60 punti ferita.</td><td>60 mana, 135 punti fede</td></tr>
+<tr><td><b>Spada santa</b></td><td>Crea e impugna la Holy Sword per 2 minuti: 20-30 danni ridotti dall'armatura del bersaglio (+30% contro malvagi e assassini). Ogni colpo restituisce al paladino un quarto del danno inflitto.</td><td>35 mana, 60 punti fede</td></tr>
+<tr><td><b>Protezione divina (Aiuto divino)</b></td><td>Gli dei ridanno al paladino 25 punti ferita e 45 di mana, fino al massimo.</td><td>80 punti fede</td></tr>
+<tr><td><b>Fulmine sacro</b></td><td>Fulmine su un bersaglio entro 12 caselle: 15 + esp./60 danni (30 + esp./30 contro gli NPC).</td><td>20 mana, 20 punti fede</td></tr>
+<tr><td><b>Verdetto divino</b></td><td>Trasforma la Holy Sword in mano nella Spada del vendicatore sacro (20-40 danni). Il primo colpo blocca il bersaglio e scatena attorno a lui una croce di esplosioni sacre, poi la spada svanisce.</td><td>50 mana, 200 punti fede</td></tr>
 <tr><td><b>Anima purificata</b></td><td>Bersaglio entro 5 caselle: danni sacri pari a esp./20, ma il paladino ne subisce altrettanti.</td><td>20 mana</td></tr>
 </table></div>
+<p><b>Libro dei paladini</b> <span class="id">60a7</span>: con lo Scudo sacro in mano si dona oro alla chiesa per i punti fede, fino a 1500 (vedi <a href="#altro">Chiesa e punti fede</a>).</p>
 <h4>Cavaliere nero</h4>
-<p>Libro dei cavalieri neri <span class="id">60b4</span>: con lo Scudo maledetto <span class="id">60b2</span> in mano si fanno le offerte per i punti fede. Le abilità si usano dal pannello del cavaliere nero.</p>
+<p>I punti fede del cavaliere nero stanno nello <b>Scudo maledetto</b> <span class="id">60b2</span>, che va impugnato (serve karma negativo).</p>
+<p><b>Scudo maledetto</b>: doppio clic sullo scudo per aprire il pannello del cavaliere nero. Il pulsante "Cambia menu" mostra le stesse abilità in un elenco.</p>
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
-<tr><td><b>Spada vampirica</b></td><td>Evoca una spada vampirica per esp./2 secondi, e comunque almeno 60 secondi (anche con esperienza 0).</td><td>50 mana</td></tr>
-<tr><td><b>Offerta votiva</b></td><td>Offerta al proprio dio per ottenere punti fede.</td><td>40 mana</td></tr>
-<tr><td><b>Peso degli anni</b></td><td>Bersaglio entro 19 caselle: gli azzera la stamina.</td><td>25 mana</td></tr>
-<tr><td><b>Tocco del male</b></td><td>Tocco su un bersaglio entro 3 caselle: 15 + esp./50 danni. Attesa di 30 secondi.</td><td>25 mana</td></tr>
-<tr><td><b>Oltraggio divino</b></td><td>Maledizione potente.</td><td>tutto il mana e molti punti ferita</td></tr>
-<tr><td><b>Paralisi</b></td><td>Tocco su un bersaglio entro 2 caselle: lo paralizza.</td><td>30 mana</td></tr>
-<tr><td><b>Malattia</b></td><td>Il bersaglio non può lanciare incantesimi per esp./40 secondi. Attesa tripla prima di poterla rilanciare.</td><td>70 mana</td></tr>
+<tr><td><b>Spada vampirica</b></td><td>Evoca una spada vampirica per esp./2 secondi, e comunque almeno 60 secondi (anche con esperienza 0).</td><td>50 mana, 70 punti fede</td></tr>
+<tr><td><b>Offerta votiva</b></td><td>Offerta al proprio dio, ovunque ci si trovi: 10 punti fede per 50 gp, 100 per 500 gp, 500 per 2500 gp (con 1 probabilità su 4 di ricevere una sfera dell'esperienza). Costa il doppio delle donazioni in chiesa.</td><td>40 mana</td></tr>
+<tr><td><b>Peso degli anni</b></td><td>Bersaglio entro 19 caselle: gli azzera la stamina.</td><td>25 mana, 70 punti fede</td></tr>
+<tr><td><b>Tocco del male</b></td><td>Tocco su un bersaglio entro 3 caselle: 15 + esp./50 danni. Attesa di 30 secondi.</td><td>25 mana, 25 punti fede</td></tr>
+<tr><td><b>Oltraggio divino</b></td><td>Gli dei dannati ridanno al cavaliere 25 + esp./50 punti ferita e 45 di mana, fino al massimo.</td><td>80 punti fede</td></tr>
+<tr><td><b>Paralisi</b></td><td>Chiude un bersaglio entro 4 caselle in un bozzolo che lo paralizza, più a lungo con l'esperienza. Non funziona se la Magery del bersaglio supera l'esperienza del cavaliere.</td><td>30 mana, 40 punti fede</td></tr>
+<tr><td><b>Malattia</b></td><td>Il bersaglio non può lanciare incantesimi per esp./40 secondi. Attesa tripla prima di poterla rilanciare.</td><td>70 mana, 250 punti fede</td></tr>
 </table></div>
+<p><b>Libro dei cavalieri neri</b> <span class="id">60b4</span>: con lo Scudo maledetto in mano si dona oro alla chiesa per i punti fede, fino a 1500.</p>
 <h4>Assassino</h4>
-<p>Manuale dei veleni <span class="id">60c3</span>. I veleni si applicano al Pugnale dell'assassino: la riuscita dipende da Poisoning, che sale usandoli.</p>
+<p><b>Manuale dei veleni</b> <span class="id">60c3</span> (5 secondi di attesa). I veleni si applicano al Pugnale dell'assassino: la riuscita dipende da Poisoning, che sale usandoli.</p>
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
 <tr><td><b>Pugnale delle ombre</b></td><td>Il pugnale dell'assassino (scherma), da avvelenare con i veleni.</td><td>10 mana</td></tr>
@@ -355,26 +383,31 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <tr><td><b>Coltello da lancio</b></td><td>Si lancia fino a 14 caselle: 10-35 danni, a volte doppi su un punto vitale. Più il bersaglio è lontano, più è facile mancarlo. Al massimo 2 alla volta.</td><td>va messo nella custodia</td></tr>
 <tr><td><b>Mantello delle ombre</b></td><td>Indossato, aumenta molto Hiding e Stealth per un tempo che dipende dall'esperienza.</td><td>60 mana</td></tr>
 <tr><td><b>Mantello del ladro</b></td><td>Indossato per 10 minuti: si passa inosservati (karma +6000, uccisioni nascoste).</td><td>70 mana</td></tr>
-<tr><td><b>Crea trappole</b></td><td>Trappole a gas, esplosive o a spuntoni piazzate sotto di sé: scattano sul primo che le calpesta. Servono Poisoning 65 e Stealing 80, non si piazzano davanti alle guardie.</td><td>3 mana</td></tr>
 </table></div>
+<p><b>Book of Traps</b> <span class="id">7293</span>, il libro delle trappole (300 aperture). Le trappole si piazzano sotto di sé e scattano sul primo che le calpesta: a gas, a spuntoni o esplosive. Servono Poisoning 65 e Stealing 80, e non si piazzano davanti alle guardie. Costruendole ci si può ferire (-20 punti ferita).</p>
 <h4>Necromante</h4>
-<p>Necronomicon <span class="id">6069</span> (250 aperture). Reagenti: cenere vulcanica, osso di demone, ossidiana, fiala di sangue, pomice, pig iron.</p>
+<p>Il <b>Necronomicon</b> <span class="id">6069</span> (250 aperture, 6 secondi di attesa) contiene due libri: le pagine del <b>Necronomicon</b> e, girando pagina, il <b>Liber Mortis</b>. Serve Magery sopra 65. Quasi tutti gli incantesimi consumano un <b>osso di demone</b> più un secondo reagente necromantico; i reagenti si creano dal Liber Mortis.</p>
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
-<tr><td><b>Dark Fire Bolt</b></td><td>Dardo di fuoco oscuro: danni fino a esp./20. Se il bersaglio riflette, il necromante subisce 25 danni.</td><td>mana e reagenti del libro</td></tr>
-<tr><td><b>Hallucination</b></td><td>Il bersaglio ha le allucinazioni.</td><td>mana e reagenti</td></tr>
-<tr><td><b>Animate Dead</b></td><td>Rianima un cadavere come non morto.</td><td>mana e reagenti</td></tr>
-<tr><td><b>Bone Armour</b></td><td>Armatura d'ossa sul necromante.</td><td>mana e reagenti</td></tr>
-<tr><td><b>Defile Corpse</b></td><td>Prosciuga un cadavere: +30 punti ferita e +30 mana, anche oltre il massimo (fino a +30). Un cadavere si prosciuga una sola volta.</td><td>mana e reagenti</td></tr>
-<tr><td><b>Vampire Ray</b></td><td>Raggio su un bersaglio entro 11 caselle: esp./66 danni e il necromante recupera esp./33 punti ferita.</td><td>mana e reagenti</td></tr>
-<tr><td><b>Summon Undead I e II</b></td><td>Evoca non morti. Con poca esperienza l'evocazione può fallire.</td><td>osso di demone e mana</td></tr>
-<tr><td><b>Patto tenebroso</b></td><td>Patto con le tenebre.</td><td>mana e reagenti</td></tr>
-<tr><td><b>Crea reagenti</b></td><td>Crea reagenti necromantici.</td><td>mana</td></tr>
-<tr><td><b>Disperdi forza vitale</b></td><td>Toglie un terzo della vita al bersaglio (50 punti fissi se ne ha più di 200). Se riflette, tocca al necromante.</td><td>mana e reagenti</td></tr>
-<tr><td><b>Curse Arcana</b></td><td>Maledizione potente al livello di esperienza più Magery. Se riflessa, colpisce il necromante.</td><td>mana e reagenti</td></tr>
+<tr><td><b>Dark Fire Bolt</b></td><td>Dardo di fuoco oscuro: danni fino a esp./20. Se il bersaglio riflette, il necromante subisce 25 danni.</td><td>18 mana, osso di demone, cenere vulcanica</td></tr>
+<tr><td><b>Hallucination</b></td><td>Per 10 secondi il bersaglio vede colori e creature distorti e sente rumori strani, e perde da 4 a 10 di Intelligenza.</td><td>osso di demone, ossidiana</td></tr>
+<tr><td><b>Animate Dead</b></td><td>Rianima un cadavere a terra come non morto al servizio del necromante: torna in vita la creatura morta, mentre gli umani diventano zombi.</td><td>osso di demone, fiala di sangue</td></tr>
+<tr><td><b>Bone Armour</b></td><td>Fa esplodere un cadavere di scheletro, che lascia a terra fino a 5 pezzi di armatura d'osso.</td><td>almeno 50 mana, osso di demone, pomice</td></tr>
+<tr><td><b>Patto tenebroso</b></td><td>Per (Magery + esperienza)/70 secondi (circa mezzo minuto al massimo), ogni incantesimo lanciato ridà 20 punti ferita, anche oltre il massimo fino a Forza + 30. Ogni volta costa da 4 a 20 di stamina, meno con più Destrezza.</td><td>20 mana, osso di demone, pig iron</td></tr>
+<tr><td><b>Defile Corpse</b></td><td>Prosciuga un cadavere: +30 punti ferita e +30 mana, anche oltre il massimo (fino a +30). Un cadavere si prosciuga una sola volta.</td><td>osso di demone, fiala di sangue</td></tr>
+<tr><td><b>Vampire Ray</b></td><td>Raggio su un bersaglio entro 11 caselle: esp./66 danni e il necromante recupera esp./33 punti ferita.</td><td>20 mana, osso di demone, bloodspawn</td></tr>
+<tr><td><b>Summon Undead I</b></td><td>Evoca un non morto a caso: di solito uno zombi, a volte uno scheletro, raramente un lich.</td><td>mana</td></tr>
+<tr><td><b>Summon Undead II</b></td><td>Fa scegliere quale non morto evocare: Skeleton Knight, Skeleton Archer, Skeleton Mage, Mummy o Liche Lord. Al massimo 2 alla volta. Con poca esperienza fallisce spesso (riesce sempre solo oltre 30 di esperienza).</td><td>30 mana, osso di demone, fiala di sangue</td></tr>
+</table></div>
+<p><b>Liber Mortis</b>, nella seconda parte del Necronomicon:</p>
+<div class="tbl"><table>
+<tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
+<tr><td><b>Crea reagenti</b></td><td>Trasforma 7 reagenti comuni in 1 reagente necromantico: sulfurous ash → cenere vulcanica, mandrake root → pig iron, black pearl → ossidiana, ossa → osso di demone, garlic → pomice, blood moss → bloodspawn.</td><td>7 reagenti comuni</td></tr>
+<tr><td><b>Disperdi forza vitale</b></td><td>Toglie un terzo della vita al bersaglio (50 punti fissi se ne ha più di 200). Se riflette, tocca al necromante.</td><td>35 mana, osso di demone, bloodspawn</td></tr>
+<tr><td><b>Curse Arcana</b></td><td>Maledizione potente al livello di esperienza più Magery. Se riflessa, colpisce il necromante.</td><td>15 mana, osso di demone, bloodspawn</td></tr>
 </table></div>
 <h4>Bardo</h4>
-<p>Spartiti del bardo <span class="id">60c7</span>. Le canzoni si trascrivono negli spartiti dai libri delle canzoni. La loro forza dipende da Peacemaking o Provocation e dall'esperienza.</p>
+<p><b>Spartiti del bardo</b> <span class="id">60c7</span>. Le canzoni si trascrivono negli spartiti dai <b>libri delle canzoni</b> <span class="id">60c8-60cc</span>, uno per canzone: è il secondo libro del bardo. La loro forza dipende da Peacemaking o Provocation e dall'esperienza.</p>
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
 <tr><td><b>Tamburino da lancio</b></td><td>Si lancia fino a 8 caselle: 10 + esp./50 danni (30 + esp./20 contro gli NPC). Attesa di 15 secondi.</td><td>20 mana</td></tr>
