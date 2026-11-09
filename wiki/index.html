@@ -122,6 +122,7 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
     <li class="sub"><a href="#addestramento">Addestramento</a></li>
     <li class="sub"><a href="#asc-cavalli">Ascensione dei cavalli</a></li>
     <li><a href="#metalli">8 · Minerali e metalli</a></li>
+    <li class="sub"><a href="#fabbro-passi">Dal minerale all'armatura</a></li>
     <li class="sub"><a href="#miniera">Miniera</a></li>
     <li class="sub"><a href="#leghe">Raffinazione e leghe</a></li>
     <li class="sub"><a href="#adamantio">Adamantio</a></li>
@@ -481,7 +482,7 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <tr><td>Spacciatore</td><td>Taste ID</td><td>Comunicatore <span class="id">7307</span></td><td>Coltivazione e commercio illegali (mariajuana, organi)</td></tr>
 </table></div>
 <p>Quasi tutte le lavorazioni hanno una piccola probabilità di far salire l'abilità del mestiere, fino a <b>130</b>.</p>
-<div class="note"><b>Craft a postazione.</b> Lo <b>scaffale degli attrezzi</b> <span class="id">75cc</span> (100 tronchi e 20 lingotti di ferro, lo costruisce il falegname) permette di produrre i <a href="#lavorati">pezzi lavorati</a> con un minigioco: bisogna scegliere ogni volta l'azione giusta (martellata, penna, ingranaggi, arco, cucito). Se si sbaglia o si raccoglie l'oggetto a metà, le materie prime vanno perse.</div>
+<div class="note"><b>Craft a postazione.</b> Lo <b>scaffale degli attrezzi</b> <span class="id">75cc</span> (100 tronchi e 20 lingotti di ferro, lo costruisce il falegname) permette di produrre i <a href="#lavorati">pezzi lavorati</a> con un minigioco: nel menu delle azioni bisogna scegliere quella del proprio mestiere (martellata per il fabbro, penna per lo scriba, ingranaggi per il tinker, arco per il bowcraft, cucito per il sarto) e poi restare fermi fino alla fine. Se si sbaglia o si raccoglie l'oggetto a metà, le materie prime vanno perse.</div>
 </section>
 
 <!-- 6 -->
@@ -556,6 +557,41 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <!-- 8 -->
 <section class="chap" id="metalli" data-k="minerali metalli miniera lingotti iron rusty copper stagno shadow gold blood rock silver verite valorite titanio cobalto adamantio bronzo rose agapite black rock mytheril orialco demonic acciaio lega ultraleggera pietra marmo gemme">
 <h2><span class="num">08</span>Minerali e metalli</h2>
+<h3 id="fabbro-passi">Dal minerale all'armatura, passo per passo</h3>
+<p>Per un'armatura di piastra servono <b>due mestieri</b>: il <b>minatore</b> scava, raffina e fa le leghe, il <b>fabbro</b> lavora i lingotti e forgia l'armatura. Ci si specializza in un solo mestiere, quindi di solito si lavora in coppia: il minatore porta i lingotti, il fabbro fa il resto.</p>
+<div class="grid2">
+  <div class="card"><h4>Cosa preparare</h4><ul>
+    <li><b>Specializzazione</b>: all'ufficio di collocamento della tua città, con l'albo artigiani <span class="id">7f9d</span>.</li>
+    <li><b>Molle</b> <span class="id">0fbb</span>: si comprano dal fabbro. Senza molle le braci ti bruciano.</li>
+    <li><b>Braci</b> <span class="id">0de9</span>: si fanno bruciando legna nel fornetto per braci, con le molle e un tronco nello zaino. I tronchi preziosi ne danno di più. Il contenitore termico <span class="id">6687</span> ne tiene fino a 500.</li>
+  </ul></div>
+  <div class="card"><h4>Gli attrezzi da specialista</h4><ul>
+    <li><b>Minatore</b>: vanga diamantata <span class="id">7f6c</span>, per raffinazione e leghe.</li>
+    <li><b>Fabbro</b>: incudine <span class="id">7f6d</span>, da tenere nello zaino insieme a braci e molle, per le armature.</li>
+    <li><b>Chiunque</b>: lo scaffale degli attrezzi <span class="id">75cc</span>, per trasformare i lingotti in pezzi lavorati.</li>
+  </ul></div>
+</div>
+<ol class="steps">
+  <li><b>Scava.</b> Con Mining, sulle pareti di roccia. Più il minerale è raro, più Mining serve (vedi la <a href="#miniera">tabella della miniera</a>).</li>
+  <li><b>Fondi il minerale.</b> Doppio clic sul minerale e poi sulla forgia: diventa lingotti.</li>
+  <li><b>Raffina e fai le leghe</b> (minatore specializzato). Doppio clic sulla vanga diamantata e scegli <i>Raffinazione metalli</i>, <i>Leghe maggiori</i> o <i>Leghe d'acciaio</i>. Per esempio: 1 Rusty dà 3 Ferro, 3 Old Copper + 3 Dull Copper danno 4 Copper, 3 Copper + 1 Stagno danno 3 Bronzo, 20 Shadow danno 1 Black Rock. Tutte le ricette sono nella <a href="#leghe">tabella delle leghe</a>. L'acciaio serve per le leghe d'acciaio: dal menu <i>Altro</i>, 1 brace + 1 pezzo di ferro lavorato (Mining 75) danno 1 lingotto d'acciaio.</li>
+  <li><b>Trasforma i lingotti in pezzi lavorati.</b> Allo scaffale degli attrezzi (<i>Quelli da fabbro</i>), oppure all'incudine del fabbro (<i>Lavorare il metallo</i>), scegli il metallo. Nello zaino compare l'oggetto della lavorazione e si apre il menu delle azioni: scegli <b>Martellata da fabbro</b>. Poi <b>resta fermo</b> finché compare "Hai costruito con successo": ogni lingotto diventa un pezzo lavorato.</li>
+  <li><b>Forgia l'armatura</b> (fabbro specializzato). Con braci e molle nello zaino, doppio clic sull'incudine, poi <i>Armature</i> e il gruppo del metallo. L'armatura completa consuma 60 pezzi lavorati, 80 per le armature superiori.</li>
+</ol>
+<div class="note"><b>Attenzione durante la lavorazione dei lingotti.</b> Se scegli un'azione diversa dalla martellata, se ti muovi, se raccogli o sposti l'oggetto della lavorazione, o se inizi un'altra lavorazione prima della fine, i lingotti vanno persi.</div>
+<div class="tbl"><table>
+<tr><th>Metallo</th><th class="n">Lingotti per lavorazione</th><th class="n">Pezzi che escono</th><th>Armatura</th><th class="n">Blacksmithing</th></tr>
+<tr><td>Iron</td><td class="n">5</td><td class="n">5</td><td>— (serve per l'acciaio e gli oggetti del menu <i>Altro</i>)</td><td class="n">—</td></tr>
+<tr><td>Gold · Rose · Agapite</td><td class="n">3</td><td class="n">3</td><td>I gruppo · 60 pezzi</td><td class="n">85</td></tr>
+<tr><td>Blood Rock · Silver</td><td class="n">3</td><td class="n">3</td><td>II gruppo · 60 pezzi</td><td class="n">95</td></tr>
+<tr><td>Verite</td><td class="n">2</td><td class="n">2</td><td>II gruppo · 60 pezzi</td><td class="n">95</td></tr>
+<tr><td>Valorite · Mytheril · Black Rock</td><td class="n">2</td><td class="n">2</td><td>III gruppo · 60 pezzi</td><td class="n">105</td></tr>
+<tr><td>Orialco</td><td class="n">1</td><td class="n">1</td><td>Armatura superiore con scudo · 80 pezzi</td><td class="n">110</td></tr>
+<tr><td>Acciaio al Titanio</td><td class="n">1</td><td class="n">1</td><td>Armatura superiore con scudo · 80 pezzi</td><td class="n">120</td></tr>
+<tr><td>Acciaio al Cobalto</td><td class="n">1</td><td class="n">1</td><td>Armatura superiore con scudo · 80 pezzi</td><td class="n">130</td></tr>
+<tr><td>Demonic · Lega Ultraleggera</td><td class="n">1</td><td class="n">1</td><td>Armi in demonic e ultraleggere</td><td class="n">—</td></tr>
+</table></div>
+<p>Un lingotto dà sempre un pezzo lavorato: per un'armatura da 60 pezzi servono 60 lingotti di quel metallo. Un esempio completo, l'<b>armatura in Black Rock</b>: 1200 Shadow (Mining 75 per scavarli), raffinati 20 alla volta in 60 Black Rock (Mining 96), lavorati 2 alla volta in 60 pezzi, poi l'armatura del III gruppo all'incudine (Blacksmithing 105).</p>
 <h3 id="miniera">Miniera</h3>
 <p>Scavando con Mining si trovano vene di questi materiali. Più il minerale è raro, più alta è l'abilità richiesta.</p>
 <div class="tbl"><table>
@@ -612,19 +648,7 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 </ul>
 
 <h3 id="lavorati">Pezzi lavorati e armature di piastra</h3>
-<p>Allo <b>scaffale degli attrezzi</b> i lingotti diventano <b>pezzi lavorati</b> <span class="id">759f–75ad</span>. Il fabbro li usa per le armature complete.</p>
-<div class="tbl"><table>
-<tr><th>Metallo</th><th class="n">Lingotti per pezzo</th><th>Armatura completa</th></tr>
-<tr><td>Iron</td><td class="n">5</td><td>—</td></tr>
-<tr><td>Gold · Rose · Agapite</td><td class="n">3</td><td>I gruppo · 60 pezzi</td></tr>
-<tr><td>Blood Rock · Silver</td><td class="n">3</td><td>II gruppo · 60 pezzi</td></tr>
-<tr><td>Verite</td><td class="n">2</td><td>II gruppo · 60 pezzi</td></tr>
-<tr><td>Valorite · Mytheril · Black Rock</td><td class="n">2</td><td>III gruppo · 60 pezzi</td></tr>
-<tr><td>Orialco</td><td class="n">1</td><td>Armatura superiore con scudo · 80 pezzi</td></tr>
-<tr><td>Acciaio al Titanio</td><td class="n">1</td><td>Armatura superiore con scudo · 80 pezzi · Blacksmithing 120</td></tr>
-<tr><td>Acciaio al Cobalto</td><td class="n">1</td><td>Armatura superiore con scudo · 80 pezzi · Blacksmithing 130</td></tr>
-<tr><td>Demonic · Lega Ultraleggera</td><td class="n">1</td><td>Armi in demonic e ultraleggere</td></tr>
-</table></div>
+<p>Allo <b>scaffale degli attrezzi</b> o all'incudine del fabbro i lingotti diventano <b>pezzi lavorati</b> <span class="id">759f–75ad</span>, uno per lingotto. Il fabbro li usa per le armature complete: lingotti, pezzi e abilità per ogni metallo sono nella <a href="#fabbro-passi">guida passo passo</a>.</p>
 <p>Gli altri pezzi lavorati: componenti, listelli e lamiere (tinker), pagine e moduli (scriba), listelli per archi, corde e cavi (bowcraft), pelli tagliate ad arte e granelli di adamantio (sarto).</p>
 <h3>Vendita dei metalli</h3>
 <p>Al mercante dei metalli: 1000 Iron = 4.000 gp · 100 Old Copper = 200 gp · 100 Dull Copper = 500 gp · 100 Copper = 400 gp · 100 Stagno = 400 gp · 100 Bronzo = 2.000 gp.</p>
