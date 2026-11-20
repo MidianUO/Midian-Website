@@ -133,6 +133,7 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
     <li><a href="#alchimia">12 · Alchimia e oggetti magici</a></li>
     <li><a href="#case">13 · Case e barche</a></li>
     <li><a href="#sicurezza">14 · Porte, serrature e bauli</a></li>
+    <li class="sub"><a href="#oggetti-casa">Oggetti per la casa</a></li>
     <li><a href="#viaggio">15 · Rune e viaggio</a></li>
     <li><a href="#altro">16 · Altri sistemi</a></li>
   </ol>
@@ -774,18 +775,33 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 </section>
 
 <!-- 14 -->
-<section class="chap" id="sicurezza" data-k="porte blindate serratura combinazione baule combinazione cassetta sicurezza scrigno gilda bankbox campanello trappola furto">
+<section class="chap" id="sicurezza" data-k="scaffale vendita stalliere slot machine tappeti campo uccidi mostri attrezzi porte blindate serratura combinazione baule combinazione cassetta sicurezza scrigno gilda bankbox campanello trappola furto">
 <h2><span class="num">14</span>Porte, serrature e bauli</h2>
 <div class="grid2">
   <div class="card"><h4>Porta blindata</h4><p><span class="id">66a2–66a5</span> Si apre solo al proprietario e a <b>due co-utenti</b> registrati. Bisogna essere vicini, non feriti sotto metà dei punti ferita e non agitati. Le magie non hanno effetto.</p></div>
-  <div class="card"><h4>Serratura a combinazione</h4><p>Deed <span class="id">758d</span>: il proprietario della porta blindata la installa sulla porta. Codice a <b>4 cifre</b>, all'inizio <b>9999</b>.</p></div>
+  <div class="card"><h4>Serratura a combinazione</h4><p>Deed <span class="id">758d</span>: doppio clic sul deed e poi sulla <b>porta blindata intestata a te</b>. La serratura nasce con il codice <b>9999</b> e il meccanismo disattivato. Con il doppio clic sulla serratura il proprietario apre il pannello: <b>solo tu</b>, <b>tutti</b> o <b>combinazione</b> (OK genera un nuovo codice a 4 cifre, scritto nei messaggi). Gli altri inseriscono il codice cifra per cifra (serve Forza 60) e, se è giusto, si trovano oltre la porta. Non si entra se si è feriti o agitati.</p></div>
   <div class="card"><h4>Campanello</h4><p>Deed <span class="id">7502</span> (25.000 gp), lo installa un GM. Pannello per registrare chi può entrare dalle porte blindate collegate.</p></div>
-  <div class="card"><h4>Baule a combinazione</h4><p>Deed <span class="id">7503/7505</span> (25.000 gp). Nasce con la serratura <b>disattivata</b> e codice 9999. Il proprietario ha un pannello per impostarlo.</p></div>
+  <div class="card"><h4>Baule a combinazione</h4><p>Deed <span class="id">7503/7505</span> (25.000 gp): il doppio clic lo piazza sotto i tuoi piedi, non si sposta più. Nasce con la serratura <b>disattivata</b> (lo apre solo il proprietario) e codice 9999. Il pannello del proprietario: <b>apri</b>, <b>cambia tipo di serratura</b> (solo tu, tutti, combinazione), <b>vedi la serratura in uso</b>, <b>apri la tua banca</b>. Con la combinazione gli altri inseriscono le 4 cifre (serve Forza 10); il pannello lo usa una persona alla volta.</p></div>
   <div class="card"><h4>Cassetta di sicurezza</h4><p><span class="id">6688</span> "Baule di …": si apre, si sposta e accetta magie solo dal proprietario.</p></div>
   <div class="card"><h4>Scrigno di gilda</h4><p><span class="id">66a0</span> Si apre solo ai membri della gilda proprietaria.</p></div>
   <div class="card"><h4>Bankbox personale</h4><p>Concessione <span class="id">64b0</span> (500 gp): una cassa che apre la propria banca. Non accetta oggetti appoggiati sopra.</p></div>
 </div>
 <div class="note warn"><b>Scassinare un baule a combinazione.</b> Chi sbaglia il codice viene punito. Al <b>3° errore</b> scatta una trappola mortale. Al <b>5° errore</b> perde 30 di Forza, finisce in prigione con una nota nel <b>Libro delle pene</b>, muore, e il baule si blocca finché il proprietario o un GM non lo sbloccano.</div>
+
+<h3 id="oggetti-casa">Oggetti per la casa e per i negozi</h3>
+<div class="grid2">
+  <div class="card"><h4>Scaffale di vendita</h4><p>Deed <span class="id">7588 / 7589</span>: doppio clic, leggi gli avvisi, e ripeti il doppio clic <b>tra 10 e 19 secondi dopo</b>: lo scaffale appare sotto i tuoi piedi ed è tuo. Non piazzarne due nella stessa schermata.</p>
+  <ul><li>Dal pannello dello scaffale il proprietario ritira un <b>cofanetto di vendita</b> vuoto.</li>
+  <li>Doppio clic sul cofanetto: <b>apri</b>, <b>nome</b>, <b>prezzo</b> (in centinaia di gp), <b>sigilla</b>. Al massimo <b>20 oggetti</b>, niente contenitori né oggetti fissati. Sigillato non si modifica più.</li>
+  <li>Il cofanetto sigillato va messo nello scaffale (al massimo 20 lotti).</li>
+  <li>Chi compra fa doppio clic sullo scaffale: <b>freccia</b> per guardare la merce, <b>pergamena</b> per comprarla. I soldi devono essere <b>nello zaino</b>. La merce in vetrina non si può prendere senza pagare.</li>
+  <li>Il proprietario, con il doppio clic, ritira l'incasso meno il <b>5%</b> di manutenzione (al massimo 60.000 gp alla volta; lo scaffale tiene fino a 3.200.000 gp).</li></ul></div>
+  <div class="card"><h4>Stalliere privato</h4><p>Deed <span class="id">7519</span> (stalliere), <span class="id">7518</span> (deluxe: mantiene abilità e statistiche dell'animale), <span class="id">753a</span> (d'addestramento, per i cavalli in addestramento). Il doppio clic lo piazza a terra. Poi doppio clic sullo stalliere e scegli l'animale da stallare oppure del <b>fieno</b>: ogni fieno sono giorni di cibo. Senza cibo l'animale muore. Non si stallano animali evocati, sotto magie, troppo forti o persone.</p></div>
+  <div class="card"><h4>Slot Machine</h4><p>Deed <span class="id">7523</span>: piazza la slot con muri e cartello. Il prezzo della giocata lo imposta un GM. Doppio clic per giocare (i soldi nello zaino), una persona alla volta. Vincite in volte la posta: tesoro ×3 = 100, triplo ×3 = 40, doppio ×3 = 20, singolo ×3 = 10, tesoro ×2 = 3, anelli ×3 = 2.</p></div>
+  <div class="card"><h4>Campo uccidi mostri</h4><p>Deed <span class="id">64d0</span>: costruisce intorno a te un recinto (muri e cancello) con il gioco ThanatoS <span class="id">64be</span>.</p></div>
+  <div class="card"><h4>Tappeti</h4><p>Deed "carpet" <span class="id">7150</span> e seguenti (56 pezzi: quadrati, angoli e bordi in 6 disegni): il doppio clic mette il pezzo di tappeto sotto i tuoi piedi.</p></div>
+  <div class="card"><h4>Scaffale degli attrezzi</h4><p><span class="id">75cc / 75ce</span>: doppio clic e scegli quali attrezzi usare (fabbro, scriba, inventore, arcaio...).</p></div>
+</div>
 </section>
 
 <!-- 15 -->
