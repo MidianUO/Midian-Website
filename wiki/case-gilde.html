@@ -127,7 +127,7 @@ tr[hidden] { display: none }
   <p>Come comprare, piazzare e gestire una casa senza aspettare un GM, e come funzionano le gilde.</p>
 </header>
 
-<div class="note"><b>In arrivo.</b> Il nuovo sistema delle case (piazzarle da soli, il pannello del cartello, il campanello e la bankbox in casa) arriva con il prossimo aggiornamento del server: fino ad allora vale quello di prima. Le gilde autonome sono in preparazione.</div>
+<div class="note"><b>In arrivo.</b> Il nuovo sistema delle case (piazzarle da soli, il pannello del cartello, il campanello e la bankbox in casa) arriva con il prossimo aggiornamento del server: fino ad allora vale quello di prima. Lo stesso vale per le gilde autonome (fondazione, candidature dal pulsante Guild, porte, scrigni e divise).</div>
 
 <section class="chap" id="avere-casa">
 <h2><span class="num">1</span>Avere una casa</h2>
@@ -208,24 +208,32 @@ tr[hidden] { display: none }
 
 <section class="chap" id="gilde">
 <h2><span class="num">8</span>Le gilde</h2>
-<h3>Come funzionano oggi</h3>
+<h3>Fondare una gilda</h3>
+<ol class="steps">
+  <li>Compra il <b>deed della guildstone</b> dallo scriba (450.000). Non devi essere già in una gilda e ti serve una casa.</li>
+  <li>Entra nella tua casa, doppio clic sul deed e scegli il punto <b>dentro casa</b>: la pietra appare e quella casa diventa la <b>sede</b> della gilda. Scrivi il nome della gilda quando il gioco lo chiede.</li>
+  <li>Il sistema delle guerre della gilda si prepara da solo.</li>
+</ol>
+<h3>Entrare in una gilda</h3>
 <ul>
-  <li>Per entrare in una gilda fai doppio clic sulla sua <b>guildstone</b> e candidati; il capo accetta o rifiuta.</li>
-  <li>Il capo espelle i membri, dà i titoli, scrive lo statuto e l'abbreviazione, dichiara guerra e pace alle altre gilde. I membri possono votare un nuovo capo.</li>
-  <li>Il pulsante <b>Guild</b> del paperdoll apre il pannello della tua gilda anche lontano dalla pietra.</li>
-  <li>Porte di gilda, scrigno di gilda, distributore delle divise e la nascita di una nuova gilda oggi li prepara lo staff.</li>
+  <li>Le sedi sono nelle case, dove gli estranei non entrano: per candidarti premi il pulsante <b>Guild</b> del paperdoll, scegli la gilda dall'elenco e premi <b>Candidati a questa gilda</b>.</li>
+  <li>Il capo riceve un messaggio e ti accetta dal suo pulsante <b>Guild</b> (voce "Accetta un candidato"), anche se è lontano. Da membro, il pulsante Guild apre il pannello della tua gilda.</li>
+  <li>Il capo può anche reclutare chi ha vicino ("Recluta qualcuno nella gilda").</li>
 </ul>
-<h3>In preparazione</h3>
-<ul>
-  <li><b>Fondare una gilda da soli</b>: il deed della guildstone si piazzerà dentro la propria casa, con il sistema delle guerre già pronto.</li>
-  <li><b>Strumenti del capo</b>: trasformare una porta della sua casa in porta di gilda, collegare lo scrigno, impostare il distributore delle divise.</li>
-  <li>Scrigni e distributori da comprare; una gilda senza membri libera porte e scrigni.</li>
-</ul>
+<h3>Gli strumenti del capo</h3>
+<p>Nel menu del capo (pulsante Guild, poi le funzioni del capo) c'è <b>Porte, scrigni e divise della gilda</b>:</p>
+<div class="grid2">
+  <div class="card"><h4>Porte di gilda</h4><p>Scegli una porta della sede: i membri la passano senza chiave (anche se c'è il campanello), gli altri restano fuori. <b>Senza limiti</b>. "Scollega una porta" la riporta normale, con la chiave.</p></div>
+  <div class="card"><h4>Scrigno di gilda</h4><p>50.000 gold, compare ai tuoi piedi dentro la sede. Lo aprono solo i membri (non i candidati). Quanti ne vuoi.</p></div>
+  <div class="card"><h4>Distributore delle divise</h4><p>25.000 gold, compare ai tuoi piedi dentro la sede. Con il doppio clic il capo <b>sceglie l'abito modello</b> dal suo zaino (il colore è quello dell'abito) e <b>il prezzo</b>. I membri fanno doppio clic e comprano la divisa; gli altri no.</p></div>
+</div>
+<p>Le divise si indossano solo da membri e si consumano con il tempo, come prima. Le gilde, le porte, gli scrigni e i distributori fatti dallo staff restano come sono.</p>
 </section>
 
 <section class="chap" id="gm">
 <h2><span class="num">9</span>Per i GM</h2>
 <ul>
+  <li>Ogni gilda fondata, porta collegata e scrigno o distributore comprato finisce nel registro del server (righe "GILDA:").</li>
   <li><code>.caseabbandonate [giorni]</code> elenca le case dei giocatori il cui proprietario è stato cancellato o non gioca da almeno quei giorni (90 se non scrivi nulla). Non cancella niente.</li>
   <li>Ogni casa costruita, ceduta, demolita e ogni campanello messo o tolto finisce nel registro del server (righe "CASA:").</li>
   <li>Le case dei giocatori si gestiscono anche dal cartello: il GM vede il pannello del proprietario.</li>
