@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<title>Case e gilde · Wiki · Midian</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: indice fisso a sinistra (sotto, su telefono), colonna di lettura a destra; tabelle scorrevoli. */
+:root {
+  --bg: #f4f5f1; --panel: #ffffff; --ink: #1c2630; --muted: #5a6670; --line: #d9ddd5;
+  --brass: #8a5c14; --teal: #24605f; --tint: #eef1ea; --warn: #9b2c2c; --ok: #2f6b3a;
+  --f-display: "Marcellus SC", "Palatino Linotype", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.wrap { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  border-right: 1px solid var(--line); padding-right: 18px; font-size: 15px; }
+nav.toc h2 { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--brass); margin: 0 0 10px; font-weight: 400 }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 8px; border-radius: 4px }
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+nav.toc .sub a { padding-left: 22px; color: var(--muted); font-size: 14px }
+.search { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 15px; margin-bottom: 14px }
+.search:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px }
+main { min-width: 0 }
+header.top { border-bottom: 2px solid var(--brass); padding-bottom: 18px; margin-bottom: 8px }
+header.top .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal) }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 50px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance }
+header.top p { max-width: 68ch; color: var(--muted); margin: 0 }
+section.chap { padding-top: 34px; scroll-margin-top: 16px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; margin: 0 0 12px; color: var(--ink); text-wrap: balance;
+  display: flex; gap: 12px; align-items: baseline }
+h2 .num { font-family: var(--f-mono); font-size: 14px; color: var(--brass) }
+h3 { font-size: 20px; margin: 26px 0 8px; color: var(--teal); font-weight: 700 }
+h4 { font-size: 17px; margin: 18px 0 6px }
+p, li { max-width: 72ch }
+a { color: var(--teal) }
+code, .id { font-family: var(--f-mono); font-size: .82em; background: var(--tint); padding: 1px 5px; border-radius: 3px; white-space: nowrap }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { background: var(--tint); font-weight: 700; white-space: nowrap; font-size: 13px; letter-spacing: .03em }
+tr:last-child td { border-bottom: 0 }
+td.n, th.n { text-align: right; white-space: nowrap }
+.zero { color: var(--warn); font-weight: 700 }
+.note { border-left: 3px solid var(--brass); background: var(--tint); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; max-width: 76ch }
+.note b { color: var(--brass) }
+.warn { border-left-color: var(--warn) } .warn b { color: var(--warn) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0 }
+.card h4 { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: var(--brass) }
+.card p, .card ul { margin: 4px 0; font-size: 15px }
+.card ul { padding-left: 18px }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.tag { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--tint) }
+ol.steps { padding-left: 22px } ol.steps li { margin: 4px 0 }
+.empty { display: none; color: var(--muted); padding: 30px 0 }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 10px }
+  nav.toc { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 12px }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) }
+  nav.toc .sub { display: none }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+</style>
+<style>
+.sitebar { border-bottom: 1px solid var(--line); background: var(--panel) }
+.sitebar-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px }
+.sitebrand { font-family: var(--f-display); font-size: 22px; letter-spacing: .12em; color: var(--brass); text-decoration: none }
+.sitenav { display: flex; gap: 4px; flex-wrap: wrap }
+.sitenav a { color: var(--ink); text-decoration: none; padding: 6px 12px; border-radius: 4px }
+.sitenav a:hover, .sitenav a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+.sitenav a[aria-current="page"] { color: var(--brass); box-shadow: inset 0 -2px 0 var(--brass) }
+</style>
+<style>
+.filtro-vuoto { color: var(--muted); font-style: italic }
+@media (max-width: 860px) { nav.toc .qui { display: none } }
+tr[hidden] { display: none }
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="sitebar-in">
+  <a class="sitebrand" href="../index.html">MIDIAN</a>
+  <nav class="sitenav" aria-label="Sezioni del sito">
+    <a href="../index.html">Home</a>
+    <a href="index.html" aria-current="page">Wiki</a>
+    <a href="crafting/index.html">Crafting</a>
+    <a href="../download.html">Download</a>
+    <a href="../contatti.html">Contatti</a>
+  </nav>
+</div></header>
+<div class="wrap">
+<nav class="toc" aria-label="Indice">
+  <h2>Case e gilde</h2>
+  <ol>
+    <li><a href="#avere-casa">Avere una casa</a></li>
+    <li><a href="#piazzare">Piazzare la casa</a></li>
+    <li><a href="#chiavi">Porte, chiavi e sicurezza</a></li>
+    <li><a href="#cartello">Il cartello della casa</a></li>
+    <li><a href="#campanello">Il campanello</a></li>
+    <li><a href="#bankbox">Bankbox e baule a combinazione</a></li>
+    <li><a href="#case-gm">Le case costruite dai GM</a></li>
+    <li><a href="#gilde">Le gilde</a></li>
+    <li><a href="#gm">Per i GM</a></li>
+  </ol>
+  <p style="margin-top:18px"><a href="index.html">← Torna alla wiki</a></p>
+</nav>
+<main id="main">
+<header class="top">
+  <div class="eyebrow">Wiki</div>
+  <h1>Case e gilde</h1>
+  <p>Come comprare, piazzare e gestire una casa senza aspettare un GM, e come funzionano le gilde.</p>
+</header>
+
+<div class="note"><b>In arrivo.</b> Il nuovo sistema delle case (piazzarle da soli, il pannello del cartello, il campanello e la bankbox in casa) arriva con il prossimo aggiornamento del server: fino ad allora vale quello di prima. Le gilde autonome sono in preparazione.</div>
+
+<section class="chap" id="avere-casa">
+<h2><span class="num">1</span>Avere una casa</h2>
+<p>Una casa si ha in due modi: si <b>compra</b> il deed dall'<b>Architetto</b> a prezzo pieno, oppure si <b>costruisce</b> con il falegname. Non ci sono rate né mutui.</p>
+<div class="tbl"><table><thead><tr><th>Dall'Architetto</th><th class="n">Prezzo</th></tr></thead><tbody>
+<tr><td>Small Stone and Plaster House</td><td class="n">100.000</td></tr>
+<tr><td>Three Room House</td><td class="n">400.000</td></tr>
+<tr><td>Two Story Stone and Plaster House</td><td class="n">750.000</td></tr>
+<tr><td>Tower</td><td class="n">1.000.000</td></tr>
+<tr><td>Campanello</td><td class="n">250.000</td></tr>
+<tr><td>Concessione per una bankbox (/ o \)</td><td class="n">100.000</td></tr>
+<tr><td>Baule a combinazione (/ o \)</td><td class="n">400.000</td></tr>
+</tbody></table></div>
+<p><b>Costruirla:</b> con Carpentry 100 il menu delle case del falegname fa i deed delle casette, delle tende, della Three Room House, della Two Story e della Tower. Oltre ai materiali serve una <b>Concessione edilizia</b>, che fa lo scriba (Inscription 100, 50.000 gold e 20 moduli). Anche campanello (Blacksmithing 115), bankbox (Tinkering 80) e baule a combinazione si possono craftare: valgono le stesse regole di quelli comprati.</p>
+<div class="note"><b>Una casa a testa.</b> Ogni account può avere una casa. Castello, keep, ville e le altre case speciali restano assegnate dallo staff.</div>
+</section>
+
+<section class="chap" id="piazzare">
+<h2><span class="num">2</span>Piazzare la casa</h2>
+<ol class="steps">
+  <li>Vai nel posto dove vuoi la casa, con il deed nello zaino.</li>
+  <li>Doppio clic sul deed e scegli il punto sul terreno.</li>
+  <li>Il terreno deve essere <b>libero e piano</b> (niente alberi, rocce, oggetti, altre case o persone in mezzo) e la zona deve permettere di costruire: <b>niente città, strade e dungeon</b>.</li>
+  <li>Se va bene la casa appare: la <b>chiave</b> è nello zaino e una <b>copia in banca</b>.</li>
+</ol>
+<p>Se il posto non va bene il gioco lo dice ("The structure is blocked", "Terrain is too bumpy…") e il deed resta a te: prova un po' più in là.</p>
+</section>
+
+<section class="chap" id="chiavi">
+<h2><span class="num">3</span>Porte, chiavi e sicurezza</h2>
+<ul>
+  <li>La porta si apre con la chiave della casa. Chi non ha la chiave resta fuori.</li>
+  <li>Dentro la casa <b>non funzionano Mark, Recall, Gate Travel e Teleport</b>: nessuno può entrare con la magia.</li>
+  <li>Gli oggetti posati a terra dentro casa <b>non spariscono</b>.</li>
+</ul>
+</section>
+
+<section class="chap" id="cartello">
+<h2><span class="num">4</span>Il cartello della casa</h2>
+<p>Il cartello accanto alla porta si chiama "Casa di …". Per il proprietario, il doppio clic apre il pannello; per gli altri dice di chi è la casa.</p>
+<div class="grid2">
+  <div class="card"><h4>Nuova chiave</h4><p>Una chiave in più nello zaino, da dare a un amico.</p></div>
+  <div class="card"><h4>Cambia la serratura</h4><p>Tutte le chiavi vecchie smettono di aprire; tu ricevi due chiavi nuove. Da usare se hai dato una chiave a chi non deve più entrare.</p></div>
+  <div class="card"><h4>Cambia il nome</h4><p>Il nome della casa (da 3 a 40 lettere), che compare sul cartello.</p></div>
+  <div class="card"><h4>Cedi la casa</h4><p>Scegli un giocatore lì vicino che non ha già una casa: diventa sua, con una serratura nuova e le chiavi nel suo zaino.</p></div>
+  <div class="card"><h4>Demolisci</h4><p>Chiede conferma. La casa sparisce e il <b>deed torna nella tua banca</b>, così puoi rimetterla altrove. Svuotala prima: gli oggetti rimasti dentro restano a terra e col tempo spariscono.</p></div>
+  <div class="card"><h4>Campanello e amici</h4><p>Se hai il campanello, scegli chi può entrare (vedi sotto).</p></div>
+</div>
+</section>
+
+<section class="chap" id="campanello">
+<h2><span class="num">5</span>Il campanello</h2>
+<ol class="steps">
+  <li>Compra il deed del campanello dall'Architetto (250.000) o fallo con il fabbro.</li>
+  <li>Mettiti fuori, accanto alla porta della tua casa, fai doppio clic sul deed e scegli la porta. Il campanello appare dove sei.</li>
+</ol>
+<ul>
+  <li>Finché c'è il campanello <b>tutte le porte della casa</b> (anche se sono due) fanno passare dall'altra parte solo <b>te e due amici</b> che scegli: <b>le chiavi non servono e non aprono</b>.</li>
+  <li>Gli amici si scelgono dal pannello del cartello ("Campanello e amici") o con il doppio clic sul campanello: "Scegli l'amico 1", "Scegli l'amico 2", "Togli gli amici".</li>
+  <li>Per passare devi essere accanto alla porta, non ferito sotto metà della vita e non in modalità guerra.</li>
+  <li>Chi è fuori fa doppio clic sul campanello per <b>suonarlo</b> (una volta al minuto): tu e i tuoi amici ricevete un messaggio con il suo nome.</li>
+  <li><b>Togli il campanello</b> dal pannello: le porte tornano normali, con la chiave, e il deed del campanello torna nella tua banca.</li>
+</ul>
+</section>
+
+<section class="chap" id="bankbox">
+<h2><span class="num">6</span>Bankbox e baule a combinazione</h2>
+<div class="grid2">
+  <div class="card"><h4>Bankbox</h4><p>Concessione (100.000): doppio clic e scegli il punto, <b>solo dentro la tua casa</b>. Il doppio clic sulla bankbox apre la propria banca. Non accetta oggetti appoggiati sopra.</p></div>
+  <div class="card"><h4>Baule a combinazione</h4><p>Deed (400.000): il doppio clic lo piazza sotto i tuoi piedi, dove vuoi. Nasce con la serratura disattivata (lo apre solo il proprietario) e codice 9999. Dal pannello: apri, cambia il tipo di serratura (solo tu, tutti, combinazione), vedi la serratura, apri la tua banca. Chi sbaglia il codice viene punito: dettagli nella <a href="index.html#sicurezza">wiki</a>.</p></div>
+</div>
+</section>
+
+<section class="chap" id="case-gm">
+<h2><span class="num">7</span>Le case costruite dai GM</h2>
+<p>Le case fatte a mano dallo staff restano come prima: cartello di proprietà, porte blindate per il proprietario e due co-utenti, campanello installato dal GM. Il nuovo sistema vale per le case piazzate con i deed.</p>
+</section>
+
+<section class="chap" id="gilde">
+<h2><span class="num">8</span>Le gilde</h2>
+<h3>Come funzionano oggi</h3>
+<ul>
+  <li>Per entrare in una gilda fai doppio clic sulla sua <b>guildstone</b> e candidati; il capo accetta o rifiuta.</li>
+  <li>Il capo espelle i membri, dà i titoli, scrive lo statuto e l'abbreviazione, dichiara guerra e pace alle altre gilde. I membri possono votare un nuovo capo.</li>
+  <li>Il pulsante <b>Guild</b> del paperdoll apre il pannello della tua gilda anche lontano dalla pietra.</li>
+  <li>Porte di gilda, scrigno di gilda, distributore delle divise e la nascita di una nuova gilda oggi li prepara lo staff.</li>
+</ul>
+<h3>In preparazione</h3>
+<ul>
+  <li><b>Fondare una gilda da soli</b>: il deed della guildstone si piazzerà dentro la propria casa, con il sistema delle guerre già pronto.</li>
+  <li><b>Strumenti del capo</b>: trasformare una porta della sua casa in porta di gilda, collegare lo scrigno, impostare il distributore delle divise.</li>
+  <li>Scrigni e distributori da comprare; una gilda senza membri libera porte e scrigni.</li>
+</ul>
+</section>
+
+<section class="chap" id="gm">
+<h2><span class="num">9</span>Per i GM</h2>
+<ul>
+  <li><code>.caseabbandonate [giorni]</code> elenca le case dei giocatori il cui proprietario è stato cancellato o non gioca da almeno quei giorni (90 se non scrivi nulla). Non cancella niente.</li>
+  <li>Ogni casa costruita, ceduta, demolita e ogni campanello messo o tolto finisce nel registro del server (righe "CASA:").</li>
+  <li>Le case dei giocatori si gestiscono anche dal cartello: il GM vede il pannello del proprietario.</li>
+</ul>
+</section>
+
+<footer>Midian · Case e gilde · aggiornato il 21 novembre 2026</footer>
+</main>
+</div>
+</body>
+</html>
