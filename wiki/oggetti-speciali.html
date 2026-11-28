@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<title>Oggetti speciali · Midian</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: indice fisso a sinistra (sotto, su telefono), colonna di lettura a destra; tabelle scorrevoli. */
+:root {
+  --bg: #f4f5f1; --panel: #ffffff; --ink: #1c2630; --muted: #5a6670; --line: #d9ddd5;
+  --brass: #8a5c14; --teal: #24605f; --tint: #eef1ea; --warn: #9b2c2c; --ok: #2f6b3a;
+  --f-display: "Marcellus SC", "Palatino Linotype", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.wrap { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  border-right: 1px solid var(--line); padding-right: 18px; font-size: 15px; }
+nav.toc h2 { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--brass); margin: 0 0 10px; font-weight: 400 }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 8px; border-radius: 4px }
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+nav.toc .sub a { padding-left: 22px; color: var(--muted); font-size: 14px }
+.search { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 15px; margin-bottom: 14px }
+.search:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px }
+main { min-width: 0 }
+header.top { border-bottom: 2px solid var(--brass); padding-bottom: 18px; margin-bottom: 8px }
+header.top .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal) }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 50px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance }
+header.top p { max-width: 68ch; color: var(--muted); margin: 0 }
+section.chap { padding-top: 34px; scroll-margin-top: 16px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; margin: 0 0 12px; color: var(--ink); text-wrap: balance;
+  display: flex; gap: 12px; align-items: baseline }
+h2 .num { font-family: var(--f-mono); font-size: 14px; color: var(--brass) }
+h3 { font-size: 20px; margin: 26px 0 8px; color: var(--teal); font-weight: 700 }
+h4 { font-size: 17px; margin: 18px 0 6px }
+p, li { max-width: 72ch }
+a { color: var(--teal) }
+code, .id { font-family: var(--f-mono); font-size: .82em; background: var(--tint); padding: 1px 5px; border-radius: 3px; white-space: nowrap }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { background: var(--tint); font-weight: 700; white-space: nowrap; font-size: 13px; letter-spacing: .03em }
+tr:last-child td { border-bottom: 0 }
+td.n, th.n { text-align: right; white-space: nowrap }
+.zero { color: var(--warn); font-weight: 700 }
+.note { border-left: 3px solid var(--brass); background: var(--tint); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; max-width: 76ch }
+.note b { color: var(--brass) }
+.warn { border-left-color: var(--warn) } .warn b { color: var(--warn) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0 }
+.card h4 { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: var(--brass) }
+.card p, .card ul { margin: 4px 0; font-size: 15px }
+.card ul { padding-left: 18px }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.tag { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--tint) }
+ol.steps { padding-left: 22px } ol.steps li { margin: 4px 0 }
+.empty { display: none; color: var(--muted); padding: 30px 0 }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 10px }
+  nav.toc { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 12px }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) }
+  nav.toc .sub { display: none }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+.muted { color: var(--muted); font-size: 14px }
+</style>
+
+</head>
+<body>
+<header class="sitebar"><div class="sitebar-in">
+  <a class="sitebrand" href="../index.html">MIDIAN</a>
+  <nav class="sitenav" aria-label="Sezioni del sito">
+    <a href="../index.html">Home</a>
+    <a href="../primi-passi.html">Primi passi</a>
+    <a href="../patch-note.html">Patch Note</a>
+    <a href="index.html" aria-current="page">Wiki</a>
+    <a href="crafting/index.html">Crafting</a>
+    <a href="../download.html">Download</a>
+    <a href="../contatti.html">Contatti</a>
+  </nav>
+</div></header>
+<style>
+.sitebar { border-bottom: 1px solid var(--line); background: var(--panel) }
+.sitebar-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px }
+.sitebrand { font-family: var(--f-display); font-size: 22px; letter-spacing: .12em; color: var(--brass); text-decoration: none }
+.sitenav { display: flex; gap: 4px; flex-wrap: wrap }
+.sitenav a { color: var(--ink); text-decoration: none; padding: 6px 12px; border-radius: 4px }
+.sitenav a:hover, .sitenav a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+.sitenav a[aria-current="page"] { color: var(--brass); box-shadow: inset 0 -2px 0 var(--brass) }
+</style>
+<div class="wrap">
+<nav class="toc" aria-label="Indice">
+  <input class="search" id="q" type="search" placeholder="Cerca (es. troll, vodoo, collana)" aria-label="Cerca in questa pagina">
+  <h2>Indice</h2>
+  <ol>
+    <li><a href="#cappelli">Cappelli della meditazione</a></li>
+    <li><a href="#anello-troll">Anello del troll</a></li>
+    <li><a href="#collane-int">Collane dell'Intelligenza</a></li>
+    <li><a href="#collane-demi">Demi Necklace e Demi Bowlace</a></li>
+    <li><a href="#vodoo">Bambole vodoo, spillo e amuleto</a></li>
+    <li><a href="#magia">Sfera incantata, catalizzatore, fascia marina</a></li>
+    <li><a href="#altri">Maschera, protezione degli animali, piume</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+<header class="top">
+<div class="eyebrow">Wiki di Midian</div>
+<h1>Oggetti speciali</h1>
+<p>Cappelli, anelli, collane e altri oggetti con un effetto: cosa fanno, cosa serve per usarli e come si ottengono. Il nome porta alla ricetta nel <a href="crafting/index.html">crafting</a> quando l'oggetto si fabbrica. Vedi anche <a href="armi.html">Armi</a>, <a href="armature.html">Armature</a> e <a href="index.html#alchimia">oggetti magici dell'alchimia</a>.</p>
+</header>
+
+<section class="chap" id="cappelli">
+<h2>Cappelli della meditazione</h2>
+<p>Finch&eacute; lo indossi, il cappello ti ridà mana a intervalli regolari (se non sei gi&agrave; al massimo, cio&egrave; alla tua Intelligenza). Per indossarlo serve Meditation; con meno: "Non sei ancora abbastanza esperto".</p>
+<div class="tbl"><table>
+<thead><tr><th>Cappello</th><th class="n">Meditation</th><th class="n">Mana</th><th class="n">Mana al minuto</th><th>Per cucirlo</th><th class="n">Tailoring</th></tr></thead>
+<tbody>
+<tr><td><a href="crafting/sarto.html#o-06403"><b>Apprentice Meditator Hat</b></a> <code>6403</code></td><td class="n">oltre 50</td><td class="n">+3 ogni 10 s</td><td class="n">18</td><td>3 filo magico, 10 gomitoli</td><td class="n">110</td></tr>
+<tr><td><a href="crafting/sarto.html#o-06404"><b>Journeyman Meditator Hat</b></a> <code>6404</code></td><td class="n">oltre 60</td><td class="n">+5 ogni 10 s</td><td class="n">30</td><td>5 filo magico, 10 gomitoli</td><td class="n">112</td></tr>
+<tr><td><a href="crafting/sarto.html#o-06405"><b>Expert Meditator Hat</b></a> <code>6405</code></td><td class="n">oltre 70</td><td class="n">+8 ogni 10 s</td><td class="n">48</td><td>8 filo magico, 10 gomitoli</td><td class="n">114</td></tr>
+<tr><td><a href="crafting/sarto.html#o-06406"><b>Adept Meditator Hat</b></a> <code>6406</code></td><td class="n">oltre 80</td><td class="n">+12 ogni 10 s</td><td class="n">72</td><td>12 filo magico, 10 gomitoli</td><td class="n">116</td></tr>
+<tr><td><a href="crafting/sarto.html#o-06407"><b>Master Meditator Hat</b></a> <code>6407</code></td><td class="n">oltre 90</td><td class="n">+15 ogni 10 s</td><td class="n">90</td><td>15 filo magico, 10 gomitoli</td><td class="n">118</td></tr>
+<tr><td><a href="crafting/sarto.html#o-06408"><b>Grand Master Meditator Hat</b></a> <code>6408</code></td><td class="n">oltre 99,9</td><td class="n">+18 ogni 10 s</td><td class="n">108</td><td>18 filo magico, 10 gomitoli</td><td class="n">120</td></tr>
+<tr><td><a href="crafting/sarto.html#o-07566"><b>Supreme Meditator Hat</b></a> <code>7566</code></td><td class="n">oltre 99,9</td><td class="n">+12 ogni 5 s</td><td class="n">144</td><td>25 filo magico, 10 gomitoli</td><td class="n">122</td></tr>
+</tbody></table></div>
+<ul>
+<li><b>Cucirli</b>: il sarto specializzato, dal menu del mestiere &rsaquo; &laquo;Cuci Cappello di meditazione&raquo; (o dalla Tailoring). Riesce con probabilit&agrave; Tailoring/140: se fallisce i materiali sono persi.</li>
+<li><b>Filo magico</b> <code>6402</code>: si ottiene solo <b>smontando</b> un cappello (&laquo;Recupera Filo Magico&raquo;, Tailoring 110): ridà 10 gomitoli e da 0 a (Tailoring &minus; 110)/5 fili. Ricette e prove nel <a href="crafting/sarto.html#o-06402">sarto</a>.</li>
+</ul>
+</section>
+
+<section class="chap" id="anello-troll">
+<h2>Anello del troll</h2>
+<ul>
+<li>Indossato, ogni 13 secondi ti ridà <b>8 punti vita</b> (se sei ferito).</li>
+<li>A ogni rigenerazione c'&egrave; 1 probabilit&agrave; su 25 che l'anello <b>svanisca</b> ("L'anello svanisce!"): dura in media 25 rigenerazioni, circa 200 punti vita.</li>
+<li>Si fa con la magia: <a href="crafting/magia.html#o-07273">&laquo;Anello del troll&raquo;</a> (1 anello e 150 Blood Moss, Magery 95).</li>
+</ul>
+</section>
+
+<section class="chap" id="collane-int">
+<h2>Collane dell'Intelligenza</h2>
+<p>Abbassano l'Intelligenza finch&eacute; le indossi: servono ad allenarsi e, togliendole, a salire oltre il limite (come le <a href="skill-oltre-100.html#magery">Demi Necklace per Magery</a>).</p>
+<div class="tbl"><table>
+<thead><tr><th>Collana</th><th class="n">Serve Intelligenza</th><th class="n">Toglie</th><th>Gemma (10 nella collana da incastonare)</th></tr></thead>
+<tbody>
+<tr><td><a href="crafting/altre-script.html#o-06359"><b>Collana Fasica</b></a></td><td class="n">100</td><td class="n">10</td><td>ambra</td></tr>
+<tr><td><a href="crafting/altre-script.html#o-0635a"><b>Collana di Fase</b></a></td><td class="n">110</td><td class="n">20</td><td>citrine</td></tr>
+<tr><td><a href="crafting/altre-script.html#o-0635b"><b>Collana di Opposizione</b></a></td><td class="n">120</td><td class="n">30</td><td>rubino</td></tr>
+<tr><td><a href="crafting/altre-script.html#o-0635c"><b>Collana di Annullamento</b></a></td><td class="n">130</td><td class="n">40</td><td>tormalina</td></tr>
+<tr><td><a href="crafting/altre-script.html#o-0635d"><b>Collana Demi</b></a></td><td class="n">140</td><td class="n">50</td><td>ametista</td></tr>
+</tbody></table></div>
+<ul>
+<li>Le collane si possono <b>rompere</b> (1 volta su 15): la Fasica quando la togli, le altre quando le indossi. Dal 28 novembre 2026 una collana che si rompe indossandola non toglie pi&ugrave; Intelligenza per sempre.</li>
+<li>La base &egrave; la <a href="crafting/alchimia.html#o-0756e">Collana da incastonare</a> dell'alchimista (7 polveri di adamantio e 3 lingotti d'oro): doppio clic e punta una gemma, 10 volte con lo stesso tipo di gemma.</li>
+</ul>
+</section>
+
+<section class="chap" id="collane-demi">
+<h2>Demi Necklace e Demi Bowlace</h2>
+<ul>
+<li><b>Demi Necklace</b> (Magery da &minus;5 a &minus;25): spiegate nella pagina <a href="skill-oltre-100.html#magery">Abilit&agrave; oltre 100</a>. Le &minus;20 e &minus;25 si fanno con la <a href="crafting/alchimia.html#o-0756f">Collana da incastonare</a> da 10 polveri di adamantio (smeraldo, zaffiro, star sapphire, diamante).</li>
+<li><b>Demi Bowlace</b> (Bowcraft): la &minus;5 chiede Bowcraft 100 e toglie 5 punti, la &minus;10 chiede 105 e ne toglie 10. Si comprano nel negozio Demi (800.000 e 1.600.000 gold) o escono dal bottino. Si consumano con l'uso: durano tra 300 e 499 minuti indossate, poi si rompono.</li>
+</ul>
+</section>
+
+<section class="chap" id="vodoo">
+<h2>Bambole vodoo, spillo e amuleto</h2>
+<ul>
+<li><b><a href="crafting/alchimia.html#o-07274">Bambola Vodoo</a></b> (alchimista: 50 stoffa, 100 Mandrake, 3 cuori di wyrm, Alchemy 100; fallisce circa 3 volte su 10 e si perdono 10 stoffa e 10 Mandrake): doppio clic e punta il <b>cuore</b> della vittima. Poi lo <b><a href="crafting/inventore.html#o-07275">Spillo</a></b> (inventore: 50 Garlic, 10 lingotti d'oro) puntato sulla bambola toglie <b>15 punti vita</b> alla vittima, ovunque sia, ogni 30 secondi. Costa 200 di karma (fino a &minus;3000); se la vittima ha meno di 15 punti vita conta come omicidio. Dopo 10 riti la bambola si consuma.</li>
+<li><b><a href="crafting/alchimia.html#o-07276">Bambola Vodoo 2</a></b> (50 stoffa, 100 Black Pearl, 3 cuori di wyrm): con la <b>testa</b> della vittima, doppio clic e dice in che zona si trova.</li>
+<li><b><a href="crafting/alchimia.html#o-07294">Amuleto di Protezione</a></b> (talismano: 10 lingotti di ferro, 100 Mandrake, 1 cuore di wyrm, Alchemy 100) e <a href="crafting/alchimia.html#o-07567">Amuleto di Protezione (Carico)</a>: si carica con 10, 20 o 50 polveri di adamantio. Al collo protegge dai riti vodoo: ogni rito consuma una carica e la vittima sa chi lo sta facendo e dove. A zero cariche si rompe.</li>
+</ul>
+</section>
+
+<section class="chap" id="magia">
+<h2>Sfera incantata, catalizzatore, fascia marina</h2>
+<ul>
+<li><b><a href="crafting/altre-script.html#o-06513">Sfera incantata</a></b>: si carica con "incanta sfera" (Heal, Protection, Night Sight o Cure); poi colpendola con una magia la trasforma in quella magia. Le cariche si vedono nel tooltip.</li>
+<li><b>Catalizzatore Lunare</b> <code>6510</code>: si attiva con le 16 pietre lunari nello zaino; fino a 4 cariche.</li>
+<li><b>Fascia Marina</b> <code>6511</code>: solo per i necromanti, una alla volta; a volte si rompe usandola (1 su 30).</li>
+</ul>
+</section>
+
+<section class="chap" id="altri">
+<h2>Maschera, protezione degli animali, piume</h2>
+<ul>
+<li><b><a href="crafting/alchimia.html#o-07555">Maschera della metamorfosi</a></b> (alchimista: 30 pelle umana, 1 sewing kit, 1 filo delle parche): solo per gli assassini. Indossata trasforma in un umano a caso; ha 20 usi, poi "questa maschera e' logora!".</li>
+<li><b>Wand of Animal Protection</b> <code>7513</code>: mette l'angelo custode a una cavalcatura (3 cariche). Si trova nel bottino; vedi la <a href="cavalli.html#aiuti">guida dei cavalli</a>.</li>
+<li><b><a href="crafting/alchimia.html#o-07252">Piume magiche</a></b>: servono all'arciere per le frecce speciali (3 piume per Freccia di Fuoco e le altre abilit&agrave; del Manuale del Ranger).</li>
+</ul>
+</section>
+
+<p id="noresults" class="note" style="display:none">Nessuna sezione corrisponde alla ricerca.</p>
+<footer>Generata da strumenti/wiki/oggetti-speciali.js (Midian-Script-X) leggendo le script (Sphereitem2, SPHEREMenu2, SPHERESkill).</footer>
+</main>
+</div>
+<script>
+(function () {
+  var q = document.getElementById('q');
+  var secs = Array.prototype.slice.call(document.querySelectorAll('section.chap'));
+  var none = document.getElementById('noresults');
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  var texts = secs.map(function (s) { return norm((s.getAttribute('data-k') || '') + ' ' + s.textContent); });
+  q.addEventListener('input', function () {
+    var v = norm(q.value.trim()); var shown = 0;
+    secs.forEach(function (s, i) { var ok = !v || texts[i].indexOf(v) >= 0; s.hidden = !ok; if (ok) shown++; });
+    none.style.display = shown ? 'none' : 'block';
+    links.forEach(function (a) { var t = document.querySelector(a.getAttribute('href')); var sec = t && t.closest('section.chap'); a.parentNode.hidden = !!(sec && sec.hidden); });
+  });
+})();
+</script>
+
+</body>
+</html>
