@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<title>Armi · Midian</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: indice fisso a sinistra (sotto, su telefono), colonna di lettura a destra; tabelle scorrevoli. */
+:root {
+  --bg: #f4f5f1; --panel: #ffffff; --ink: #1c2630; --muted: #5a6670; --line: #d9ddd5;
+  --brass: #8a5c14; --teal: #24605f; --tint: #eef1ea; --warn: #9b2c2c; --ok: #2f6b3a;
+  --f-display: "Marcellus SC", "Palatino Linotype", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.wrap { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  border-right: 1px solid var(--line); padding-right: 18px; font-size: 15px; }
+nav.toc h2 { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--brass); margin: 0 0 10px; font-weight: 400 }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 8px; border-radius: 4px }
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+nav.toc .sub a { padding-left: 22px; color: var(--muted); font-size: 14px }
+.search { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 15px; margin-bottom: 14px }
+.search:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px }
+main { min-width: 0 }
+header.top { border-bottom: 2px solid var(--brass); padding-bottom: 18px; margin-bottom: 8px }
+header.top .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal) }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 50px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance }
+header.top p { max-width: 68ch; color: var(--muted); margin: 0 }
+section.chap { padding-top: 34px; scroll-margin-top: 16px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; margin: 0 0 12px; color: var(--ink); text-wrap: balance;
+  display: flex; gap: 12px; align-items: baseline }
+h2 .num { font-family: var(--f-mono); font-size: 14px; color: var(--brass) }
+h3 { font-size: 20px; margin: 26px 0 8px; color: var(--teal); font-weight: 700 }
+h4 { font-size: 17px; margin: 18px 0 6px }
+p, li { max-width: 72ch }
+a { color: var(--teal) }
+code, .id { font-family: var(--f-mono); font-size: .82em; background: var(--tint); padding: 1px 5px; border-radius: 3px; white-space: nowrap }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { background: var(--tint); font-weight: 700; white-space: nowrap; font-size: 13px; letter-spacing: .03em }
+tr:last-child td { border-bottom: 0 }
+td.n, th.n { text-align: right; white-space: nowrap }
+.zero { color: var(--warn); font-weight: 700 }
+.note { border-left: 3px solid var(--brass); background: var(--tint); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; max-width: 76ch }
+.note b { color: var(--brass) }
+.warn { border-left-color: var(--warn) } .warn b { color: var(--warn) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0 }
+.card h4 { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: var(--brass) }
+.card p, .card ul { margin: 4px 0; font-size: 15px }
+.card ul { padding-left: 18px }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.tag { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--tint) }
+ol.steps { padding-left: 22px } ol.steps li { margin: 4px 0 }
+.empty { display: none; color: var(--muted); padding: 30px 0 }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 10px }
+  nav.toc { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 12px }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) }
+  nav.toc .sub { display: none }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+tr[hidden] { display: none }
+.muted { color: var(--muted); font-size: 13px }
+.pill { font-family: var(--f-mono); font-size: 12px; background: var(--tint); border-radius: 3px; padding: 0 5px; white-space: nowrap }
+.vai { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 4px; font-size: 15px }
+</style>
+
+</head>
+<body>
+<header class="sitebar"><div class="sitebar-in">
+  <a class="sitebrand" href="../index.html">MIDIAN</a>
+  <nav class="sitenav" aria-label="Sezioni del sito">
+    <a href="../index.html">Home</a>
+    <a href="../primi-passi.html">Primi passi</a>
+    <a href="../patch-note.html">Patch Note</a>
+    <a href="index.html" aria-current="page">Wiki</a>
+    <a href="crafting/index.html">Crafting</a>
+    <a href="../download.html">Download</a>
+    <a href="../contatti.html">Contatti</a>
+  </nav>
+</div></header>
+<style>
+.sitebar { border-bottom: 1px solid var(--line); background: var(--panel) }
+.sitebar-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px }
+.sitebrand { font-family: var(--f-display); font-size: 22px; letter-spacing: .12em; color: var(--brass); text-decoration: none }
+.sitenav { display: flex; gap: 4px; flex-wrap: wrap }
+.sitenav a { color: var(--ink); text-decoration: none; padding: 6px 12px; border-radius: 4px }
+.sitenav a:hover, .sitenav a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+.sitenav a[aria-current="page"] { color: var(--brass); box-shadow: inset 0 -2px 0 var(--brass) }
+</style>
+<div class="wrap">
+<nav class="toc" aria-label="Indice">
+  <input class="search" id="q" type="search" placeholder="Cerca (es. kryss, gold, power, troll)" aria-label="Cerca in questa pagina">
+  <h2>Indice</h2>
+  <ol>
+    <li><a href="#come-si-legge">Come si leggono le tabelle</a></li>
+    <li><a href="#archi">Archi (20)</a></li>
+    <li><a href="#balestre">Balestre (27)</a></li>
+    <li><a href="#spade">Spade (66)</a></li>
+    <li><a href="#asce">Asce (49)</a></li>
+    <li><a href="#aste">Armi in asta (alabarde e bardiche) (17)</a></li>
+    <li><a href="#lance">Lance, picche e forconi (41)</a></li>
+    <li><a href="#punta">Pugnali e kryss (18)</a></li>
+    <li><a href="#mazze">Mazze e martelli (70)</a></li>
+    <li><a href="#staff">Armi dello staff (5)</a></li>
+    <li><a href="#materiali">Dove si fanno: metalli, leghe e legni</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+<header class="top" id="indice-armi">
+<div class="eyebrow">Wiki di Midian</div>
+<h1>Armi</h1>
+<p>Tutte le armi delle script di Midian (313), divise per tipo e in ordine di forza: archi, balestre, spade, asce, armi in asta, lance, pugnali e kryss, mazze. Ci sono le armi normali, quelle dei metalli colorati (bronze, gold, silver, black rock, verite, mytheril...), demonic, lega ultraleggera, le Power Weapons e le armi uniche. Il nome della colonna "Si fa" porta alla ricetta nel crafting.</p>
+<div class="vai"><a href="#archi">Archi</a><a href="#balestre">Balestre</a><a href="#spade">Spade</a><a href="#asce">Asce</a><a href="#aste">Armi in asta (alabarde e bardiche)</a><a href="#lance">Lance, picche e forconi</a><a href="#punta">Pugnali e kryss</a><a href="#mazze">Mazze e martelli</a><a href="#staff">Armi dello staff</a><a href="armature.html">Armature &rarr;</a><a href="crafting/index.html">Crafting &rarr;</a></div>
+</header>
+
+<section class="chap" id="come-si-legge">
+<h2>Come si leggono le tabelle</h2>
+<ul>
+<li><b>Danno arma</b>: il danno della definizione. Si consuma con l'usura: un'arma a met&agrave; dei punti vita fa met&agrave; di questo danno. A questo si aggiunge sempre la forza/10 di chi colpisce (la destrezza/10 con archi e balestre), pi&ugrave; 1.</li>
+<li><b>Colpo dello script</b>: molte armi di Midian (metalli colorati, demonic, ultraleggere, Power Weapons, archi speciali) hanno un colpo in pi&ugrave; scritto nella loro script. <span class="pill">N</span> &egrave; un colpo normale, ridotto dalla difesa N del bersaglio; <span class="pill">P</span> &egrave; perforante, ridotto dalla difesa P. Le difese sono spiegate nelle <a href="armature.html#come-si-legge">armature</a>.</li>
+<li><b>Velocit&agrave;</b>: pi&ugrave; &egrave; alta, pi&ugrave; colpi al minuto (conta anche la destrezza). <b>Forza</b>: la forza che serve per impugnarla.</li>
+<li><b>Si fa</b>: il mestiere e l'abilit&agrave; per fabbricarla; il collegamento apre la ricetta con i materiali. "non si fabbrica" vuol dire che si trova (mostri, venditori, premi, staff).</li>
+<li>In alto a sinistra c'&egrave; la ricerca: scrivi per esempio <i>kryss</i>, <i>gold</i>, <i>power</i>, <i>demonic</i> o <i>amber</i>.</li>
+</ul>
+</section>
+
+<section class="chap" id="archi">
+<h2>Archi</h2>
+<p>Abilit&agrave;: <b>Archery</b>. Il colpo aggiunge la destrezza/10 di chi tira. Servono le frecce nello zaino; si tira fino a 10 caselle. In ordine dal danno medio pi&ugrave; alto. <a href="#indice-armi">Torna su</a> &middot; <a href="armature.html">Armature</a> &middot; <a href="crafting/index.html">Crafting</a></p>
+<div class="tbl"><table>
+<thead><tr><th>Arma</th><th class="n">Danno arma</th><th>Colpo dello script</th><th class="n">Velocit&agrave;</th><th class="n">Forza</th><th>Note</th><th>Si fa</th></tr></thead>
+<tbody>
+<tr><td><strong>Crazy Bow</strong> <code>06368</code></td><td class="n">5</td><td>25–35 <span class="pill">P</span> + 25–35 <span class="pill">N</span></td><td class="n">20</td><td class="n">30</td><td>due mani</td><td><a href="crafting/arcaio.html#o-06368">Arcaio</a><br><span class="muted">Bowcraft 95,0</span></td></tr>
+<tr><td><strong>Dark Elven</strong> <code>06367</code></td><td class="n">5</td><td>15–25 <span class="pill">N</span> + 15–25 <span class="pill">P</span></td><td class="n">20</td><td class="n">30</td><td>due mani</td><td><a href="crafting/arcaio.html#o-06367">Arcaio</a><br><span class="muted">Bowcraft 94,0</span></td></tr>
+<tr><td><strong>Arco Professionale</strong> <code>06366</code></td><td class="n">5</td><td>30–45 <span class="pill">P</span></td><td class="n">20</td><td class="n">30</td><td>due mani</td><td><a href="crafting/arcaio.html#o-06366">Arcaio</a><br><span class="muted">Bowcraft 93,0</span></td></tr>
+<tr><td><strong>Bow of Vanquishing &amp; Electricity</strong> <code>04153</code></td><td class="n">25–40</td><td>—</td><td class="n">20</td><td class="n">20</td><td>due mani; a volte toglie mana al bersaglio</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Arco delle Parche</strong> <code>07540</code></td><td class="n">5–16</td><td>uno a caso tra 5, 7, 12, 15, 23, 35 (senza difesa)</td><td class="n">20</td><td class="n">30</td><td>due mani; a ogni colpo toglie o da' mana a caso al bersaglio</td><td><a href="crafting/arcaio.html#o-07540">Arcaio</a><br><span class="muted">Bowcraft 95,0</span></td></tr>
+<tr><td><strong>Compound</strong> <code>06369</code></td><td class="n">5</td><td><span class="pill">P</span> forza/4 + 0–9 (sopra 120 di forza), altrimenti 10–40</td><td class="n">20</td><td class="n">30</td><td>due mani</td><td><a href="crafting/arcaio.html#o-06369">Arcaio</a><br><span class="muted">Bowcraft 95,0</span></td></tr>
+<tr><td><strong>Amber bow</strong> <code>07011</code></td><td class="n">3</td><td>20–30 <span class="pill">N</span></td><td class="n">18</td><td class="n">20</td><td>due mani</td><td><a href="crafting/arcaio.html#o-07011">Arcaio</a><br><span class="muted">Bowcraft 92,0</span></td></tr>
+<tr><td><strong>Amethist bow</strong> <code>07010</code></td><td class="n">3</td><td>20–30 <span class="pill">N</span></td><td class="n">18</td><td class="n">20</td><td>due mani</td><td><a href="crafting/arcaio.html#o-07010">Arcaio</a><br><span class="muted">Bowcraft 91,5</span></td></tr>
+<tr><td><strong>Diamond bow</strong> <code>07014</code></td><td class="n">3</td><td>20–30 <span class="pill">N</span></td><td class="n">22</td><td class="n">20</td><td>due mani</td><td><a href="crafting/arcaio.html#o-07014">Arcaio</a><br><span class="muted">Bowcraft 94,0</span></td></tr>
+<tr><td><strong>Emerald bow</strong> <code>07012</code></td><td class="n">3</td><td>20–30 <span class="pill">N</span></td><td class="n">18</td><td class="n">20</td><td>due mani; a volte toglie mana al bersaglio</td><td><a href="crafting/arcaio.html#o-07012">Arcaio</a><br><span class="muted">Bowcraft 92,5</span></td></tr>
+<tr><td><strong>Ruby bow</strong> <code>07013</code></td><td class="n">3</td><td>20–30 <span class="pill">N</span></td><td class="n">18</td><td class="n">20</td><td>due mani</td><td><a href="crafting/arcaio.html#o-07013">Arcaio</a><br><span class="muted">Bowcraft 93,0</span></td></tr>
+<tr><td><strong>Bow of Force</strong> <code>04131</code></td><td class="n">9–41</td><td>—</td><td class="n">20</td><td class="n">20</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Bow of Might</strong> <code>04130</code></td><td class="n">9–41</td><td>—</td><td class="n">20</td><td class="n">20</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Bow of Power</strong> <code>04132</code></td><td class="n">9–41</td><td>—</td><td class="n">20</td><td class="n">20</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Bow of Ruin</strong> <code>04129</code></td><td class="n">9–41</td><td>—</td><td class="n">20</td><td class="n">20</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Bow of Vanquishing</strong> <code>04133</code></td><td class="n">9–41</td><td>—</td><td class="n">20</td><td class="n">20</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Elven Bow</strong> <code>05006</code></td><td class="n">3</td><td>10–25 <span class="pill">N</span></td><td class="n">18</td><td class="n">30</td><td>due mani</td><td><a href="crafting/arcaio.html#o-05006">Arcaio</a><br><span class="muted">Bowcraft 95,5</span></td></tr>
+<tr><td><strong>bow</strong> <code>013b1</code></td><td class="n">9–24</td><td>—</td><td class="n">20</td><td class="n">20</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Arco dei boschi</strong> <code>07243</code></td><td class="n">8–10</td><td>—</td><td class="n">80</td><td class="n">30</td><td>due mani</td><td><a href="crafting/altre-script.html#o-07243">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Arco Professionale 20 god+1</strong> <code>07593</code></td><td class="n">3</td><td>—</td><td class="n">20</td><td class="n">30</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+</tbody></table></div>
+</section>
+
+<section class="chap" id="balestre">
+<h2>Balestre</h2>
+<p>Abilit&agrave;: <b>Archery</b>. Come gli archi, ma con i dardi (crossbow bolts). In ordine dal danno medio pi&ugrave; alto. <a href="#indice-armi">Torna su</a> &middot; <a href="armature.html">Armature</a> &middot; <a href="crafting/index.html">Crafting</a></p>
+<div class="tbl"><table>
+<thead><tr><th>Arma</th><th class="n">Danno arma</th><th>Colpo dello script</th><th class="n">Velocit&agrave;</th><th class="n">Forza</th><th>Note</th><th>Si fa</th></tr></thead>
+<tbody>
+<tr><td><strong>Amber heavycrossbow</strong> <code>0701b</code></td><td class="n">5</td><td>40–45 <span class="pill">P</span></td><td class="n">10</td><td class="n">40</td><td>due mani</td><td><a href="crafting/arcaio.html#o-0701b">Arcaio</a><br><span class="muted">Bowcraft 93,5</span></td></tr>
+<tr><td><strong>Amethist heavycrossbow</strong> <code>0701a</code></td><td class="n">5</td><td>40–45 <span class="pill">P</span></td><td class="n">10</td><td class="n">40</td><td>due mani</td><td><a href="crafting/arcaio.html#o-0701a">Arcaio</a><br><span class="muted">Bowcraft 93,0</span></td></tr>
+<tr><td><strong>Diamond heavy crossbow</strong> <code>0701e</code></td><td class="n">5</td><td>40–45 <span class="pill">P</span></td><td class="n">12</td><td class="n">40</td><td>due mani</td><td><a href="crafting/arcaio.html#o-0701e">Arcaio</a><br><span class="muted">Bowcraft 94,7</span></td></tr>
+<tr><td><strong>Emerald heavycrossbow</strong> <code>0701c</code></td><td class="n">5</td><td>40–45 <span class="pill">P</span></td><td class="n">10</td><td class="n">40</td><td>due mani; a volte toglie mana al bersaglio</td><td><a href="crafting/arcaio.html#o-0701c">Arcaio</a><br><span class="muted">Bowcraft 94,0</span></td></tr>
+<tr><td><strong>Ruby heavycrossbow</strong> <code>0701d</code></td><td class="n">5</td><td>40–45 <span class="pill">P</span></td><td class="n">10</td><td class="n">40</td><td>due mani</td><td><a href="crafting/arcaio.html#o-0701d">Arcaio</a><br><span class="muted">Bowcraft 94,5</span></td></tr>
+<tr><td><strong>Heavy Crossbow of Vanquishing &amp; Daemon's Breath</strong> <code>04152</code></td><td class="n">30–50</td><td>—</td><td class="n">13</td><td class="n">40</td><td>due mani; a volte toglie mana al bersaglio</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Heavy Crossbow of Force</strong> <code>04126</code></td><td class="n">11–56</td><td>—</td><td class="n">13</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Heavy Crossbow of Might</strong> <code>04125</code></td><td class="n">11–56</td><td>—</td><td class="n">13</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Heavy Crossbow of Power</strong> <code>04127</code></td><td class="n">11–56</td><td>—</td><td class="n">13</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Heavy Crossbow of Ruin</strong> <code>04124</code></td><td class="n">11–56</td><td>—</td><td class="n">13</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Heavy Crossbow of Vanquishing</strong> <code>04128</code></td><td class="n">11–56</td><td>—</td><td class="n">13</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Amber crossbow</strong> <code>07016</code></td><td class="n">3</td><td>25–35 <span class="pill">P</span></td><td class="n">18</td><td class="n">30</td><td>due mani</td><td><a href="crafting/arcaio.html#o-07016">Arcaio</a><br><span class="muted">Bowcraft 92,5</span></td></tr>
+<tr><td><strong>Amethist crossbow</strong> <code>07015</code></td><td class="n">3</td><td>25–35 <span class="pill">P</span></td><td class="n">18</td><td class="n">30</td><td>due mani</td><td><a href="crafting/arcaio.html#o-07015">Arcaio</a><br><span class="muted">Bowcraft 92,0</span></td></tr>
+<tr><td><strong>Diamond crossbow</strong> <code>07019</code></td><td class="n">3</td><td>25–35 <span class="pill">P</span></td><td class="n">22</td><td class="n">30</td><td>due mani</td><td><a href="crafting/arcaio.html#o-07019">Arcaio</a><br><span class="muted">Bowcraft 94,3</span></td></tr>
+<tr><td><strong>Emerald crossbow</strong> <code>07017</code></td><td class="n">3</td><td>25–35 <span class="pill">P</span></td><td class="n">18</td><td class="n">30</td><td>due mani; a volte toglie mana al bersaglio</td><td><a href="crafting/arcaio.html#o-07017">Arcaio</a><br><span class="muted">Bowcraft 93,0</span></td></tr>
+<tr><td><strong>Ruby crossbow</strong> <code>07018</code></td><td class="n">3</td><td>25–35 <span class="pill">P</span></td><td class="n">18</td><td class="n">30</td><td>due mani</td><td><a href="crafting/arcaio.html#o-07018">Arcaio</a><br><span class="muted">Bowcraft 93,5</span></td></tr>
+<tr><td><strong>Crossbow of Force</strong> <code>04109</code></td><td class="n">8–43</td><td>—</td><td class="n">20</td><td class="n">30</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Crossbow of Vanquishing</strong> <code>04110</code></td><td class="n">8–43</td><td>—</td><td class="n">20</td><td class="n">30</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Balestra di piombo (15kg)</strong> <code>06364</code></td><td class="n">20–26</td><td>—</td><td class="n">20</td><td class="n">30</td><td>due mani</td><td><a href="crafting/altre-script.html#o-06364">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Balestra di piombo (22kg)</strong> <code>06365</code></td><td class="n">20–26</td><td>—</td><td class="n">20</td><td class="n">30</td><td>due mani</td><td><a href="crafting/altre-script.html#o-06365">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Balestra di piombo (30kg)</strong> <code>0636a</code></td><td class="n">20–26</td><td>—</td><td class="n">18</td><td class="n">30</td><td>due mani</td><td><a href="crafting/altre-script.html#o-0636a">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Balestra di piombo (7kg)</strong> <code>07410</code></td><td class="n">20–26</td><td>—</td><td class="n">20</td><td class="n">30</td><td>due mani</td><td><a href="crafting/altre-script.html#o-07410">Altre ricette delle script</a></td></tr>
+<tr><td><strong>heavy crossbow</strong> <code>013fc</code></td><td class="n">6–34</td><td>—</td><td class="n">10</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Crossbow of Might</strong> <code>0410e</code></td><td class="n">13–26</td><td>—</td><td class="n">22</td><td class="n">30</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Crossbow of Power</strong> <code>0410f</code></td><td class="n">13–26</td><td>—</td><td class="n">24</td><td class="n">30</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Crossbow of Ruin</strong> <code>0410d</code></td><td class="n">13–26</td><td>—</td><td class="n">21</td><td class="n">30</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>crossbow</strong> <code>00f4f</code></td><td class="n">6–26</td><td>—</td><td class="n">18</td><td class="n">30</td><td>due mani</td><td><a href="crafting/arcaio.html#o-00f4f">Arcaio</a><br><span class="muted">Bowcraft 37,8</span></td></tr>
+</tbody></table></div>
+</section>
+
+<section class="chap" id="spade">
+<h2>Spade</h2>
+<p>Abilit&agrave;: <b>Swordsmanship</b>. Il colpo aggiunge la forza/10 di chi colpisce. In ordine dal danno medio pi&ugrave; alto. <a href="#indice-armi">Torna su</a> &middot; <a href="armature.html">Armature</a> &middot; <a href="crafting/index.html">Crafting</a></p>
+<div class="tbl"><table>
+<thead><tr><th>Arma</th><th class="n">Danno arma</th><th>Colpo dello script</th><th class="n">Velocit&agrave;</th><th class="n">Forza</th><th>Note</th><th>Si fa</th></tr></thead>
+<tbody>
+<tr><td><strong>Spada Ultraleggera</strong> <code>06681</code></td><td class="n">25</td><td>33–37 <span class="pill">N</span></td><td class="n">80</td><td class="n">35</td><td></td><td><a href="crafting/fabbro.html#o-06681">Fabbro</a><br><span class="muted">Blacksmithing 115,0</span></td></tr>
+<tr><td><strong>Power Cutlass</strong> <code>06017</code></td><td class="n">15–25</td><td>28–42 <span class="pill">N</span></td><td class="n">72</td><td class="n">10</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-06017">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Power Scimitar</strong> <code>06014</code></td><td class="n">3</td><td>33–47 <span class="pill">N</span></td><td class="n">72</td><td class="n">40</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-06014">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Power Viking Sword</strong> <code>06018</code></td><td class="n">3</td><td>33–47 <span class="pill">N</span></td><td class="n">35</td><td class="n">40</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-06018">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Power Longsword</strong> <code>0601b</code></td><td class="n">3</td><td>30–45 <span class="pill">N</span></td><td class="n">35</td><td class="n">25</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-0601b">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Golden Viking</strong> <code>062dd</code></td><td class="n">3</td><td>33–37 <span class="pill">N</span></td><td class="n">30</td><td class="n">40</td><td></td><td><a href="crafting/fabbro.html#o-062dd">Fabbro</a><br><span class="muted">Blacksmithing 65,0</span></td></tr>
+<tr><td><strong>Power Broadsword</strong> <code>0601a</code></td><td class="n">3</td><td>28–42 <span class="pill">N</span></td><td class="n">35</td><td class="n">25</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-0601a">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Power Katana</strong> <code>06019</code></td><td class="n">3</td><td>28–42 <span class="pill">N</span></td><td class="n">70</td><td class="n">40</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-06019">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Odino's Sword</strong> <code>07278</code></td><td class="n">25–50</td><td>—</td><td class="n">35</td><td class="n">90</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Mytheril Viking</strong> <code>062e4</code></td><td class="n">3</td><td>8–9 <span class="pill">P</span> + 24–27 <span class="pill">N</span></td><td class="n">30</td><td class="n">40</td><td></td><td><a href="crafting/fabbro.html#o-062e4">Fabbro</a><br><span class="muted">Blacksmithing 95,0</span></td></tr>
+<tr><td><strong>Golden Katana</strong> <code>062db</code></td><td class="n">3</td><td>28–32 <span class="pill">N</span></td><td class="n">40</td><td class="n">10</td><td></td><td><a href="crafting/fabbro.html#o-062db">Fabbro</a><br><span class="muted">Blacksmithing 65,0</span></td></tr>
+<tr><td><strong>Mytheril Katana</strong> <code>062e2</code></td><td class="n">3</td><td>7–8 <span class="pill">P</span> + 21–24 <span class="pill">N</span></td><td class="n">40</td><td class="n">10</td><td></td><td><a href="crafting/fabbro.html#o-062e2">Fabbro</a><br><span class="muted">Blacksmithing 95,0</span></td></tr>
+<tr><td><strong>Silver Katana</strong> <code>062e9</code></td><td class="n">3</td><td>28–32 <span class="pill">N</span></td><td class="n">50</td><td class="n">10</td><td>+30% a chi ha karma sotto −1000 o piu' di 5 omicidi</td><td><a href="crafting/fabbro.html#o-062e9">Fabbro</a><br><span class="muted">Blacksmithing 80,0</span></td></tr>
+<tr><td><strong>Silver Viking</strong> <code>062eb</code></td><td class="n">3</td><td>28–32 <span class="pill">N</span></td><td class="n">35</td><td class="n">40</td><td>+30% a chi ha karma sotto −1000 o piu' di 5 omicidi</td><td><a href="crafting/fabbro.html#o-062eb">Fabbro</a><br><span class="muted">Blacksmithing 80,0</span></td></tr>
+<tr><td><strong>Viking of Vanquishing and Brimstone</strong> <code>04150</code></td><td class="n">31–35</td><td>—</td><td class="n">35</td><td class="n">40</td><td>a volte toglie mana al bersaglio</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Viking of Vanquishing and Electricity</strong> <code>04151</code></td><td class="n">31–35</td><td>—</td><td class="n">35</td><td class="n">40</td><td>a volte toglie mana al bersaglio</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Durlindana</strong> <code>07295</code></td><td class="n">30–35</td><td>—</td><td class="n">80</td><td class="n">80</td><td>a volte toglie mana al bersaglio</td><td><a href="crafting/altre-script.html#o-07295">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Viking of Vanquishing and Daemon's Breath</strong> <code>04149</code></td><td class="n">30–35</td><td>—</td><td class="n">35</td><td class="n">40</td><td>a volte toglie mana al bersaglio</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Spada del vendicatore sacro!</strong> <code>060a3</code></td><td class="n">20–40</td><td>—</td><td class="n">60</td><td class="n">85</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Fire Sword</strong> <code>06615</code></td><td class="n">25–32</td><td>—</td><td class="n">30</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Unholy Sword</strong> <code>060a9</code></td><td class="n">3</td><td>20–30 <span class="pill">N</span></td><td class="n">40</td><td class="n">85</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Vampire Sword</strong> <code>060ab</code></td><td class="n">3</td><td>20–30 <span class="pill">N</span></td><td class="n">40</td><td class="n">85</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Longsword of Force</strong> <code>0414c</code></td><td class="n">14–28</td><td>—</td><td class="n">37</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Longsword of Might</strong> <code>0414b</code></td><td class="n">14–28</td><td>—</td><td class="n">36</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Longsword of Power</strong> <code>0414d</code></td><td class="n">14–28</td><td>—</td><td class="n">38</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Longsword of Ruin</strong> <code>0414a</code></td><td class="n">14–28</td><td>—</td><td class="n">35</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Longsword of Vanquishing</strong> <code>0414e</code></td><td class="n">14–28</td><td>—</td><td class="n">39</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Spada Demi</strong> <code>06350</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-06350">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Spada di piombo (15kg)</strong> <code>0634e</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-0634e">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Spada di piombo (22kg)</strong> <code>0634f</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-0634f">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Spada di piombo (7kg)</strong> <code>0634a</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-0634a">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Broadsword of Force</strong> <code>0413c</code></td><td class="n">13–26</td><td>—</td><td class="n">37</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Broadsword of Might</strong> <code>0413b</code></td><td class="n">13–26</td><td>—</td><td class="n">36</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Broadsword of Power</strong> <code>0413d</code></td><td class="n">13–26</td><td>—</td><td class="n">38</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Broadsword of Ruin</strong> <code>0413a</code></td><td class="n">13–26</td><td>—</td><td class="n">35</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Broadsword of Vanquishing</strong> <code>0413e</code></td><td class="n">13–26</td><td>—</td><td class="n">39</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Scimitar of Vanquishing</strong> <code>04106</code></td><td class="n">4–32</td><td>—</td><td class="n">35</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>viking sword</strong> <code>013b9</code></td><td class="n">4–32</td><td>—</td><td class="n">35</td><td class="n">40</td><td></td><td><a href="crafting/fabbro.html#o-013b9">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Scimitar of Might</strong> <code>0410b</code></td><td class="n">11–22</td><td>—</td><td class="n">37</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Scimitar of Power</strong> <code>0410c</code></td><td class="n">11–22</td><td>—</td><td class="n">39</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Scimitar of Ruin</strong> <code>0410a</code></td><td class="n">11–22</td><td>—</td><td class="n">36</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>longsword</strong> <code>00f60</code></td><td class="n">4–28</td><td>—</td><td class="n">35</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>broadsword</strong> <code>00f5e</code></td><td class="n">5–25</td><td>—</td><td class="n">35</td><td class="n">25</td><td></td><td><a href="crafting/fabbro.html#o-00f5e">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Katana of Force</strong> <code>0412c</code></td><td class="n">10–20</td><td>—</td><td class="n">43</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Katana of Might</strong> <code>0412b</code></td><td class="n">10–20</td><td>—</td><td class="n">42</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Katana of Power</strong> <code>0412d</code></td><td class="n">10–20</td><td>—</td><td class="n">44</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Katana of Ruin</strong> <code>0412a</code></td><td class="n">10–20</td><td>—</td><td class="n">41</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Katana of Vanquishing</strong> <code>0412e</code></td><td class="n">10–20</td><td>—</td><td class="n">45</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Spada di odino</strong> <code>07216</code></td><td class="n">10–20</td><td>—</td><td class="n">90</td><td class="n">85</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>scimitar</strong> <code>013b5</code></td><td class="n">6–22</td><td>—</td><td class="n">45</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Cutlass of Force</strong> <code>0411c</code></td><td class="n">9–18</td><td>—</td><td class="n">48</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Cutlass of Might</strong> <code>0411b</code></td><td class="n">9–18</td><td>—</td><td class="n">47</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Cutlass of Power</strong> <code>0411d</code></td><td class="n">9–18</td><td>—</td><td class="n">49</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Cutlass of Ruin</strong> <code>0411a</code></td><td class="n">9–18</td><td>—</td><td class="n">46</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Cutlass of Vanquishing</strong> <code>0411e</code></td><td class="n">9–18</td><td>—</td><td class="n">50</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>cutlass</strong> <code>01440</code></td><td class="n">6–18</td><td>—</td><td class="n">45</td><td class="n">10</td><td></td><td><a href="crafting/fabbro.html#o-01440">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>katana</strong> <code>013fe</code></td><td class="n">4–20</td><td>—</td><td class="n">40</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Viking Sword of Force</strong> <code>04121</code></td><td class="n">1–23</td><td>—</td><td class="n">35</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Viking Sword of Might</strong> <code>04120</code></td><td class="n">1–23</td><td>—</td><td class="n">35</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Viking Sword of Power</strong> <code>04122</code></td><td class="n">1–23</td><td>—</td><td class="n">35</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Viking Sword of Ruin</strong> <code>04119</code></td><td class="n">1–23</td><td>—</td><td class="n">35</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Viking Sword of Vanquishing</strong> <code>04123</code></td><td class="n">1–23</td><td>—</td><td class="n">35</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>butcher knife</strong> <code>013f6</code></td><td class="n">10</td><td>—</td><td class="n">80</td><td class="n">5</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Scimitar of Force</strong> <code>04105</code></td><td class="n">4–16</td><td>—</td><td class="n">35</td><td class="n">40</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>skinning knife</strong> <code>00ec4</code></td><td class="n">8</td><td>—</td><td class="n">80</td><td class="n">5</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Mannaia</strong> <code>00ec2</code></td><td class="n">3–12</td><td>—</td><td class="n">70</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+</tbody></table></div>
+</section>
+
+<section class="chap" id="asce">
+<h2>Asce</h2>
+<p>Abilit&agrave;: <b>Swordsmanship</b>. Le asce usano Swordsmanship, come le spade. In ordine dal danno medio pi&ugrave; alto. <a href="#indice-armi">Torna su</a> &middot; <a href="armature.html">Armature</a> &middot; <a href="crafting/index.html">Crafting</a></p>
+<div class="tbl"><table>
+<thead><tr><th>Arma</th><th class="n">Danno arma</th><th>Colpo dello script</th><th class="n">Velocit&agrave;</th><th class="n">Forza</th><th>Note</th><th>Si fa</th></tr></thead>
+<tbody>
+<tr><td><strong>Black Rock Large Battle Axe</strong> <code>062d7</code></td><td class="n">20</td><td>63–67 <span class="pill">N</span></td><td class="n">20</td><td class="n">45</td><td>due mani</td><td><a href="crafting/fabbro.html#o-062d7">Fabbro</a><br><span class="muted">Blacksmithing 99,0</span></td></tr>
+<tr><td><strong>Bronze Large Battle Axe</strong> <code>062d2</code></td><td class="n">20</td><td>63–67 <span class="pill">N</span></td><td class="n">20</td><td class="n">45</td><td>due mani</td><td><a href="crafting/fabbro.html#o-062d2">Fabbro</a><br><span class="muted">Blacksmithing 55,0</span></td></tr>
+<tr><td><strong>Power Large Battle Axe</strong> <code>06024</code></td><td class="n">3</td><td>63–87 <span class="pill">N</span></td><td class="n">30</td><td class="n">85</td><td>due mani; Power Weapon</td><td><a href="crafting/fabbro.html#o-06024">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Black Rock Double Axe</strong> <code>062d8</code></td><td class="n">25</td><td>48–52 <span class="pill">N</span></td><td class="n">35</td><td class="n">35</td><td>due mani</td><td><a href="crafting/fabbro.html#o-062d8">Fabbro</a><br><span class="muted">Blacksmithing 99,0</span></td></tr>
+<tr><td><strong>Bronze Double Axe</strong> <code>062d3</code></td><td class="n">25</td><td>48–52 <span class="pill">N</span></td><td class="n">35</td><td class="n">35</td><td>due mani</td><td><a href="crafting/fabbro.html#o-062d3">Fabbro</a><br><span class="muted">Blacksmithing 55,0</span></td></tr>
+<tr><td><strong>Verite Double Axe</strong> <code>062f2</code></td><td class="n">25</td><td>48–52 <span class="pill">N</span></td><td class="n">40</td><td class="n">35</td><td>due mani</td><td><a href="crafting/fabbro.html#o-062f2">Fabbro</a><br><span class="muted">Blacksmithing 85,0</span></td></tr>
+<tr><td><strong>Power executioner's Axe</strong> <code>0601f</code></td><td class="n">3</td><td>58–82 <span class="pill">N</span></td><td class="n">60</td><td class="n">75</td><td>due mani; Power Weapon</td><td><a href="crafting/fabbro.html#o-0601f">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Verite Large Battle Axe</strong> <code>062f1</code></td><td class="n">20</td><td>43–47 <span class="pill">N</span></td><td class="n">35</td><td class="n">45</td><td>due mani</td><td><a href="crafting/fabbro.html#o-062f1">Fabbro</a><br><span class="muted">Blacksmithing 85,0</span></td></tr>
+<tr><td><strong>Power Double Axe</strong> <code>06022</code></td><td class="n">3</td><td>48–67 <span class="pill">N</span></td><td class="n">36</td><td class="n">35</td><td>due mani; Power Weapon</td><td><a href="crafting/fabbro.html#o-06022">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Power Two Handed Axe</strong> <code>06023</code></td><td class="n">3</td><td>48–67 <span class="pill">N</span></td><td class="n">—</td><td class="n">40</td><td>due mani; Power Weapon</td><td><a href="crafting/fabbro.html#o-06023">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Power Axe</strong> <code>06021</code></td><td class="n">3</td><td>33–47 <span class="pill">N</span></td><td class="n">35</td><td class="n">25</td><td>due mani; Power Weapon</td><td><a href="crafting/fabbro.html#o-06021">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Power Battle Axe</strong> <code>06020</code></td><td class="n">3</td><td>33–47 <span class="pill">N</span></td><td class="n">35</td><td class="n">45</td><td>due mani; Power Weapon</td><td><a href="crafting/fabbro.html#o-06020">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>executioner's axe</strong> <code>00f45</code></td><td class="n">30</td><td>—</td><td class="n">50</td><td class="n">35</td><td>due mani</td><td><a href="crafting/fabbro.html#o-00f45">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Battle Axe of Force</strong> <code>0418c</code></td><td class="n">18–36</td><td>—</td><td class="n">23</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Battle Axe of Might</strong> <code>0418b</code></td><td class="n">18–36</td><td>—</td><td class="n">22</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Battle Axe of Power</strong> <code>0418d</code></td><td class="n">18–36</td><td>—</td><td class="n">24</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Battle Axe of Ruin</strong> <code>0418a</code></td><td class="n">18–36</td><td>—</td><td class="n">21</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Battle Axe of Vanquishing</strong> <code>0418e</code></td><td class="n">18–36</td><td>—</td><td class="n">25</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Large Battle Axe of Force</strong> <code>041a2</code></td><td class="n">18–36</td><td>—</td><td class="n">23</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Large Battle Axe of Might</strong> <code>041a1</code></td><td class="n">18–36</td><td>—</td><td class="n">22</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Large Battle Axe of Power</strong> <code>041a3</code></td><td class="n">18–36</td><td>—</td><td class="n">24</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Large Battle Axe of Ruin</strong> <code>041a0</code></td><td class="n">18–36</td><td>—</td><td class="n">21</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Large Battle Axe of Vanquishing</strong> <code>041a4</code></td><td class="n">18–36</td><td>—</td><td class="n">25</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>battle axe</strong> <code>00f47</code></td><td class="n">25</td><td>—</td><td class="n">20</td><td class="n">45</td><td>due mani</td><td><a href="crafting/fabbro.html#o-00f47">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>double axe</strong> <code>00f4b</code></td><td class="n">25</td><td>—</td><td class="n">35</td><td class="n">35</td><td>due mani</td><td><a href="crafting/fabbro.html#o-00f4b">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Double Axe of Force</strong> <code>04192</code></td><td class="n">16–32</td><td>—</td><td class="n">38</td><td class="n">35</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Double Axe of Might</strong> <code>04191</code></td><td class="n">16–32</td><td>—</td><td class="n">37</td><td class="n">35</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Double Axe of Power</strong> <code>04193</code></td><td class="n">16–32</td><td>—</td><td class="n">39</td><td class="n">35</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Double Axe of Ruin</strong> <code>04190</code></td><td class="n">16–32</td><td>—</td><td class="n">36</td><td class="n">35</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Double Axe of Vanquishing</strong> <code>04194</code></td><td class="n">16–32</td><td>—</td><td class="n">40</td><td class="n">39</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Two Handed Axe of Force</strong> <code>04197</code></td><td class="n">16–32</td><td>—</td><td class="n">33</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Two Handed Axe of Might</strong> <code>04196</code></td><td class="n">16–32</td><td>—</td><td class="n">32</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Two Handed Axe of Power</strong> <code>04198</code></td><td class="n">16–32</td><td>—</td><td class="n">34</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Two Handed Axe of Ruin</strong> <code>04195</code></td><td class="n">16–32</td><td>—</td><td class="n">31</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Two Handed Axe of Vanquishing</strong> <code>04199</code></td><td class="n">16–32</td><td>—</td><td class="n">35</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Axe of Force</strong> <code>04182</code></td><td class="n">14–28</td><td>—</td><td class="n">43</td><td class="n">25</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Axe of Might</strong> <code>04181</code></td><td class="n">14–28</td><td>—</td><td class="n">42</td><td class="n">25</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Axe of Power</strong> <code>04183</code></td><td class="n">14–28</td><td>—</td><td class="n">44</td><td class="n">25</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Axe of Ruin</strong> <code>04180</code></td><td class="n">14–28</td><td>—</td><td class="n">41</td><td class="n">25</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Axe of Vanquishing</strong> <code>04184</code></td><td class="n">14–28</td><td>—</td><td class="n">45</td><td class="n">25</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Executioner's Axe of Force</strong> <code>04187</code></td><td class="n">14–28</td><td>—</td><td class="n">53</td><td class="n">35</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Executioner's Axe of Might</strong> <code>04186</code></td><td class="n">14–28</td><td>—</td><td class="n">52</td><td class="n">35</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Executioner's Axe of Power</strong> <code>04188</code></td><td class="n">14–28</td><td>—</td><td class="n">54</td><td class="n">35</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Executioner's Axe of Ruin</strong> <code>04185</code></td><td class="n">14–28</td><td>—</td><td class="n">51</td><td class="n">35</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Executioner's Axe of Vanquishing</strong> <code>04189</code></td><td class="n">14–28</td><td>—</td><td class="n">55</td><td class="n">35</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>large battle axe</strong> <code>013fa</code></td><td class="n">20</td><td>—</td><td class="n">20</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>two handed axe</strong> <code>01442</code></td><td class="n">4–32</td><td>—</td><td class="n">30</td><td class="n">40</td><td>due mani</td><td><a href="crafting/fabbro.html#o-01442">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>axe</strong> <code>00f49</code></td><td class="n">15</td><td>—</td><td class="n">40</td><td class="n">25</td><td>due mani</td><td><a href="crafting/fabbro.html#o-00f49">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>hatchet</strong> <code>00f43</code></td><td class="n">2</td><td>—</td><td class="n">55</td><td class="n">15</td><td></td><td><a href="crafting/inventore.html#o-00f43">Inventore</a><br><span class="muted">Tinkering 33,9</span></td></tr>
+</tbody></table></div>
+</section>
+
+<section class="chap" id="aste">
+<h2>Armi in asta (alabarde e bardiche)</h2>
+<p>Abilit&agrave;: <b>Swordsmanship</b>. Armi a due mani, tra le piu' forti. In ordine dal danno medio pi&ugrave; alto. <a href="#indice-armi">Torna su</a> &middot; <a href="armature.html">Armature</a> &middot; <a href="crafting/index.html">Crafting</a></p>
+<div class="tbl"><table>
+<thead><tr><th>Arma</th><th class="n">Danno arma</th><th>Colpo dello script</th><th class="n">Velocit&agrave;</th><th class="n">Forza</th><th>Note</th><th>Si fa</th></tr></thead>
+<tbody>
+<tr><td><strong>Power Bardiche</strong> <code>06016</code></td><td class="n">20–40</td><td>53–67 <span class="pill">N</span></td><td class="n">10</td><td class="n">40</td><td>due mani; Power Weapon</td><td><a href="crafting/fabbro.html#o-06016">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Power Halberd</strong> <code>06015</code></td><td class="n">3</td><td>68–92 <span class="pill">N</span></td><td class="n">15</td><td class="n">80</td><td>due mani; Power Weapon</td><td><a href="crafting/fabbro.html#o-06015">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Alabarda Ultraleggera</strong> <code>06680</code></td><td class="n">20</td><td>55–60 <span class="pill">N</span></td><td class="n">75</td><td class="n">45</td><td>due mani</td><td><a href="crafting/fabbro.html#o-06680">Fabbro</a><br><span class="muted">Blacksmithing 115,0</span></td></tr>
+<tr><td><strong>Alabarda in demonic</strong> <code>06640</code></td><td class="n">3</td><td>50–55 <span class="pill">N</span></td><td class="n">30</td><td class="n">85</td><td>due mani</td><td><a href="crafting/fabbro.html#o-06640">Fabbro</a><br><span class="muted">Blacksmithing 110,0</span></td></tr>
+<tr><td><strong>Bardica in demonic</strong> <code>06641</code></td><td class="n">3</td><td>48–52 <span class="pill">N</span></td><td class="n">30</td><td class="n">85</td><td>due mani</td><td><a href="crafting/fabbro.html#o-06641">Fabbro</a><br><span class="muted">Blacksmithing 110,0</span></td></tr>
+<tr><td><strong>halberd</strong> <code>0143e</code></td><td class="n">4–48</td><td>—</td><td class="n">20</td><td class="n">45</td><td>due mani</td><td><a href="crafting/fabbro.html#o-0143e">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Halberd of Force</strong> <code>04107</code></td><td class="n">10–35</td><td>—</td><td class="n">20</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Halberd of Might</strong> <code>04112</code></td><td class="n">10–35</td><td>—</td><td class="n">20</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Halberd of Power</strong> <code>04113</code></td><td class="n">10–35</td><td>—</td><td class="n">20</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Halberd of Ruin</strong> <code>04111</code></td><td class="n">10–35</td><td>—</td><td class="n">20</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Halberd of Vanquishing</strong> <code>04108</code></td><td class="n">10–35</td><td>—</td><td class="n">20</td><td class="n">45</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>bardiche</strong> <code>00f4d</code></td><td class="n">7–35</td><td>—</td><td class="n">30</td><td class="n">40</td><td>due mani</td><td><a href="crafting/fabbro.html#o-00f4d">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Bardiche of Force</strong> <code>04116</code></td><td class="n">8–33</td><td>—</td><td class="n">27</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Bardiche of Might</strong> <code>04115</code></td><td class="n">8–33</td><td>—</td><td class="n">27</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Bardiche of Power</strong> <code>04117</code></td><td class="n">8–33</td><td>—</td><td class="n">27</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Bardiche of Ruin</strong> <code>04114</code></td><td class="n">8–33</td><td>—</td><td class="n">27</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Bardiche of Vanquishing</strong> <code>04118</code></td><td class="n">8–33</td><td>—</td><td class="n">27</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+</tbody></table></div>
+</section>
+
+<section class="chap" id="lance">
+<h2>Lance, picche e forconi</h2>
+<p>Abilit&agrave;: <b>Fencing</b>. Colpi perforanti: contro di loro conta la difesa P del bersaglio. In ordine dal danno medio pi&ugrave; alto. <a href="#indice-armi">Torna su</a> &middot; <a href="armature.html">Armature</a> &middot; <a href="crafting/index.html">Crafting</a></p>
+<div class="tbl"><table>
+<thead><tr><th>Arma</th><th class="n">Danno arma</th><th>Colpo dello script</th><th class="n">Velocit&agrave;</th><th class="n">Forza</th><th>Note</th><th>Si fa</th></tr></thead>
+<tbody>
+<tr><td><strong>Forcone dei Tritoni</strong> <code>0602e</code></td><td class="n">3</td><td>43–47 <span class="pill">P</span></td><td class="n">30</td><td class="n">15</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Power Spear</strong> <code>0601d</code></td><td class="n">3</td><td>38–52 <span class="pill">P</span></td><td class="n">55</td><td class="n">30</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-0601d">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Tridente in demonic</strong> <code>06643</code></td><td class="n">3</td><td>43–47 <span class="pill">P</span></td><td class="n">40</td><td class="n">15</td><td>due mani</td><td><a href="crafting/fabbro.html#o-06643">Fabbro</a><br><span class="muted">Blacksmithing 110,0</span></td></tr>
+<tr><td><strong>Black Rock Short Spear</strong> <code>062d9</code></td><td class="n">3</td><td>38–42 <span class="pill">P</span></td><td class="n">50</td><td class="n">15</td><td></td><td><a href="crafting/fabbro.html#o-062d9">Fabbro</a><br><span class="muted">Blacksmithing 99,0</span></td></tr>
+<tr><td><strong>Bronze Short Spear</strong> <code>062d4</code></td><td class="n">3</td><td>38–42 <span class="pill">P</span></td><td class="n">50</td><td class="n">15</td><td></td><td><a href="crafting/fabbro.html#o-062d4">Fabbro</a><br><span class="muted">Blacksmithing 55,0</span></td></tr>
+<tr><td><strong>Lancia in demonic</strong> <code>06642</code></td><td class="n">3</td><td>38–42 <span class="pill">P</span></td><td class="n">40</td><td class="n">15</td><td>due mani</td><td><a href="crafting/fabbro.html#o-06642">Fabbro</a><br><span class="muted">Blacksmithing 110,0</span></td></tr>
+<tr><td><strong>Lancia Ultraleggera</strong> <code>06682</code></td><td class="n">3</td><td>38–42 <span class="pill">P</span></td><td class="n">95</td><td class="n">15</td><td>due mani</td><td><a href="crafting/fabbro.html#o-06682">Fabbro</a><br><span class="muted">Blacksmithing 115,0</span></td></tr>
+<tr><td><strong>Verite Short Spear</strong> <code>062f3</code></td><td class="n">3</td><td>33–37 <span class="pill">P</span></td><td class="n">50</td><td class="n">15</td><td>due mani</td><td><a href="crafting/fabbro.html#o-062f3">Fabbro</a><br><span class="muted">Blacksmithing 85,0</span></td></tr>
+<tr><td><strong>Golden Pike</strong> <code>062e0</code></td><td class="n">3</td><td>28–32 <span class="pill">P</span></td><td class="n">35</td><td class="n">10</td><td></td><td><a href="crafting/fabbro.html#o-062e0">Fabbro</a><br><span class="muted">Blacksmithing 65,0</span></td></tr>
+<tr><td><strong>Mytheril Pike</strong> <code>062e7</code></td><td class="n">3</td><td>21–24 <span class="pill">P</span> + 7–8 <span class="pill">N</span></td><td class="n">50</td><td class="n">10</td><td></td><td><a href="crafting/fabbro.html#o-062e7">Fabbro</a><br><span class="muted">Blacksmithing 95,0</span></td></tr>
+<tr><td><strong>Power Short Spear</strong> <code>0601e</code></td><td class="n">3</td><td>23–37 <span class="pill">P</span></td><td class="n">45</td><td class="n">15</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-0601e">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Silver Pike</strong> <code>062ee</code></td><td class="n">3</td><td>28–32 <span class="pill">N</span></td><td class="n">40</td><td class="n">10</td><td>+30% a chi ha karma sotto −1000 o piu' di 5 omicidi</td><td><a href="crafting/fabbro.html#o-062ee">Fabbro</a><br><span class="muted">Blacksmithing 80,0</span></td></tr>
+<tr><td><strong>War Fork of Force</strong> <code>0415c</code></td><td class="n">16–32</td><td>—</td><td class="n">38</td><td class="n">35</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Fork of Might</strong> <code>0415b</code></td><td class="n">16–32</td><td>—</td><td class="n">35</td><td class="n">37</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Fork of Power</strong> <code>0415d</code></td><td class="n">16–32</td><td>—</td><td class="n">39</td><td class="n">35</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Fork of Ruin</strong> <code>0415a</code></td><td class="n">16–32</td><td>—</td><td class="n">36</td><td class="n">35</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Fork of Vanquishing</strong> <code>0415e</code></td><td class="n">16–32</td><td>—</td><td class="n">40</td><td class="n">35</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Picca Demi</strong> <code>06356</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-06356">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Picca di piombo (15kg)</strong> <code>06354</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-06354">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Picca di piombo (22kg)</strong> <code>06355</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-06355">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Picca di piombo (7kg)</strong> <code>0634b</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-0634b">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Lancia da Cavaliere</strong> <code>06113</code></td><td class="n">15–20</td><td>—</td><td class="n">90</td><td class="n">75</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>spear</strong> <code>00f62</code></td><td class="n">7–27</td><td>—</td><td class="n">30</td><td class="n">30</td><td></td><td><a href="crafting/fabbro.html#o-00f62">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Spear of Force</strong> <code>04146</code></td><td class="n">6–26</td><td>—</td><td class="n">35</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Spear of Might</strong> <code>04145</code></td><td class="n">6–26</td><td>—</td><td class="n">35</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Spear of Power</strong> <code>04147</code></td><td class="n">6–26</td><td>—</td><td class="n">35</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Spear of Ruin</strong> <code>04144</code></td><td class="n">6–26</td><td>—</td><td class="n">35</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Spear of Vanquishing</strong> <code>04148</code></td><td class="n">6–26</td><td>—</td><td class="n">35</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>war fork</strong> <code>01404</code></td><td class="n">4–28</td><td>—</td><td class="n">35</td><td class="n">35</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Short Spear of Force</strong> <code>04157</code></td><td class="n">10–20</td><td>—</td><td class="n">57</td><td class="n">15</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Short Spear of Might</strong> <code>04156</code></td><td class="n">10–20</td><td>—</td><td class="n">56</td><td class="n">15</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Short Spear of Power</strong> <code>04158</code></td><td class="n">10–20</td><td>—</td><td class="n">58</td><td class="n">15</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Short Spear of Ruin</strong> <code>04155</code></td><td class="n">10–20</td><td>—</td><td class="n">55</td><td class="n">15</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Short Spear of Vanquishing</strong> <code>04159</code></td><td class="n">10–20</td><td>—</td><td class="n">59</td><td class="n">15</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>short spear</strong> <code>01402</code></td><td class="n">7–19</td><td>—</td><td class="n">55</td><td class="n">15</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>pitchfork</strong> <code>00e87</code></td><td class="n">5–20</td><td>—</td><td class="n">50</td><td class="n">15</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Pitchfork of Force</strong> <code>04136</code></td><td class="n">5–20</td><td>—</td><td class="n">30</td><td class="n">15</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Pitchfork of Might</strong> <code>04135</code></td><td class="n">5–20</td><td>—</td><td class="n">30</td><td class="n">15</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Pitchfork of Power</strong> <code>04137</code></td><td class="n">5–20</td><td>—</td><td class="n">30</td><td class="n">15</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Pitchfork of Ruin</strong> <code>04134</code></td><td class="n">5–20</td><td>—</td><td class="n">30</td><td class="n">15</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Pitchfork of Vanquishing</strong> <code>04138</code></td><td class="n">5–20</td><td>—</td><td class="n">30</td><td class="n">15</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+</tbody></table></div>
+</section>
+
+<section class="chap" id="punta">
+<h2>Pugnali e kryss</h2>
+<p>Abilit&agrave;: <b>Fencing</b>. Armi da punta leggere, veloci; sul pugnale si mette il veleno. In ordine dal danno medio pi&ugrave; alto. <a href="#indice-armi">Torna su</a> &middot; <a href="armature.html">Armature</a> &middot; <a href="crafting/index.html">Crafting</a></p>
+<div class="tbl"><table>
+<thead><tr><th>Arma</th><th class="n">Danno arma</th><th>Colpo dello script</th><th class="n">Velocit&agrave;</th><th class="n">Forza</th><th>Note</th><th>Si fa</th></tr></thead>
+<tbody>
+<tr><td><strong>Golden Kryss</strong> <code>062dc</code></td><td class="n">3</td><td>38–42 <span class="pill">P</span></td><td class="n">50</td><td class="n">10</td><td></td><td><a href="crafting/fabbro.html#o-062dc">Fabbro</a><br><span class="muted">Blacksmithing 65,0</span></td></tr>
+<tr><td><strong>Power Kryss</strong> <code>0601c</code></td><td class="n">3</td><td>29–41 <span class="pill">N</span></td><td class="n">65</td><td class="n">10</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-0601c">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Mytheril Kryss</strong> <code>062e3</code></td><td class="n">3</td><td>21–24 <span class="pill">P</span> + 7–8 <span class="pill">N</span></td><td class="n">50</td><td class="n">10</td><td></td><td><a href="crafting/fabbro.html#o-062e3">Fabbro</a><br><span class="muted">Blacksmithing 95,0</span></td></tr>
+<tr><td><strong>Silver Kryss</strong> <code>062ea</code></td><td class="n">3</td><td>28–32 <span class="pill">N</span></td><td class="n">50</td><td class="n">10</td><td>+30% a chi ha karma sotto −1000 o piu' di 5 omicidi</td><td><a href="crafting/fabbro.html#o-062ea">Fabbro</a><br><span class="muted">Blacksmithing 80,0</span></td></tr>
+<tr><td><strong>Golden Dagger</strong> <code>062da</code></td><td class="n">3</td><td>13–17 <span class="pill">P</span></td><td class="n">80</td><td class="n">1</td><td></td><td><a href="crafting/fabbro.html#o-062da">Fabbro</a><br><span class="muted">Blacksmithing 65,0</span></td></tr>
+<tr><td><strong>Silver Dagger</strong> <code>062e8</code></td><td class="n">3</td><td>13–17 <span class="pill">P</span></td><td class="n">—</td><td class="n">1</td><td>+30% a chi ha karma sotto −1000 o piu' di 5 omicidi</td><td><a href="crafting/fabbro.html#o-062e8">Fabbro</a><br><span class="muted">Blacksmithing 80,0</span></td></tr>
+<tr><td><strong>Pugnale dell'assassino</strong> <code>060b5</code></td><td class="n">15–20</td><td>—</td><td class="n">80</td><td class="n">25</td><td></td><td><a href="crafting/avvelenatore.html#o-060b5">Avvelenatore</a><br><span class="muted">Poisoning 100,0</span></td></tr>
+<tr><td><strong>Mytheril Dagger</strong> <code>062e1</code></td><td class="n">3</td><td>9–12 <span class="pill">P</span> + 3–4 <span class="pill">N</span></td><td class="n">80</td><td class="n">1</td><td></td><td><a href="crafting/fabbro.html#o-062e1">Fabbro</a><br><span class="muted">Blacksmithing 95,0</span></td></tr>
+<tr><td><strong>kryss</strong> <code>01400</code></td><td class="n">6–18</td><td>—</td><td class="n">50</td><td class="n">10</td><td></td><td><a href="crafting/fabbro.html#o-01400">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Kryss of Force</strong> <code>04141</code></td><td class="n">5–11</td><td>—</td><td class="n">65</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Kryss of Might</strong> <code>04140</code></td><td class="n">5–11</td><td>—</td><td class="n">65</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Kryss of Power</strong> <code>04142</code></td><td class="n">5–11</td><td>—</td><td class="n">65</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Kryss of Ruin</strong> <code>04139</code></td><td class="n">5–11</td><td>—</td><td class="n">65</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Kryss of Vanquishing</strong> <code>04143</code></td><td class="n">5–11</td><td>—</td><td class="n">65</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Pugnale Avvelenato con paralisi</strong> <code>060b7</code></td><td class="n">5–10</td><td>—</td><td class="n">80</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Pugnale Avvelenato Mortale</strong> <code>060b9</code></td><td class="n">5–10</td><td>—</td><td class="n">80</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Pugnale Avvelenato Pietrificante</strong> <code>060bb</code></td><td class="n">5–10</td><td>—</td><td class="n">80</td><td class="n">25</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>dagger</strong> <code>00f51</code></td><td class="n">2–8</td><td>—</td><td class="n">80</td><td class="n">1</td><td></td><td><a href="crafting/fabbro.html#o-00f51">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+</tbody></table></div>
+</section>
+
+<section class="chap" id="mazze">
+<h2>Mazze e martelli</h2>
+<p>Abilit&agrave;: <b>Mace Fighting</b>. Il colpo aggiunge la forza/10 di chi colpisce. In ordine dal danno medio pi&ugrave; alto. <a href="#indice-armi">Torna su</a> &middot; <a href="armature.html">Armature</a> &middot; <a href="crafting/index.html">Crafting</a></p>
+<div class="tbl"><table>
+<thead><tr><th>Arma</th><th class="n">Danno arma</th><th>Colpo dello script</th><th class="n">Velocit&agrave;</th><th class="n">Forza</th><th>Note</th><th>Si fa</th></tr></thead>
+<tbody>
+<tr><td><strong>Power War Hammer</strong> <code>0602a</code></td><td class="n">3</td><td>68–92 <span class="pill">N</span></td><td class="n">21</td><td class="n">90</td><td>due mani; Power Weapon</td><td><a href="crafting/fabbro.html#o-0602a">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Mytheril War Mace</strong> <code>062e5</code></td><td class="n">3</td><td>12 <span class="pill">P</span> + 37 <span class="pill">N</span></td><td class="n">30</td><td class="n">30</td><td></td><td><a href="crafting/fabbro.html#o-062e5">Fabbro</a><br><span class="muted">Blacksmithing 95,0</span></td></tr>
+<tr><td><strong>Power Hammer Pick</strong> <code>06029</code></td><td class="n">3</td><td>38–52 <span class="pill">N</span></td><td class="n">31</td><td class="n">85</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-06029">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Power Maul</strong> <code>06026</code></td><td class="n">3</td><td>38–52 <span class="pill">N</span></td><td class="n">41</td><td class="n">20</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-06026">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Black Rock Hammer Pick</strong> <code>062d5</code></td><td class="n">3</td><td>38–42 <span class="pill">N</span></td><td class="n">30</td><td class="n">35</td><td>due mani</td><td><a href="crafting/fabbro.html#o-062d5">Fabbro</a><br><span class="muted">Blacksmithing 99,0</span></td></tr>
+<tr><td><strong>Black Rock Maul</strong> <code>062d6</code></td><td class="n">3</td><td>38–42 <span class="pill">N</span></td><td class="n">38</td><td class="n">20</td><td></td><td><a href="crafting/fabbro.html#o-062d6">Fabbro</a><br><span class="muted">Blacksmithing 99,0</span></td></tr>
+<tr><td><strong>Bronze Hammer Pick</strong> <code>062d0</code></td><td class="n">3</td><td>38–42 <span class="pill">N</span></td><td class="n">30</td><td class="n">35</td><td>due mani</td><td><a href="crafting/fabbro.html#o-062d0">Fabbro</a><br><span class="muted">Blacksmithing 55,0</span></td></tr>
+<tr><td><strong>Bronze Maul</strong> <code>062d1</code></td><td class="n">3</td><td>38–42 <span class="pill">N</span></td><td class="n">38</td><td class="n">20</td><td></td><td><a href="crafting/fabbro.html#o-062d1">Fabbro</a><br><span class="muted">Blacksmithing 55,0</span></td></tr>
+<tr><td><strong>Martello in demonic</strong> <code>06644</code></td><td class="n">3</td><td>38–42 <span class="pill">N</span></td><td class="n">38</td><td class="n">20</td><td>due mani</td><td><a href="crafting/fabbro.html#o-06644">Fabbro</a><br><span class="muted">Blacksmithing 110,0</span></td></tr>
+<tr><td><strong>Power Mace</strong> <code>06027</code></td><td class="n">3</td><td>33–47 <span class="pill">N</span></td><td class="n">41</td><td class="n">20</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-06027">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Power War Mace</strong> <code>06028</code></td><td class="n">3</td><td>33–47 <span class="pill">N</span></td><td class="n">41</td><td class="n">30</td><td>Power Weapon</td><td><a href="crafting/fabbro.html#o-06028">Fabbro</a><br><span class="muted">Blacksmithing 99,1</span></td></tr>
+<tr><td><strong>Verite Maul</strong> <code>062f0</code></td><td class="n">3</td><td>38–42 <span class="pill">N</span></td><td class="n">38</td><td class="n">20</td><td></td><td><a href="crafting/fabbro.html#o-062f0">Fabbro</a><br><span class="muted">Blacksmithing 85,0</span></td></tr>
+<tr><td><strong>Golden Mace</strong> <code>062df</code></td><td class="n">3</td><td>33–37 <span class="pill">N</span></td><td class="n">30</td><td class="n">30</td><td></td><td><a href="crafting/fabbro.html#o-062df">Fabbro</a><br><span class="muted">Blacksmithing 65,0</span></td></tr>
+<tr><td><strong>Golden War Mace</strong> <code>062de</code></td><td class="n">3</td><td>33–37 <span class="pill">N</span></td><td class="n">30</td><td class="n">30</td><td></td><td><a href="crafting/fabbro.html#o-062de">Fabbro</a><br><span class="muted">Blacksmithing 65,0</span></td></tr>
+<tr><td><strong>Maglio Ultraleggero</strong> <code>0667e</code></td><td class="n">3</td><td>33–37 <span class="pill">N</span></td><td class="n">78</td><td class="n">20</td><td></td><td><a href="crafting/fabbro.html#o-0667e">Fabbro</a><br><span class="muted">Blacksmithing 115,0</span></td></tr>
+<tr><td><strong>Martello Ultraleggero</strong> <code>0667d</code></td><td class="n">3</td><td>33–37 <span class="pill">N</span></td><td class="n">75</td><td class="n">35</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Silver Mace</strong> <code>062ed</code></td><td class="n">3</td><td>33–37 <span class="pill">N</span></td><td class="n">40</td><td class="n">30</td><td>+30% a chi ha karma sotto −1000 o piu' di 5 omicidi</td><td><a href="crafting/fabbro.html#o-062ed">Fabbro</a><br><span class="muted">Blacksmithing 80,0</span></td></tr>
+<tr><td><strong>Silver War Mace</strong> <code>062ec</code></td><td class="n">3</td><td>33–37 <span class="pill">N</span></td><td class="n">35</td><td class="n">30</td><td>+30% a chi ha karma sotto −1000 o piu' di 5 omicidi</td><td><a href="crafting/fabbro.html#o-062ec">Fabbro</a><br><span class="muted">Blacksmithing 80,0</span></td></tr>
+<tr><td><strong>Verite Hammer Pick</strong> <code>062ef</code></td><td class="n">3</td><td>33–37 <span class="pill">N</span></td><td class="n">35</td><td class="n">35</td><td>due mani</td><td><a href="crafting/fabbro.html#o-062ef">Fabbro</a><br><span class="muted">Blacksmithing 85,0</span></td></tr>
+<tr><td><strong>Mytheril Mace</strong> <code>062e6</code></td><td class="n">3</td><td>8–9 <span class="pill">P</span> + 24–27 <span class="pill">N</span></td><td class="n">30</td><td class="n">30</td><td></td><td><a href="crafting/fabbro.html#o-062e6">Fabbro</a><br><span class="muted">Blacksmithing 95,0</span></td></tr>
+<tr><td><strong>Martello Benedetto</strong> <code>06093</code></td><td class="n">30–40</td><td>—</td><td class="n">60</td><td class="n">85</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Martello di thor</strong> <code>07213</code></td><td class="n">30–40</td><td>—</td><td class="n">60</td><td class="n">95</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Grizzly Hammer</strong> <code>0602d</code></td><td class="n">18–36</td><td>—</td><td class="n">75</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Hammer of Force</strong> <code>0417c</code></td><td class="n">18–36</td><td>—</td><td class="n">23</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Hammer of Might</strong> <code>0417b</code></td><td class="n">18–36</td><td>—</td><td class="n">22</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Hammer of Power</strong> <code>0417d</code></td><td class="n">18–36</td><td>—</td><td class="n">24</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Hammer of Ruin</strong> <code>0417a</code></td><td class="n">18–36</td><td>—</td><td class="n">21</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Hammer of Vanquishing</strong> <code>0417e</code></td><td class="n">18–36</td><td>—</td><td class="n">25</td><td class="n">40</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Hammer Pick of Force</strong> <code>04177</code></td><td class="n">17–34</td><td>—</td><td class="n">33</td><td class="n">35</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Hammer Pick of Might</strong> <code>04176</code></td><td class="n">17–34</td><td>—</td><td class="n">32</td><td class="n">35</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Hammer Pick of Power</strong> <code>04178</code></td><td class="n">17–34</td><td>—</td><td class="n">34</td><td class="n">35</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Hammer Pick of Ruin</strong> <code>04175</code></td><td class="n">17–34</td><td>—</td><td class="n">31</td><td class="n">35</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Hammer Pick of Vanquishing</strong> <code>04179</code></td><td class="n">17–34</td><td>—</td><td class="n">35</td><td class="n">35</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Mace of Force</strong> <code>04172</code></td><td class="n">17–34</td><td>—</td><td class="n">33</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Mace of Might</strong> <code>04171</code></td><td class="n">17–34</td><td>—</td><td class="n">32</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Mace of Power</strong> <code>04173</code></td><td class="n">17–34</td><td>—</td><td class="n">34</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Mace of Ruin</strong> <code>04170</code></td><td class="n">17–34</td><td>—</td><td class="n">31</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>War Mace of Vanquishing</strong> <code>04174</code></td><td class="n">17–34</td><td>—</td><td class="n">35</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Artiglio del lupo</strong> <code>0721c</code></td><td class="n">20–30</td><td>—</td><td class="n">60</td><td class="n">95</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Staff of the Rainbow</strong> <code>07ffb</code></td><td class="n">20–30</td><td>—</td><td class="n">60</td><td class="n">50</td><td>a volte toglie mana al bersaglio</td><td><a href="crafting/altre-script.html#o-07ffb">Altre ricette delle script</a></td></tr>
+<tr><td><strong>hammer pick</strong> <code>0143c</code></td><td class="n">9–33</td><td>—</td><td class="n">30</td><td class="n">35</td><td>due mani</td><td><a href="crafting/fabbro.html#o-0143c">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Maglio Demi</strong> <code>06353</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-06353">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Maglio di piombo (15kg)</strong> <code>06351</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-06351">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Maglio di piombo (22kg)</strong> <code>06352</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-06352">Altre ricette delle script</a></td></tr>
+<tr><td><strong>Maglio di piombo (7kg)</strong> <code>0634c</code></td><td class="n">20</td><td>—</td><td class="n">40</td><td class="n">70</td><td></td><td><a href="crafting/altre-script.html#o-0634c">Altre ricette delle script</a></td></tr>
+<tr><td><strong>war hammer</strong> <code>01438</code></td><td class="n">4–36</td><td>—</td><td class="n">20</td><td class="n">40</td><td>due mani</td><td><a href="crafting/fabbro.html#o-01438">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>war mace</strong> <code>01406</code></td><td class="n">6–34</td><td>—</td><td class="n">30</td><td class="n">30</td><td></td><td><a href="crafting/fabbro.html#o-01406">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Basiliscus</strong> <code>06068</code></td><td class="n">5–32</td><td>—</td><td class="n">41</td><td class="n">150</td><td>a volte toglie mana al bersaglio</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Maul of Force</strong> <code>0416c</code></td><td class="n">11–22</td><td>—</td><td class="n">43</td><td class="n">20</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Maul of Might</strong> <code>0416b</code></td><td class="n">11–22</td><td>—</td><td class="n">42</td><td class="n">20</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Maul of Power</strong> <code>0416d</code></td><td class="n">11–22</td><td>—</td><td class="n">44</td><td class="n">20</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Maul of Ruin</strong> <code>0416a</code></td><td class="n">11–22</td><td>—</td><td class="n">41</td><td class="n">20</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Maul of Vanquishing</strong> <code>0416e</code></td><td class="n">11–22</td><td>—</td><td class="n">45</td><td class="n">20</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>black staff</strong> <code>00df0</code></td><td class="n">7–23</td><td>—</td><td class="n">35</td><td class="n">35</td><td>due mani</td><td><a href="crafting/falegname.html#o-00df0">Falegname</a><br><span class="muted">Carpentry 50,0</span></td></tr>
+<tr><td><strong>gnarled staff</strong> <code>013f8</code></td><td class="n">9–21</td><td>—</td><td class="n">40</td><td class="n">20</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>maul</strong> <code>0143a</code></td><td class="n">9–21</td><td>—</td><td class="n">40</td><td class="n">20</td><td></td><td><a href="crafting/fabbro.html#o-0143a">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>Mace of Force</strong> <code>04167</code></td><td class="n">8–16</td><td>—</td><td class="n">58</td><td class="n">20</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Mace of Might</strong> <code>04166</code></td><td class="n">8–16</td><td>—</td><td class="n">57</td><td class="n">20</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Mace of Power</strong> <code>04168</code></td><td class="n">8–16</td><td>—</td><td class="n">59</td><td class="n">20</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Mace of Ruin</strong> <code>04165</code></td><td class="n">8–16</td><td>—</td><td class="n">56</td><td class="n">20</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Mace of Vanquishing</strong> <code>04169</code></td><td class="n">8–16</td><td>—</td><td class="n">60</td><td class="n">20</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>quarter staff</strong> <code>00e89</code></td><td class="n">6–18</td><td>—</td><td class="n">50</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>mace</strong> <code>00f5c</code></td><td class="n">4–16</td><td>—</td><td class="n">55</td><td class="n">20</td><td></td><td><a href="crafting/fabbro.html#o-00f5c">Fabbro</a><br><span class="muted">Blacksmithing 20,0</span></td></tr>
+<tr><td><strong>smith's hammer</strong> <code>013e3</code></td><td class="n">4–16</td><td>—</td><td class="n">60</td><td class="n">30</td><td></td><td><a href="crafting/inventore.html#o-013e3">Inventore</a><br><span class="muted">Tinkering 41,9</span></td></tr>
+<tr><td><strong>Club of Force</strong> <code>04162</code></td><td class="n">6–12</td><td>—</td><td class="n">62</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Club of Might</strong> <code>04161</code></td><td class="n">6–12</td><td>—</td><td class="n">61</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Club of Power</strong> <code>04163</code></td><td class="n">6–12</td><td>—</td><td class="n">63</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Club of Ruin</strong> <code>04160</code></td><td class="n">6–12</td><td>—</td><td class="n">60</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Club of Vanquishing</strong> <code>04164</code></td><td class="n">6–12</td><td>—</td><td class="n">64</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>club</strong> <code>013b3</code></td><td class="n">3–12</td><td>—</td><td class="n">60</td><td class="n">10</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+</tbody></table></div>
+</section>
+
+<section class="chap" id="staff">
+<h2>Armi dello staff</h2>
+<p>Abilit&agrave;: <b>varie</b>. Armi dei GM e degli eventi, che i giocatori non trovano in gioco: qui solo per completezza. In ordine dal danno medio pi&ugrave; alto. <a href="#indice-armi">Torna su</a> &middot; <a href="armature.html">Armature</a> &middot; <a href="crafting/index.html">Crafting</a></p>
+<div class="tbl"><table>
+<thead><tr><th>Arma</th><th class="n">Danno arma</th><th>Colpo dello script</th><th class="n">Velocit&agrave;</th><th class="n">Forza</th><th>Note</th><th>Si fa</th></tr></thead>
+<tbody>
+<tr><td><strong>Spada della giustizia</strong> <code>0740b</code></td><td class="n">5000</td><td>—</td><td class="n">1000</td><td class="n">30</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>GM Bow of Smite and Electricity</strong> <code>04154</code></td><td class="n">20–80</td><td>—</td><td class="n">20</td><td class="n">20</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>PKGhost Club</strong> <code>065cb</code></td><td class="n">40–50</td><td>—</td><td class="n">90</td><td class="n">600</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Pugnale Esplosivo</strong> <code>0602c</code></td><td class="n">18–36</td><td>—</td><td class="n">75</td><td class="n">400</td><td>due mani</td><td><span class="muted">non si fabbrica</span></td></tr>
+<tr><td><strong>Spada mangia anime</strong> <code>07415</code></td><td class="n">3</td><td>—</td><td class="n">99</td><td class="n">300</td><td></td><td><span class="muted">non si fabbrica</span></td></tr>
+</tbody></table></div>
+</section>
+
+<section class="chap" id="materiali">
+<h2>Dove si fanno: metalli, leghe e legni</h2>
+<ul>
+<li>Armi di ferro e dei metalli colorati: <a href="crafting/fabbro.html">Fabbro</a>, menu del Blacksmithing &rsaquo; Weapons e Colored Armor. I pezzi lavorati di ogni metallo si fanno all'incudine (<a href="crafting/fabbro.html">Lavorare il Metallo</a>).</li>
+<li>Demonic, lega ultraleggera e acciai: il passo passo &egrave; nel <a href="crafting/index.html#percorsi">crafting</a> (<a href="crafting/index.html#lega-ultraleggera">lega ultraleggera</a>, <a href="crafting/index.html#demonic">demonic</a>, <a href="crafting/index.html#acciai">acciai</a>).</li>
+<li>Power Weapons: Metallo Magico incantato e martello da fabbro in mano (<a href="crafting/index.html#consigli-provati">consigli provati</a>).</li>
+<li>Archi e balestre: <a href="crafting/arcaio.html">Arcaio</a>, e i listelli allo Scaffale degli attrezzi (<a href="crafting/index.html#archi">passo passo</a>).</li>
+<li>Minerali, lingotti e leghe: <a href="crafting/minatore.html">Minatore</a> e <a href="index.html#metalli">metalli nella wiki</a>.</li>
+</ul>
+</section>
+
+<p id="noresults" class="note" style="display:none">Nessuna riga corrisponde alla ricerca.</p>
+<footer>Generata da strumenti/wiki/armi-armature.js (Midian-Script-X) dalle script che girano sul server, con i collegamenti alle pagine del crafting.</footer>
+</main>
+</div>
+<script>
+// Filtra le righe delle tabelle (e nasconde le sezioni senza righe) con il testo cercato.
+(function () {
+  var q = document.getElementById('q');
+  var secs = Array.prototype.slice.call(document.querySelectorAll('section.chap'));
+  var none = document.getElementById('noresults');
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  q.addEventListener('input', function () {
+    var v = norm(q.value.trim()), viste = 0;
+    secs.forEach(function (s) {
+      var righe = Array.prototype.slice.call(s.querySelectorAll('tbody tr')), n = 0;
+      righe.forEach(function (r) { var ok = !v || norm(r.textContent).indexOf(v) >= 0; r.hidden = !ok; if (ok) n++; });
+      var ok = !v || n > 0 || (!righe.length && norm(s.textContent).indexOf(v) >= 0);
+      s.hidden = !ok; if (ok) viste++;
+    });
+    none.style.display = viste ? 'none' : 'block';
+  });
+})();
+</script>
+</body>
+</html>
