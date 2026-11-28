@@ -116,6 +116,7 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
     <li class="sub"><a href="#spellbook">Incantesimi per classe</a></li>
     <li><a href="#stat">4 · Statistiche ed esperienza</a></li>
     <li><a href="#mestieri">5 · Mestieri</a></li>
+    <li class="sub"><a href="#spacciatore">Spacciatore passo passo</a></li>
     <li><a href="#ascensioni">6 · Ascensioni</a></li>
     <li><a href="#cavalcature">7 · Cavalcature</a></li>
     <li class="sub"><a href="#stalle">Stalle</a></li>
@@ -489,10 +490,19 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <tr><td>Tinker</td><td>Tinkering</td><td>Cassetta degli attrezzi <span class="id">7f62</span></td><td>Utensili, componenti, campanelli</td></tr>
 <tr><td>Scriba</td><td>Inscription</td><td>Manuali dello scriba <span class="id">7fa2</span></td><td>Libri, manuali di classe, abilità speciali, permessi e lotti per le case</td></tr>
 <tr><td>Alchimista</td><td>Alchemy</td><td>—</td><td>Pozioni speciali</td></tr>
-<tr><td>Spacciatore</td><td>Taste ID</td><td>Comunicatore <span class="id">7307</span></td><td>Coltivazione e commercio illegali (mariajuana, organi)</td></tr>
+<tr><td>Spacciatore</td><td>Taste ID</td><td>Comunicatore per spacciatori <span class="id">7fa8</span> (<a href="#spacciatore">passo passo</a>)</td><td>Coltivazione e commercio illegali (mariajuana, organi)</td></tr>
 </table></div>
 <p>Quasi tutte le lavorazioni hanno una piccola probabilità di far salire l'abilità del mestiere, fino a <b>130</b>.</p>
 <div class="note"><b>Craft a postazione.</b> Lo <b>scaffale degli attrezzi</b> <span class="id">75cc</span> (100 tronchi e 20 lingotti di ferro, lo costruisce il falegname) permette di produrre i <a href="#lavorati">pezzi lavorati</a> con un minigioco: nel menu delle azioni bisogna scegliere quella del proprio mestiere (martellata per il fabbro, penna per lo scriba, ingranaggi per il tinker, arco per il bowcraft, cucito per il sarto) e poi restare fermi fino alla fine. Se si sbaglia o si raccoglie l'oggetto a metà, le materie prime vanno perse.</div>
+<!-- spacciatore passo passo (strumenti/wiki/spacciatore.js, prove del 28/11/2026) -->
+<h3 id="spacciatore">Lo spacciatore, passo passo</h3>
+<p>Si diventa spacciatori all'Albo artigiani dell'ufficio di collocamento ("Ora sei uno spacciatore"). Il mestiere ha tre attivit&agrave;, tutte provate:</p>
+<ol>
+<li><b>Raccogliere la mariajuana</b>: le piante crescono in due campi, intorno a <b>1244, 1875-1900</b> e intorno a <b>5200, 3600-3650</b>, e ricrescono da sole. Doppio clic sulla pianta: finisce nello zaino. Serve <b>Taste ID oltre 60</b> ("Non sono uno spacciatore abbastanza esperto...").</li>
+<li><b>Fumarla con la Pipa Deluxe</b> (la fa il falegname: <a href="crafting/falegname.html#o-07f9e">Pipa Deluxe</a>, Carpentry 85, 2 tronchi, 1 chiodi, 1 minerale di ferro). Appoggia la pipa <b>a terra</b> (nello zaino dice solo "MADE IN TAIWAN") e fai doppio clic con <b>2 mariajuana</b> nello zaino. Per 100 secondi: +20 vita, +20 mana, +3 Tactics, &minus;10 Destrezza e le allucinazioni; poi "Che viaggio!" e tutto torna come prima. Non si pu&ograve; fumare di nuovo finch&eacute; dura. La pipa si rompe a ogni fumata.</li>
+<li><b>Barattare organi</b> con il <a href="crafting/inventore.html#o-07fa8">Comunicatore per spacciatori</a> (lo fa l'inventore: Tinkering 75, 2 lingotti d'oro): doppio clic &rsaquo; "Clicca qui per continuare" &rsaquo; "Si" &rsaquo; "Baratta un cuore con un intestino". Serve <b>Item Identification oltre 55</b>: 1 cuore diventa 1 intestino (a volte "ti hanno dato un organo fallato"). Gli intestini servono al tinker per le corde degli strumenti (2 intestini e 2 acciaio); i cuori servono anche alla <a href="oggetti-speciali.html#vodoo">bambola vodoo</a>.</li>
+</ol>
+<p class="note">Dal 28 novembre 2026 la fumata finisce davvero dopo 100 secondi (prima la Destrezza e le allucinazioni restavano), e la pipa non toglie pi&ugrave; gli altri stati del personaggio.</p>
 </section>
 
 <!-- 6 -->
