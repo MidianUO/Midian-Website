@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<title>Cavalli: addestramento e ascensione · Midian</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: indice fisso a sinistra (sotto, su telefono), colonna di lettura a destra; tabelle scorrevoli. */
+:root {
+  --bg: #f4f5f1; --panel: #ffffff; --ink: #1c2630; --muted: #5a6670; --line: #d9ddd5;
+  --brass: #8a5c14; --teal: #24605f; --tint: #eef1ea; --warn: #9b2c2c; --ok: #2f6b3a;
+  --f-display: "Marcellus SC", "Palatino Linotype", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171c; --panel: #172028; --ink: #e2e6df; --muted: #9aa6ad; --line: #2a3640;
+  --brass: #dcaa52; --teal: #6fb7b2; --tint: #1b262e; --warn: #e48a8a; --ok: #8ccf97; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.wrap { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  border-right: 1px solid var(--line); padding-right: 18px; font-size: 15px; }
+nav.toc h2 { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--brass); margin: 0 0 10px; font-weight: 400 }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 8px; border-radius: 4px }
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+nav.toc .sub a { padding-left: 22px; color: var(--muted); font-size: 14px }
+.search { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 15px; margin-bottom: 14px }
+.search:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px }
+main { min-width: 0 }
+header.top { border-bottom: 2px solid var(--brass); padding-bottom: 18px; margin-bottom: 8px }
+header.top .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal) }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 50px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance }
+header.top p { max-width: 68ch; color: var(--muted); margin: 0 }
+section.chap { padding-top: 34px; scroll-margin-top: 16px }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; margin: 0 0 12px; color: var(--ink); text-wrap: balance;
+  display: flex; gap: 12px; align-items: baseline }
+h2 .num { font-family: var(--f-mono); font-size: 14px; color: var(--brass) }
+h3 { font-size: 20px; margin: 26px 0 8px; color: var(--teal); font-weight: 700 }
+h4 { font-size: 17px; margin: 18px 0 6px }
+p, li { max-width: 72ch }
+a { color: var(--teal) }
+code, .id { font-family: var(--f-mono); font-size: .82em; background: var(--tint); padding: 1px 5px; border-radius: 3px; white-space: nowrap }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { background: var(--tint); font-weight: 700; white-space: nowrap; font-size: 13px; letter-spacing: .03em }
+tr:last-child td { border-bottom: 0 }
+td.n, th.n { text-align: right; white-space: nowrap }
+.zero { color: var(--warn); font-weight: 700 }
+.note { border-left: 3px solid var(--brass); background: var(--tint); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; max-width: 76ch }
+.note b { color: var(--brass) }
+.warn { border-left-color: var(--warn) } .warn b { color: var(--warn) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0 }
+.card h4 { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: var(--brass) }
+.card p, .card ul { margin: 4px 0; font-size: 15px }
+.card ul { padding-left: 18px }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.tag { font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--tint) }
+ol.steps { padding-left: 22px } ol.steps li { margin: 4px 0 }
+.empty { display: none; color: var(--muted); padding: 30px 0 }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 10px }
+  nav.toc { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 12px }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) }
+  nav.toc .sub { display: none }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+.muted { color: var(--muted); font-size: 14px }
+ol.passi > li { margin-bottom: 8px }
+</style>
+
+</head>
+<body>
+<header class="sitebar"><div class="sitebar-in">
+  <a class="sitebrand" href="../index.html">MIDIAN</a>
+  <nav class="sitenav" aria-label="Sezioni del sito">
+    <a href="../index.html">Home</a>
+    <a href="../primi-passi.html">Primi passi</a>
+    <a href="../patch-note.html">Patch Note</a>
+    <a href="index.html" aria-current="page">Wiki</a>
+    <a href="crafting/index.html">Crafting</a>
+    <a href="../download.html">Download</a>
+    <a href="../contatti.html">Contatti</a>
+  </nav>
+</div></header>
+<style>
+.sitebar { border-bottom: 1px solid var(--line); background: var(--panel) }
+.sitebar-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px }
+.sitebrand { font-family: var(--f-display); font-size: 22px; letter-spacing: .12em; color: var(--brass); text-decoration: none }
+.sitenav { display: flex; gap: 4px; flex-wrap: wrap }
+.sitenav a { color: var(--ink); text-decoration: none; padding: 6px 12px; border-radius: 4px }
+.sitenav a:hover, .sitenav a:focus-visible { background: var(--tint); color: var(--teal); outline: none }
+.sitenav a[aria-current="page"] { color: var(--brass); box-shadow: inset 0 -2px 0 var(--brass) }
+</style>
+<div class="wrap">
+<nav class="toc" aria-label="Indice">
+  <input class="search" id="q" type="search" placeholder="Cerca in questa pagina (es. sfera, mustang)" aria-label="Cerca in questa pagina">
+  <h2>Indice</h2>
+  <ol>
+    <li><a href="#in-breve">In breve</a></li>
+    <li><a href="#cosa-serve">Cosa serve</a></li>
+    <li><a href="#cavallo">1. Il cavallo</a></li>
+    <li><a href="#stalla">2. La stalla d'addestramento</a></li>
+    <li><a href="#allenamento">3. L'allenamento</a></li>
+    <li class="sub"><a href="#percorsi">I percorsi</a></li>
+    <li class="sub"><a href="#regole">Le regole della corsa</a></li>
+    <li class="sub"><a href="#sfera">La sfera e i punti</a></li>
+    <li class="sub"><a href="#aiuti">Estratto, Salvaskill, angelo custode</a></li>
+    <li><a href="#ascensione">4. L'ascensione</a></li>
+    <li class="sub"><a href="#percentuali">Percentuali di riuscita</a></li>
+    <li class="sub"><a href="#tipi">I tipi che rinascono</a></li>
+    <li><a href="#dopo">5. Dopo l'ascensione</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+<header class="top">
+<div class="eyebrow">Wiki di Midian &middot; guida passo passo</div>
+<h1>Cavalli: addestramento e ascensione</h1>
+<p>Come si allena un cavallo in Resistenza e Velocit&agrave;, dove sono i percorsi, cosa serve e come si fa l'ascensione, con le percentuali di riuscita e tutti i tipi di Mustang. Provato in gioco il 28 novembre 2026. Torna alla <a href="index.html#cavalcature">wiki</a>.</p>
+</header>
+
+<section class="chap" id="in-breve">
+<h2>In breve</h2>
+<ol class="passi">
+<li>Doma un <b>cavallo</b> (o un pack horse): deve essere tuo.</li>
+<li>Allenalo sui <b>percorsi</b>: a cavallo, alla pietra di partenza, corri fino alla mattonella d'arrivo. All'arrivo ricevi una <b>Sfera di aumento skill</b>: puntala sul cavallo e la sua Resistenza o Velocit&agrave; sale.</li>
+<li>Quando Resistenza e Velocit&agrave; sono <b>almeno 50 tutte e due</b> (meglio molto di pi&ugrave;), vai alla pietra <b>Ascensione Cavalcature</b> e punta il cavallo.</li>
+<li>Il cavallo muore e dopo 10-30 secondi <b>rinasce come Mustang</b> (a volte raro), oppure non torna. Pi&ugrave; Resistenza e Velocit&agrave; sono alte, pi&ugrave; &egrave; facile che rinasca e che esca un Mustang raro.</li>
+</ol>
+</section>
+
+<section class="chap" id="cosa-serve">
+<h2>Cosa serve</h2>
+<div class="tbl"><table>
+<thead><tr><th>Cosa</th><th>A cosa serve</th><th>Come si ottiene</th></tr></thead>
+<tbody>
+<tr><td><b>Cavallo o pack horse</b></td><td>&Egrave; l'animale da allenare e da ascendere.</td><td>Si doma con Animal Taming.</td></tr>
+<tr><td><b>Veterinary</b> e <b>Animal Taming</b></td><td>Il cavallo non pu&ograve; superare la tua Veterinary in Resistenza n&eacute; la tua Animal Taming in Velocit&agrave;; pi&ugrave; sono alte, pi&ugrave; punti d&agrave; ogni corsa.</td><td>Salgono anche allenando (con la sfera) e a ogni ascensione riuscita.</td></tr>
+<tr><td><b>Oro</b></td><td>Ogni corsa costa da 96 a 480 gp (vedi i <a href="#percorsi">percorsi</a>).</td><td>&mdash;</td></tr>
+<tr><td><b>Stalliere d'addestramento</b> <code>753a</code></td><td>L'unica stalla che conserva Resistenza e Velocit&agrave;.</td><td>Lo fa il fabbro: <a href="crafting/fabbro.html#o-0753a">Stalliere d'Addestramento</a> (60 stagno, 2 acciaio al cobalto, 1 brace, Blacksmithing 109). Le altre stalle: <a href="crafting/fabbro.html#o-07519">Stalliere</a>, <a href="crafting/fabbro.html#o-07518">Stalliere Deluxe</a>.</td></tr>
+<tr><td><b>Fieno per stalla</b> <code>7517</code></td><td>Il cibo della stalla: se finisce, l'animale dentro muore.</td><td>Non ha una ricetta: si ha dallo staff o da altri giocatori.</td></tr>
+<tr><td><b>Estratto energetico</b> <code>753d</code></td><td>Facoltativo: +0,2 a Resistenza e Velocit&agrave;.</td><td>Mortaio e pestello puntato su almeno 10 pesci crudi, con Cooking 100 (10 pesci = 1 estratto).</td></tr>
+<tr><td><b>Wand of Animal Protection</b> <code>7513</code></td><td>Facoltativa: mette l'angelo custode alla cavalcatura (3 cariche).</td><td>Bottino raro (tesori, pesca a Fishing 100).</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="chap" id="cavallo">
+<h2>1. Il cavallo</h2>
+<ul>
+<li>Si allenano i <b>cavalli</b> (tutti i colori di Horse e i Mustang) e gli <b>ostard</b>; si ascendono solo <b>cavalli e pack horse</b>. Gli ostard (Oclock, Orn, Zostrich) prendono met&agrave; punti dall'allenamento e la pietra di ascensione li rifiuta.</li>
+<li>Il cavallo deve essere <b>tuo</b>: la pietra controlla il padrone.</li>
+<li>La <b>Resistenza</b> &egrave; l'abilit&agrave; Magery del cavallo, la <b>Velocit&agrave;</b> la sua Meditation: si vedono dalla stalla d'addestramento o con il Salvaskill. Partono da 0.</li>
+</ul>
+</section>
+
+<section class="chap" id="stalla">
+<h2>2. La stalla d'addestramento</h2>
+<ol class="passi">
+<li>Fatti fare dal fabbro il <a href="crafting/fabbro.html#o-0753a">Deed per uno stalliere d'Addestramento</a>, fai doppio clic e mettilo a terra.</li>
+<li>Riempila di <b>fieno</b>: ogni balla aggiunge giorni di cibo.</li>
+<li>Prende solo cavalli e ostard addestrabili (Forza fino a 300, Destrezza fino a 220) e conserva Resistenza e Velocit&agrave;. Quando ritiri l'animale ricevi un <b>Salvaskill</b> con i suoi valori.</li>
+<li>Non usare lo Stalliere normale per un cavallo in allenamento: perde Resistenza e Velocit&agrave;, e il Salvaskill non funziona pi&ugrave;.</li>
+</ol>
+</section>
+
+<section class="chap" id="allenamento">
+<h2>3. L'allenamento</h2>
+<ol class="passi">
+<li><b>Togli le collane</b>: durante la prova sono vietate.</li>
+<li><b>Monta</b> il cavallo e mettiti accanto (a una casella) alla pietra di partenza: <i>Addestramento cavalli: Resistenza</i> o <i>Velocit&agrave;</i>.</li>
+<li>Doppio clic sulla pietra: paghi la corsa, ricevi la <b>Collana allenamento cavallo</b> e senti "VIA!!!". Se un altro sta gi&agrave; correndo su quella pietra, usa un'altra delle quattro pietre accanto.</li>
+<li>Corri fino alla <b>mattonella d'arrivo</b> del percorso entro il tempo massimo, sullo stesso cavallo, senza morire e senza teleport.</li>
+<li>All'arrivo ricevi la <b>Sfera di aumento skill</b> nello zaino: doppio clic e punta il cavallo. Non puoi iniziare un'altra corsa finch&eacute; hai una sfera da usare.</li>
+</ol>
+
+<h3 id="percorsi">I percorsi</h3>
+<p>Ogni percorso va da una pietra a una mattonella d'arrivo; molti sono in coppia, uno all'andata e uno al ritorno. Le coordinate sono quelle del mondo (x, y). Il costo &egrave; 12 gp per ogni decimo di punto base.</p>
+<div class="tbl"><table>
+<thead><tr><th>Codice</th><th>Allena</th><th>Partenza</th><th>Arrivo</th><th class="n">Tempo massimo</th><th class="n">Tempo ideale</th><th class="n">Punti base</th><th class="n">10% sotto l'ideale</th><th class="n">Costo</th></tr></thead>
+<tbody>
+<tr><td><code>0222</code></td><td>Resistenza</td><td>3919-3922, 178</td><td>4291, 753</td><td class="n">150 s</td><td class="n">59 s</td><td class="n">0.8</td><td class="n">0,9</td><td class="n">96 gp</td></tr>
+<tr><td><code>0394</code></td><td>Resistenza</td><td>4295, 750</td><td>3919-3920, 181</td><td class="n">150 s</td><td class="n">58 s</td><td class="n">0.8</td><td class="n">0,9</td><td class="n">96 gp</td></tr>
+<tr><td><code>0364</code></td><td>Resistenza</td><td>5698-5701, 3216</td><td>5267, 3992-3993</td><td class="n">240 s</td><td class="n">101 s</td><td class="n">1.7</td><td class="n">2</td><td class="n">204 gp</td></tr>
+<tr><td><code>0665</code></td><td>Resistenza</td><td>5270-5271, 3988</td><td>5708-5709, 3216</td><td class="n">240 s</td><td class="n">99 s</td><td class="n">1.7</td><td class="n">2</td><td class="n">204 gp</td></tr>
+<tr><td><code>0589</code></td><td>Resistenza</td><td>508-510, 1563-1565</td><td>1584-1586, 2486-2488</td><td class="n">400 s</td><td class="n">168 s</td><td class="n">2.4</td><td class="n">2,9</td><td class="n">288 gp</td></tr>
+<tr><td><code>0875</code></td><td>Resistenza</td><td>1593-1594, 2488</td><td>506, 1568-1569</td><td class="n">400 s</td><td class="n">170 s</td><td class="n">2.4</td><td class="n">2,9</td><td class="n">288 gp</td></tr>
+<tr><td><code>0167</code></td><td>Resistenza</td><td>3347-3350, 298</td><td>533-534, 996</td><td class="n">700 s</td><td class="n">297 s</td><td class="n">4</td><td class="n">4,9</td><td class="n">480 gp</td></tr>
+<tr><td><code>0436</code></td><td>Resistenza</td><td>532-533, 989</td><td>3352-3353, 298</td><td class="n">700 s</td><td class="n">291 s</td><td class="n">4</td><td class="n">4,9</td><td class="n">480 gp</td></tr>
+<tr><td><code>0999</code></td><td>Velocita'</td><td>6080, 435-436</td><td>6050-6053, 457</td><td class="n">240 s</td><td class="n">51 s</td><td class="n">0.9</td><td class="n">1</td><td class="n">108 gp</td></tr>
+<tr><td><code>0887</code></td><td>Velocita'</td><td>5610-5613, 463</td><td>5502-5503, 445</td><td class="n">180 s</td><td class="n">77 s</td><td class="n">1.1</td><td class="n">1,3</td><td class="n">132 gp</td></tr>
+<tr><td><code>0421</code></td><td>Velocita'</td><td>5489-5492, 416</td><td>5486-5488, 471</td><td class="n">300 s</td><td class="n">22 s</td><td class="n">3.5</td><td class="n">4,2</td><td class="n">420 gp</td></tr>
+</tbody></table></div>
+<p class="muted">Punti base = quanto prende il cavallo con l'abilit&agrave; a 100 arrivando nel tempo ideale. "10% sotto l'ideale" = arrivando il 10% prima del tempo ideale.</p>
+
+<h3 id="regole">Le regole della corsa</h3>
+<ul>
+<li>La collana controlla ogni secondo quanta strada fai. Se arrivi <b>troppo veloce a un passaggio</b> (13 caselle in un secondo) il cavallo inciampa e perdi 1 secondo; a 14 caselle "lo fai riposare" e perdi 3 secondi. Pi&ugrave; di 14 caselle in un secondo, o 3 avvisi, vale come teleport e la prova &egrave; annullata.</li>
+<li>Se cambi cavallo, se arrivi con un altro personaggio, se muori o se il tempo scade ("Ti sei perso? Tempo scaduto!") la prova fallisce e l'oro &egrave; perso.</li>
+<li>Se <b>batti il record</b> del percorso (la pergamena accanto alla pietra dice chi lo ha e in quanto tempo): punti <b>doppi</b> in Resistenza, <b>tripli</b> in Velocit&agrave;. Se lo <b>eguagli</b>: +30%.</li>
+</ul>
+
+<h3 id="sfera">La sfera e i punti</h3>
+<p>La sfera vale solo per il cavallo con cui hai corso e solo per te. I punti, in decimi, sono:</p>
+<p class="note"><b>punti = punti base &times; (tua abilit&agrave; / 100) &times; (tempo ideale / tuo tempo)&sup2;</b><br>L'abilit&agrave; &egrave; Veterinary per la Resistenza, Animal Taming per la Velocit&agrave;. Il tempo conta al quadrato: arrivare il 10% prima vale circa il 23% di punti in pi&ugrave;, arrivare con il doppio del tempo ideale ne d&agrave; un quarto.</p>
+<ul>
+<li>Se la Resistenza del cavallo &egrave; gi&agrave; pi&ugrave; alta della tua Veterinary (o la Velocit&agrave; della tua Animal Taming), la sfera non insegna nulla: "Non sei abbastanza esperto...".</li>
+<li>Agli ostard la sfera d&agrave; met&agrave; dei punti (pi&ugrave; un decimo). Il massimo &egrave; 100.</li>
+<li>Usando la sfera migliori anche tu, fino a 100: Veterinary +0,1 una volta su 4 (sfera di Resistenza), Animal Taming +0,1 una volta su 7 (sfera di Velocit&agrave;).</li>
+</ul>
+
+<h3 id="aiuti">Estratto, Salvaskill, angelo custode</h3>
+<ul>
+<li><b>Estratto energetico</b>: +0,2 a Resistenza e Velocit&agrave; (+0,1 agli ostard), ma solo fino alla tua abilit&agrave; corrispondente meno 95. Si fa con il mortaio e pestello su 10 pesci crudi, con Cooking 100.</li>
+<li><b>Salvaskill</b>: lo d&agrave; lo stalliere d'addestramento quando ritiri l'animale. Ricorda Resistenza e Velocit&agrave; e le rimette se un errore le abbassa.</li>
+<li><b>Angelo custode</b> (Wand of Animal Protection): protegge la cavalcatura. All'ascensione viene tolto.</li>
+</ul>
+</section>
+
+<section class="chap" id="ascensione">
+<h2>4. L'ascensione</h2>
+<p>Le pietre <b>Ascensione Cavalcature</b> sono a <b>1946, 893</b> e a <b>5441, 3386</b>.</p>
+<ol class="passi">
+<li>Smonta e porta il cavallo accanto alla pietra. Deve essere tuo, e un cavallo o un pack horse.</li>
+<li>Resistenza e Velocit&agrave; devono essere <b>almeno 50 tutte e due</b>, altrimenti: "La resistenza di questo animale e' troppo bassa, lo vuoi uccidere?".</li>
+<li>Doppio clic sulla pietra ("Scegli la cavalcatura da ascendere...") e punta il cavallo.</li>
+<li>Il cavallo muore subito (l'angelo custode viene tolto). Dopo <b>10-30 secondi</b>: "Il prodigio dell'ascensione si e' compiuto, il tuo destriero rinasce a nuova vita!" e accanto alla pietra compare la nuova cavalcatura, gi&agrave; tua. Oppure: "...realizzi la dura realta': non tornera'."</li>
+<li>Se rinasce, guadagni da 0,1 a 1,0 in <b>Veterinary</b> e in <b>Animal Taming</b> (fino a 120).</li>
+</ol>
+
+<h3 id="percentuali">Percentuali di riuscita</h3>
+<p>La pietra estrae un numero da 0 a 200,9. Il numero decide il tipo che rinasce; ma se supera <b>Resistenza + Velocit&agrave;</b> il cavallo non torna. Per questo i Mustang rari escono <b>solo</b> con valori altissimi: il Wild Mustang chiede pi&ugrave; di 190 in totale, il Blue Moon pi&ugrave; di 199.</p>
+<div class="tbl"><table>
+<thead><tr><th class="n">Resistenza + Velocit&agrave;</th><th class="n">Mustang A</th><th class="n">Mustang B</th><th class="n">Wild</th><th class="n">Ruby</th><th class="n">Emerald</th><th class="n">Sky</th><th class="n">Blue Moon</th><th class="n">Non torna</th></tr></thead>
+<tbody>
+<tr><td class="n"><b>100</b></td><td class="n">49,8%</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n"><b>50,2%</b></td></tr>
+<tr><td class="n"><b>120</b></td><td class="n">59,8%</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n"><b>40,2%</b></td></tr>
+<tr><td class="n"><b>140</b></td><td class="n">63,7%</td><td class="n">6,0%</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n"><b>30,3%</b></td></tr>
+<tr><td class="n"><b>160</b></td><td class="n">63,7%</td><td class="n">15,9%</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n"><b>20,3%</b></td></tr>
+<tr><td class="n"><b>180</b></td><td class="n">63,7%</td><td class="n">25,9%</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n"><b>10,4%</b></td></tr>
+<tr><td class="n"><b>190</b></td><td class="n">63,7%</td><td class="n">30,8%</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n"><b>5,4%</b></td></tr>
+<tr><td class="n"><b>195</b></td><td class="n">63,7%</td><td class="n">30,8%</td><td class="n">2,5%</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n"><b>2,9%</b></td></tr>
+<tr><td class="n"><b>198</b></td><td class="n">63,7%</td><td class="n">30,8%</td><td class="n">3,0%</td><td class="n">0,5%</td><td class="n">0,5%</td><td class="n">—</td><td class="n">—</td><td class="n"><b>1,4%</b></td></tr>
+<tr><td class="n"><b>199</b></td><td class="n">63,7%</td><td class="n">30,8%</td><td class="n">3,0%</td><td class="n">0,5%</td><td class="n">0,5%</td><td class="n">0,5%</td><td class="n">—</td><td class="n"><b>0,9%</b></td></tr>
+<tr><td class="n"><b>200</b></td><td class="n">63,7%</td><td class="n">30,8%</td><td class="n">3,0%</td><td class="n">0,5%</td><td class="n">0,5%</td><td class="n">0,5%</td><td class="n">0,5%</td><td class="n"><b>0,4%</b></td></tr>
+</tbody></table></div>
+<p class="muted">Esempio: con 100 di Resistenza e 100 di Velocit&agrave; (200) il cavallo non torna solo 4 volte su 1000; con 50 e 50 (100) una volta su due.</p>
+
+<h3 id="tipi">I tipi che rinascono</h3>
+<div class="tbl"><table>
+<thead><tr><th>Cavallo di partenza</th><th>Mustang A (63,7%)</th><th>Mustang B (30,8%)</th><th>Rari (con valori alti)</th></tr></thead>
+<tbody>
+<tr><td>Horse (corpo 0c8)</td><td>Mustang, colore 031c</td><td>Mustang, colore 0455</td><td rowspan="5">Wild Mustang (059f), Ruby Mustang (048b), Emerald Mustang (048a), Sky Mustang (080c), Blue Moon Mustang (0192). I rari sono pi&ugrave; forti in combattimento (Parrying 65-70, Tactics e Wrestling 50-65 invece di 35-45 e 29-44).</td></tr>
+<tr><td>Horse (corpo 0cc)</td><td>Mustang, colore 01bb</td><td>Mustang, colore 01b6</td></tr>
+<tr><td>Horse (corpo 0e2)</td><td>Mustang, colore 03e7</td><td>Mustang, colore 0263</td></tr>
+<tr><td>Horse (corpo 0e4)</td><td>Mustang, colore 01bb</td><td>Mustang, colore 0279</td></tr>
+<tr><td>Pack Horse</td><td>Mustang, colore 0158</td><td>Mustang, colore 033</td></tr>
+</tbody></table></div>
+<p>Tutti i Mustang hanno Forza 100-180 e Destrezza 90-130 (un Horse 44-120 e 36-55). Le altre cavalcature rare (Musty nero, Orn, Oclock, Zostrich) si prendono con i punti Thanatos.</p>
+</section>
+
+<section class="chap" id="dopo">
+<h2>5. Dopo l'ascensione</h2>
+<ul>
+<li>Il Mustang riparte con Resistenza e Velocit&agrave; a 0: per un'altra ascensione va riallenato.</li>
+<li>Anche un Mustang si pu&ograve; ascendere di nuovo (&egrave; un cavallo): &egrave; il modo per tentare un Mustang raro, allenandolo vicino a 100 e 100.</li>
+<li>Mettilo nello stalliere d'addestramento, non in quello normale, se vuoi conservarne i valori.</li>
+</ul>
+<p class="note">Provato in gioco il 28/11/2026: un Horse con 100 e 100 &egrave; rinato Mustang, &egrave; rimasto del padrone, e Veterinary e Animal Taming sono saliti. Gli ostard prima venivano accettati e morivano senza rinascere: ora la pietra li rifiuta.</p>
+</section>
+
+<p id="noresults" class="note" style="display:none">Nessuna sezione corrisponde alla ricerca.</p>
+<footer>Dalle script di Midian (Sphereitem2: pietre 7533, 7534, 7535, 7536, 7538, collane 7531/7532) e dalle pietre del mondo, provato sul server di prova.</footer>
+</main>
+</div>
+<script>
+(function () {
+  var q = document.getElementById('q');
+  var secs = Array.prototype.slice.call(document.querySelectorAll('section.chap'));
+  var none = document.getElementById('noresults');
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  var texts = secs.map(function (s) { return norm((s.getAttribute('data-k') || '') + ' ' + s.textContent); });
+  q.addEventListener('input', function () {
+    var v = norm(q.value.trim()); var shown = 0;
+    secs.forEach(function (s, i) { var ok = !v || texts[i].indexOf(v) >= 0; s.hidden = !ok; if (ok) shown++; });
+    none.style.display = shown ? 'none' : 'block';
+    links.forEach(function (a) { var t = document.querySelector(a.getAttribute('href')); var sec = t && t.closest('section.chap'); a.parentNode.hidden = !!(sec && sec.hidden); });
+  });
+})();
+</script>
+
+</body>
+</html>
