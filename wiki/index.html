@@ -268,7 +268,7 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <tr><td><b>Disarmare</b></td><td>Carica la Durlindana: il colpo successivo fa cadere nello zaino del bersaglio le armi che impugna. Funziona solo sui giocatori, e non sulle armi che non si possono perdere.</td><td>40 stamina, 25 mana, 10 cibo</td></tr>
 <tr><td><b>Last Blow</b></td><td>Carica la Durlindana: il colpo successivo infligge 30 danni a un giocatore o 100-300 a un mostro, ma la spada si spezza e diventa una Durlindana rotta, inservibile. Dopo 200 colpi la Durlindana scatena da sola un Last Blow e si spezza.</td><td>50 stamina, 30 mana, 15 cibo</td></tr>
 <tr><td><b>Berserk</b></td><td>Per 3 minuti: grandi bonus a Forza, Destrezza e abilità di combattimento.</td><td>50 stamina, 30 mana, 8 sangue di drago</td></tr>
-<tr><td><b>Esplosivo</b></td><td>Crea un esplosivo da lanciare (esplosione ad area). Con poca esperienza può scoppiare in mano (-25 punti ferita).</td><td>70 stamina, 20 mana, polvere da sparo + contenitore</td></tr>
+<tr><td><b>Esplosivo</b></td><td>Crea un esplosivo da lanciare (esplosione ad area). Sotto 50 di esperienza può scoppiare in mano (-25 punti ferita).</td><td>70 stamina, 20 mana, polvere da sparo + contenitore</td></tr>
 </table></div>
 <h4>Mago</h4>
 <p><b>Manuale da mago</b> <span class="id">60f5</span>, manuale dello scriba. A ogni apertura c'è una piccola probabilità di consumare cibo, e chi è affamato perde tutta la stamina.</p>
@@ -367,7 +367,7 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <div class="tbl"><table>
 <tr><th>Abilità</th><th>Effetto</th><th>Costo</th></tr>
 <tr><td><b>Spada vampirica</b></td><td>Evoca una spada vampirica per esp./2 secondi, e comunque almeno 60 secondi (anche con esperienza 0).</td><td>50 mana, 70 punti fede</td></tr>
-<tr><td><b>Offerta votiva</b></td><td>Offerta al proprio dio, ovunque ci si trovi: 10 punti fede per 50 gp, 100 per 500 gp, 500 per 2500 gp (con 1 probabilità su 4 di ricevere una sfera dell'esperienza). Costa il doppio delle donazioni in chiesa.</td><td>40 mana</td></tr>
+<tr><td><b>Offerta votiva</b></td><td>Offerta al proprio dio, ovunque ci si trovi: 10 punti fede per 50 gp, 100 per 500 gp, 500 per 2500 gp (con 1 probabilità su 4 di ricevere una sfera dell'esperienza). Costa più delle donazioni in chiesa.</td><td>40 mana</td></tr>
 <tr><td><b>Peso degli anni</b></td><td>Bersaglio entro 19 caselle: gli azzera la stamina.</td><td>25 mana, 70 punti fede</td></tr>
 <tr><td><b>Tocco del male</b></td><td>Tocco su un bersaglio entro 3 caselle: 15 + esp./50 danni. Attesa di 30 secondi.</td><td>25 mana, 25 punti fede</td></tr>
 <tr><td><b>Oltraggio divino</b></td><td>Gli dei dannati ridanno al cavaliere 25 + esp./50 punti ferita e 45 di mana, fino al massimo.</td><td>80 punti fede</td></tr>
@@ -382,7 +382,7 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <tr><td><b>Pugnale delle ombre</b></td><td>Il pugnale dell'assassino (scherma), da avvelenare con i veleni.</td><td>10 mana</td></tr>
 <tr><td><b>Veleno paralizzante</b></td><td>Applicato al pugnale: i colpi paralizzano la vittima.</td><td>5 mana</td></tr>
 <tr><td><b>Veleno mortale</b></td><td>Applicato al pugnale: uccide all'istante una vittima che non stava attaccando l'assassino. Il corpo diventa velenoso al tocco.</td><td>30 mana</td></tr>
-<tr><td><b>Veleno di medusa</b></td><td>Applicato al pugnale: pietrifica la vittima.</td><td>40 mana</td></tr>
+<tr><td><b>Veleno di medusa</b></td><td>Applicato al pugnale: una volta su due il colpo trasforma la vittima in pietra per 15 secondi.</td><td>40 mana</td></tr>
 <tr><td><b>Gas velenoso</b></td><td>Pozione da lanciare entro 10 caselle: avvelena gravemente una persona. Non funziona su mostri e animali.</td><td>25 mana</td></tr>
 <tr><td><b>Coltello da lancio</b></td><td>Si lancia fino a 14 caselle: 10-35 danni, a volte doppi su un punto vitale. Più il bersaglio è lontano, più è facile mancarlo. Al massimo 2 alla volta.</td><td>va messo nella custodia</td></tr>
 <tr><td><b>Mantello delle ombre</b></td><td>Indossato, aumenta molto Hiding e Stealth per un tempo che dipende dall'esperienza.</td><td>60 mana</td></tr>
@@ -467,6 +467,8 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <p>Puoi allenare le abilità con le macro anche quando non sei al computer: non ci sono controlli e non si finisce in jail per questo. Resta solo la regola del ritardo minimo di <b>2,5 secondi</b> tra un'azione e l'altra.</p>
 <h3>Nuovo sistema di armi e armature</h3>
 <p>Il menu di aiuto contiene l'aggiornamento al "nuovo sistema di armi e armature": il personaggio riceve tre oggetti invisibili (armatura, resistenze, rigenerazioni). Le armi calcolano il danno in base a un danno base e alla difesa del bersaglio, le armature sommano la difesa e alcune tolgono destrezza.</p>
+<p><b>Quanto protegge l'armatura.</b> Ogni pezzo indossato aggiunge la sua percentuale di assorbimento, che vedi quando lo indossi e in "Controlla l'armatura": <b>N</b> per i colpi normali (spade, mazze, mostri) e <b>P</b> per quelli perforanti (lance, frecce, armi da punta). Quella percentuale si toglie sempre da ogni colpo fisico che ricevi. Le armature vecchie, che non mostrano la percentuale, valgono circa met&agrave; della loro armatura. Al massimo si arriva all'80%. Le magie non sono ridotte dall'armatura.</p>
+<p><b>Colpi dei mostri.</b> Ogni mostro colpisce sempre pi&ugrave; o meno con la stessa forza (al massimo il 5% in pi&ugrave; o in meno). Per esempio un Balron fa circa 85 se sei nudo, circa 74 in piastre di bronzo, 64 in piastre d'oro, 55 in orialco e 44 in cobalto.</p>
 </section>
 
 <!-- 5 -->
@@ -836,7 +838,7 @@ footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line);
 <tr><td class="n">40.000</td><td>Musty nero oppure Orn</td></tr><tr><td class="n">50.000</td><td>Ocloack</td></tr><tr><td class="n">60.000</td><td>Zostrich</td></tr>
 </table></div>
 <h3>Chiesa e punti fede</h3>
-<p>Paladini e cavalieri neri donano oro alla chiesa dal loro libro: 10 punti per 25 gp, 100 punti per 250 gp, 500 punti per 1.000 gp (più una <b>sfera dell'esperienza</b>). Massimo 1500 punti fede.</p>
+<p>Paladini e cavalieri neri donano oro alla chiesa dal loro libro: 10 punti per 20 gp, 100 punti per 200 gp, 500 punti per 1.000 gp (e una volta su sei anche una <b>sfera dell'esperienza</b>). Massimo 1500 punti fede.</p>
 <h3>Diventare vampiro</h3>
 <p>All'<b>Altare del Nosferatu</b> <span class="id">7575</span> un <b>chierico</b> può convertirsi in vampiro con <b>20.000 punti esperienza</b> e <b>200 fiale di sangue</b>. Il <b>sangue corrotto</b> si consegna per la ricompensa di Lord British, oppure si versa su un lingotto di ferro per ottenere a caso oro, bronzo, argento o titanio.</p>
 <h3>Cambio di razza e classe, reset</h3>
